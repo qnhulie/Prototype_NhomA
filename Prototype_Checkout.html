@@ -1,0 +1,83 @@
+<!--
+  NOTE:
+  Trang Checkout dùng để xác nhận gói membership và thanh toán.
+  Trang này KHÔNG xuất hiện trong navigation menu.
+  Người dùng chỉ truy cập khi nhấn vào các gói mua (CTA) ở trang Focus Page.
+-->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Buddy - Checkout</title>
+</head>
+<body style="font-family:Arial; margin:0; background:#f9f9f9;">
+
+  <header style="display:flex; justify-content:space-between; align-items:center; padding:10px 30px; background-color:#ddd; border-bottom:2px solid #ccc;">
+    <div style="font-weight:bold;">[LOGO]</div>
+    <nav>
+      <a href="Prototype_Homepage.html" style="margin-right:15px;">Home</a>
+      <a href="Prototype_Chatbot.html" style="margin-right:15px;">Chatbot</a>
+      <a href="Prototype_EmotionTracker.html" style="margin-right:15px;">Emotion Tracker</a>
+      <a href="Prototype_Focus.html" style="margin-right:15px;">Focus</a>
+      <a href="Prototype_Profile.html" style="margin-right:15px;">Profile</a>
+      <a href="Prototype_About.html">About</a>
+    </nav>
+  </header>
+
+  <section style="margin:20px 30px; border:2px dashed #aaa; text-align:center; height:120px;">
+    [Banner Checkout: Xác nhận gói và thanh toán]
+  </section>
+
+  <main style="display:flex; gap:20px; margin:0 30px;">
+    
+    <!-- CTA / Gói mua -->
+    <div style="flex:2; border:1px solid #aaa; background:#fff; padding:20px;">
+      <h2>Try Essential/Premium Package</h2>
+      <p><strong>7-Day Free Trial</strong> - Includes Basic Membership</p>
+      <ul>
+        <li>30 session đa dạng</li>
+        <li>Voice persona tùy chọn</li>
+        <li>Tự động nhắc lịch focus</li>
+      </ul>
+      <button>Bắt đầu dùng thử</button>
+    </div>
+
+    <!-- Payment Info -->
+    <aside style="flex:1; display:flex; flex-direction:column; gap:15px;">
+      
+      <div style="border:1px solid #aaa; background:#fff; padding:15px;">
+        <h4>Thông tin thẻ</h4>
+        <label>Số thẻ</label><br>
+        <input type="text" placeholder="1234 5678 9012 3456" style="width:85%; padding:8px; margin:5px 0;"><br>
+        <label>Họ tên chủ thẻ</label><br>
+        <input type="text" placeholder="Nguyen Van A" style="width:85%; padding:8px; margin:5px 0;"><br>
+        <label>Ngày hết hạn</label><br>
+        <input type="text" placeholder="MM/YY" style="width:85%; padding:8px; margin:5px 0;"><br>
+        <label>CVC</label><br>
+        <input type="text" placeholder="123" style="width:85%; padding:8px; margin:5px 0;">
+      </div>
+
+      <div style="border:1px solid #aaa; background:#fff; padding:15px;">
+        <h4>Địa chỉ thanh toán</h4>
+        <input type="text" placeholder="Địa chỉ" style="width:85%; padding:8px; margin:5px 0;">
+        <input type="text" placeholder="Thành phố" style="width:85%; padding:8px; margin:5px 0;">
+        <input type="text" placeholder="Mã Zip" style="width:85%; padding:8px; margin:5px 0;">
+      </div>
+
+      <div style="border:1px solid #aaa; background:#fff; padding:15px; text-align:center;">
+        <button style="padding:10px 20px; background:#28A745; color:#fff; border:none; border-radius:4px; cursor:pointer;">
+          Xác nhận thanh toán
+        </button>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <footer style="margin-top:30px; background:#ddd; text-align:center; padding:10px;">
+    [Thông tin nhóm | Contact | &#169; 2025 AI Buddy]
+  </footer>
+
+</body>
+</html>
