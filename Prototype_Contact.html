@@ -1,700 +1,708 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liên hệ - MindCare</title>
-    <style>
-        /* Biến màu sắc */
-        :root {
-            /* Palette 1 */
-            --dark-gray: #353535;
-            --teal: #33c6e7;
-            --white: #ffffff;
-            --light-gray: #d9d9d9;
-            --dark-blue: #284b63;
-            
-            /* Palette 2 */
-            --dark-navy: #01161e;
-            --navy: #124559;
-            --slate: #598392;
-            --sage: #aec3b0;
-            --light-cream: #eff6e0;
-        }
-        
-        /* Reset và cài đặt cơ bản */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--light-cream);
-            color: var(--dark-navy);
-            line-height: 1.6;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header */
-        header {
-            background-color: var(--navy);
-            color: var(--white);
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--teal);
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 25px;
-        }
-        
-        nav ul li a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        nav ul li a:hover {
-            color: var(--teal);
-        }
-        
-        .cta-button {
-            background-color: var(--teal);
-            color: var(--white);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .cta-button:hover {
-            background-color: #2ab4d1;
-        }
-        
-        /* Hero Section */
-        .page-hero {
-            background: linear-gradient(135deg, var(--navy) 0%, var(--slate) 100%);
-            color: var(--white);
-            padding: 80px 0;
-            text-align: center;
-        }
-        
-        .page-hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-        
-        .breadcrumb {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-        }
-        
-        .breadcrumb li {
-            margin: 0 10px;
-            position: relative;
-        }
-        
-        .breadcrumb li:not(:last-child):after {
-            content: ">";
-            position: absolute;
-            right: -15px;
-        }
-        
-        .breadcrumb a {
-            color: var(--light-gray);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .breadcrumb a:hover {
-            color: var(--teal);
-        }
-        
-        .breadcrumb .current {
-            color: var(--teal);
-        }
-        
-        /* Contact Section */
-        .contact {
-            padding: 80px 0;
-        }
-        
-        .contact-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-        }
-        
-        .contact-info {
-            background-color: var(--white);
-            border-radius: 10px;
-            padding: 40px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .contact-info h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: var(--dark-navy);
-        }
-        
-        .contact-info p {
-            margin-bottom: 30px;
-            color: var(--slate);
-        }
-        
-        .contact-details {
-            margin-bottom: 40px;
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 25px;
-        }
-        
-        .contact-icon {
-            width: 50px;
-            height: 50px;
-            background-color: var(--sage);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: var(--navy);
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-        
-        .contact-text h3 {
-            font-size: 1.2rem;
-            margin-bottom: 5px;
-            color: var(--dark-navy);
-        }
-        
-        .contact-text p {
-            margin-bottom: 0;
-            color: var(--slate);
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .social-links a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: var(--navy);
-            border-radius: 50%;
-            color: var(--white);
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-        
-        .social-links a:hover {
-            background-color: var(--teal);
-        }
-        
-        /* Contact Form */
-        .contact-form {
-            background-color: var(--white);
-            border-radius: 10px;
-            padding: 40px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .contact-form h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: var(--dark-navy);
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--dark-navy);
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--light-gray);
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: var(--teal);
-        }
-        
-        textarea.form-control {
-            min-height: 150px;
-            resize: vertical;
-        }
-        
-        .btn-primary {
-            background-color: var(--teal);
-            color: var(--white);
-            padding: 12px 30px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary:hover {
-            background-color: #2ab4d1;
-            transform: translateY(-2px);
-        }
-        
-        /* FAQ Section */
-        .faq {
-            padding: 80px 0;
-            background-color: var(--white);
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--dark-navy);
-            margin-bottom: 15px;
-        }
-        
-        .section-title p {
-            color: var(--slate);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .faq-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .faq-item {
-            margin-bottom: 15px;
-            border: 1px solid var(--light-gray);
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        
-        .faq-question {
-            padding: 20px;
-            background-color: var(--light-cream);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            color: var(--dark-navy);
-        }
-        
-        .faq-answer {
-            padding: 0 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-            color: var(--slate);
-        }
-        
-        .faq-item.active .faq-answer {
-            padding: 20px;
-            max-height: 500px;
-        }
-        
-        .faq-toggle {
-            font-size: 1.2rem;
-            transition: transform 0.3s;
-        }
-        
-        .faq-item.active .faq-toggle {
-            transform: rotate(45deg);
-        }
-        
-        /* Map Section */
-        .map-section {
-            padding: 0 0 80px;
-        }
-        
-        .map-container {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            height: 400px;
-        }
-        
-        .map-placeholder {
-            width: 100%;
-            height: 100%;
-            background-color: var(--slate);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-size: 1.2rem;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--dark-navy);
-            color: var(--white);
-            padding: 60px 0 20px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-        
-        .footer-column h3 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            color: var(--teal);
-        }
-        
-        .footer-column ul {
-            list-style: none;
-        }
-        
-        .footer-column ul li {
-            margin-bottom: 10px;
-        }
-        
-        .footer-column ul li a {
-            color: var(--light-gray);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-column ul li a:hover {
-            color: var(--teal);
-        }
-        
-        .copyright {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid var(--navy);
-            color: var(--light-gray);
-            font-size: 0.9rem;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            nav ul {
-                margin-top: 20px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            nav ul li {
-                margin: 0 10px 10px;
-            }
-            
-            .contact-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .page-hero h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - AI Buddy</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Color Variables */
+    :root {
+      --primary-dark: #01161e;
+      --primary: #124559;
+      --primary-light: #598392;
+      --accent: #33c6e7;
+      --light: #aec3b0;
+      --background: #eff6e0;
+      --white: #ffffff;
+      --gray: #d9d9d9;
+      --text: #353535;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* Header Styles */
+    header {
+      background-color: var(--white);
+      padding: 15px 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-icon {
+      margin-right: 8px;
+      font-size: 28px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .signin-btn {
+      background-color: var(--accent);
+      color: var(--white);
+      border: none;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .signin-btn:hover {
+      background-color: #2ab4d1;
+    }
+
+    /* Page Hero */
+    .page-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: var(--white);
+      padding: 60px 0;
+      text-align: center;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .page-hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+    }
+
+    .breadcrumb li {
+      margin: 0 10px;
+      position: relative;
+    }
+
+    .breadcrumb li:not(:last-child):after {
+      content: ">";
+      position: absolute;
+      right: -15px;
+    }
+
+    .breadcrumb a {
+      color: var(--light);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--accent);
+    }
+
+    .breadcrumb .current {
+      color: var(--accent);
+    }
+
+    /* Contact Section */
+    .contact-section {
+      padding: 80px 0;
+    }
+
+    .contact-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+    }
+
+    .contact-info {
+      background-color: var(--white);
+      border-radius: 10px;
+      padding: 40px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .contact-info h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+
+    .contact-info p {
+      margin-bottom: 30px;
+      color: var(--text);
+    }
+
+    .contact-details {
+      margin-bottom: 40px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 25px;
+    }
+
+    .contact-icon {
+      width: 50px;
+      height: 50px;
+      background-color: var(--light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      color: var(--primary);
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .contact-text h3 {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+      color: var(--primary);
+    }
+
+    .contact-text p {
+      margin-bottom: 0;
+      color: var(--text);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: var(--primary);
+      border-radius: 50%;
+      color: var(--white);
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .social-links a:hover {
+      background-color: var(--accent);
+    }
+
+    /* Contact Form */
+    .contact-form {
+      background-color: var(--white);
+      border-radius: 10px;
+      padding: 40px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .contact-form h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--primary);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--gray);
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    textarea.form-control {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      color: var(--white);
+      padding: 12px 30px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary:hover {
+      background-color: #2ab4d1;
+      transform: translateY(-2px);
+    }
+
+    /* FAQ Section */
+    .faq {
+      padding: 80px 0;
+      background-color: var(--white);
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    .section-title p {
+      color: var(--text);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      margin-bottom: 15px;
+      border: 1px solid var(--gray);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 20px;
+      background-color: var(--light);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      color: var(--text);
+    }
+
+    .faq-item.active .faq-answer {
+      padding: 20px;
+      max-height: 500px;
+    }
+
+    .faq-toggle {
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+    }
+
+    .faq-item.active .faq-toggle {
+      transform: rotate(45deg);
+    }
+
+    /* Map Section */
+    .map-section {
+      padding: 0 0 80px;
+    }
+
+    .map-container {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      height: 400px;
+    }
+
+    .map-placeholder {
+      width: 100%;
+      height: 100%;
+      background-color: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--primary-dark);
+      color: var(--white);
+      padding: 60px 0 20px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-column h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: var(--accent);
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-column ul li a {
+      color: var(--light);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-column ul li a:hover {
+      color: var(--accent);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--primary);
+      color: var(--light);
+      font-size: 0.9rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      nav {
+        margin: 15px 0;
+      }
+      
+      nav a {
+        margin: 0 10px;
+      }
+      
+      .contact-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .page-hero h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-content">
-            <div class="logo">MindCare</div>
-            <nav>
-                <ul>
-                    <li><a href="index.html">Trang chủ</a></li>
-                    <li><a href="#">Dịch vụ</a></li>
-                    <li><a href="#">Chuyên gia</a></li>
-                    <li><a href="#">Bài viết</a></li>
-                    <li><a href="contact.html" class="current">Liên hệ</a></li>
-                </ul>
-            </nav>
-            <button class="cta-button">Đặt lịch tư vấn</button>
+  <!-- Header -->
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <span class="logo-icon">🤖</span>
+        AI Buddy
+      </div>
+      <nav>
+        <a href="Prototype_Homepage.html">Home</a>
+        <a href="Prototype_Chatbot.html">Chatbot</a>
+        <a href="Prototype_EmotionTracker.html">Emotion Tracker</a>
+        <a href="Prototype_Focus.html">Focus</a>
+        <a href="Prototype_Profile.html">Profile</a>
+        <a href="Prototype_Contact.html" class="current">Contact</a>
+      </nav>
+      <button class="signin-btn">Sign In</button>
+    </div>
+  </header>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>Contact Us</h1>
+      <ul class="breadcrumb">
+        <li><a href="Prototype_Homepage.html">Home</a></li>
+        <li class="current">Contact</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact-section">
+    <div class="container contact-container">
+      <div class="contact-info">
+        <h2>Get in Touch</h2>
+        <p>We're always here to listen and support you. Don't hesitate to reach out to us through any of the methods below.</p>
+        
+        <div class="contact-details">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="contact-text">
+              <h3>Address</h3>
+              <p>123 Wellness Street, Mindful District, CA 90210</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-phone"></i>
+            </div>
+            <div class="contact-text">
+              <h3>Phone</h3>
+              <p>+1 (555) 123-4567</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contact-text">
+              <h3>Email</h3>
+              <p>support@aibuddy.com</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="contact-text">
+              <h3>Working Hours</h3>
+              <p>Monday - Friday: 8:00 AM - 8:00 PM<br>Saturday: 9:00 AM - 5:00 PM</p>
+            </div>
+          </div>
         </div>
-    </header>
-
-    <!-- Page Hero -->
-    <section class="page-hero">
-        <div class="container">
-            <h1>Liên hệ với chúng tôi</h1>
-            <ul class="breadcrumb">
-                <li><a href="index.html">Trang chủ</a></li>
-                <li class="current">Liên hệ</li>
-            </ul>
+        
+        <h3>Follow Us</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
         </div>
-    </section>
+      </div>
+      
+      <div class="contact-form">
+        <h2>Send Us a Message</h2>
+        <form id="contactForm">
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <select id="subject" class="form-control">
+              <option value="">Select a subject</option>
+              <option value="general">General Inquiry</option>
+              <option value="support">Technical Support</option>
+              <option value="feedback">Feedback</option>
+              <option value="partnership">Partnership</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message *</label>
+            <textarea id="message" class="form-control" required></textarea>
+          </div>
+          <button type="submit" class="btn-primary">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
 
-    <!-- Contact Section -->
-    <section class="contact">
-        <div class="container contact-container">
-            <div class="contact-info">
-                <h2>Thông tin liên hệ</h2>
-                <p>Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn. Đừng ngần ngại liên hệ với chúng tôi qua các phương thức dưới đây.</p>
-                
-                <div class="contact-details">
-                    <div class="contact-item">
-                        <div class="contact-icon">📍</div>
-                        <div class="contact-text">
-                            <h3>Địa chỉ</h3>
-                            <p>123 Đường ABC, Quận 1, TP.HCM</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">📞</div>
-                        <div class="contact-text">
-                            <h3>Điện thoại</h3>
-                            <p>(028) 1234 5678</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">✉️</div>
-                        <div class="contact-text">
-                            <h3>Email</h3>
-                            <p>info@mindcare.vn</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">🕒</div>
-                        <div class="contact-text">
-                            <h3>Giờ làm việc</h3>
-                            <p>Thứ 2 - Thứ 6: 8:00 - 18:00<br>Thứ 7: 8:00 - 12:00</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <h3>Theo dõi chúng tôi</h3>
-                <div class="social-links">
-                    <a href="#">FB</a>
-                    <a href="#">IG</a>
-                    <a href="#">TW</a>
-                    <a href="#">YT</a>
-                </div>
-            </div>
-            
-            <div class="contact-form">
-                <h2>Gửi tin nhắn cho chúng tôi</h2>
-                <form id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Họ và tên *</label>
-                        <input type="text" id="name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email *</label>
-                        <input type="email" id="email" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Số điện thoại</label>
-                        <input type="tel" id="phone" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Chủ đề</label>
-                        <select id="subject" class="form-control">
-                            <option value="">Chọn chủ đề</option>
-                            <option value="consultation">Tư vấn dịch vụ</option>
-                            <option value="appointment">Đặt lịch hẹn</option>
-                            <option value="feedback">Phản hồi</option>
-                            <option value="other">Khác</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Tin nhắn *</label>
-                        <textarea id="message" class="form-control" required></textarea>
-                    </div>
-                    <button type="submit" class="btn-primary">Gửi tin nhắn</button>
-                </form>
-            </div>
+  <!-- FAQ Section -->
+  <section class="faq">
+    <div class="container">
+      <div class="section-title">
+        <h2>Frequently Asked Questions</h2>
+        <p>Find answers to common questions about our services</p>
+      </div>
+      
+      <div class="faq-container">
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>How quickly can I expect a response to my inquiry?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>We typically respond to all inquiries within 24 hours during business days. For urgent matters, please call our support line for immediate assistance.</p>
+          </div>
         </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="faq">
-        <div class="container">
-            <div class="section-title">
-                <h2>Câu hỏi thường gặp</h2>
-                <p>Tìm câu trả lời cho những thắc mắc phổ biến về dịch vụ của chúng tôi</p>
-            </div>
-            
-            <div class="faq-container">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Tôi có thể đặt lịch tư vấn trực tuyến không?</span>
-                        <span class="faq-toggle">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Có, chúng tôi cung cấp dịch vụ tư vấn trực tuyến qua video call, điện thoại hoặc chat. Bạn có thể chọn hình thức phù hợp nhất với nhu cầu của mình.</p>
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Chi phí cho một buổi tư vấn là bao nhiêu?</span>
-                        <span class="faq-toggle">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Chi phí tư vấn phụ thuộc vào loại hình dịch vụ và chuyên gia bạn lựa chọn. Chúng tôi có các gói dịch vụ với mức giá khác nhau để phù hợp với nhu cầu và khả năng tài chính của bạn. Vui lòng liên hệ để được tư vấn cụ thể.</p>
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Tôi có thể hủy hoặc đổi lịch hẹn không?</span>
-                        <span class="faq-toggle">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Có, bạn có thể hủy hoặc đổi lịch hẹn miễn phí nếu thông báo trước ít nhất 24 giờ. Trong trường hợp khẩn cấp, vui lòng liên hệ trực tiếp với chúng tôi để được hỗ trợ.</p>
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Thông tin của tôi có được bảo mật không?</span>
-                        <span class="faq-toggle">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Hoàn toàn có. Chúng tôi tuân thủ nghiêm ngặt các quy định về bảo mật thông tin cá nhân và sức khỏe. Tất cả thông tin bạn chia sẻ đều được bảo mật và chỉ sử dụng cho mục đích chăm sóc sức khỏe của bạn.</p>
-                    </div>
-                </div>
-            </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Is AI Buddy suitable for crisis situations?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>While AI Buddy provides emotional support, it is not a replacement for emergency mental health services. If you're in crisis, please contact your local emergency services or a crisis hotline immediately.</p>
+          </div>
         </div>
-    </section>
-
-    <!-- Map Section -->
-    <section class="map-section">
-        <div class="container">
-            <div class="map-container">
-                <div class="map-placeholder">
-                    Bản đồ vị trí MindCare
-                </div>
-            </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Can I use AI Buddy without creating an account?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Yes, you can access basic features without an account, but creating an account allows you to save your progress, track your emotional journey, and access personalized recommendations.</p>
+          </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>MindCare</h3>
-                    <p>Chăm sóc sức khỏe tâm thần cho mọi người với chất lượng dịch vụ tốt nhất.</p>
-                    <div class="social-links">
-                        <a href="#">FB</a>
-                        <a href="#">IG</a>
-                        <a href="#">TW</a>
-                        <a href="#">YT</a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h3>Liên kết nhanh</h3>
-                    <ul>
-                        <li><a href="index.html">Trang chủ</a></li>
-                        <li><a href="#">Dịch vụ</a></li>
-                        <li><a href="#">Chuyên gia</a></li>
-                        <li><a href="#">Bài viết</a></li>
-                        <li><a href="contact.html">Liên hệ</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Dịch vụ</h3>
-                    <ul>
-                        <li><a href="#">Tư vấn tâm lý</a></li>
-                        <li><a href="#">Trị liệu nhóm</a></li>
-                        <li><a href="#">Tư vấn trực tuyến</a></li>
-                        <li><a href="#">Đào tạo kỹ năng</a></li>
-                        <li><a href="#">Hỗ trợ khẩn cấp</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Liên hệ</h3>
-                    <ul>
-                        <li>Địa chỉ: 123 Đường ABC, Quận 1, TP.HCM</li>
-                        <li>Điện thoại: (028) 1234 5678</li>
-                        <li>Email: info@mindcare.vn</li>
-                        <li>Giờ làm việc: T2-T6: 8:00-18:00</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2023 MindCare. Tất cả các quyền được bảo lưu.</p>
-            </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Is my data and privacy protected?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Absolutely. We take your privacy seriously. All your data is encrypted and stored securely. We never share your personal information with third parties without your explicit consent.</p>
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
+  </section>
 
-    <script>
-        // FAQ Toggle
-        document.querySelectorAll('.faq-question').forEach(question => {
-            question.addEventListener('click', () => {
-                const faqItem = question.parentElement;
-                faqItem.classList.toggle('active');
-            });
-        });
+  <!-- Map Section -->
+  <section class="map-section">
+    <div class="container">
+      <div class="map-container">
+        <div class="map-placeholder">
+          <i class="fas fa-map-marked-alt"></i> AI Buddy Headquarters Location
+        </div>
+      </div>
+    </div>
+  </section>
 
-        // Form Submission
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi trong thời gian sớm nhất.');
-            this.reset();
-        });
-    </script>
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>AI Buddy</h3>
+          <p>Your companion for mental wellness with intelligent AI support and personalized care.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="Prototype_Homepage.html">Home</a></li>
+            <li><a href="Prototype_Chatbot.html">Chatbot</a></li>
+            <li><a href="Prototype_EmotionTracker.html">Emotion Tracker</a></li>
+            <li><a href="Prototype_Focus.html">Focus</a></li>
+            <li><a href="Prototype_Contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Services</h3>
+          <ul>
+            <li><a href="#">Emotional Chat Support</a></li>
+            <li><a href="#">Mood Tracking</a></li>
+            <li><a href="#">Meditation Sessions</a></li>
+            <li><a href="#">Focus Exercises</a></li>
+            <li><a href="#">Personalized Insights</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Contact</h3>
+          <ul>
+            <li><i class="fas fa-map-marker-alt"></i> 123 Wellness Street, Mindful District, CA 90210</li>
+            <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+            <li><i class="fas fa-envelope"></i> support@aibuddy.com</li>
+            <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 8:00 PM</li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2025 AI Buddy. All rights reserved. | Mental Health Companion</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ Toggle
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const faqItem = question.parentElement;
+        faqItem.classList.toggle('active');
+      });
+    });
+
+    // Form Submission
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Thank you for contacting us! We will get back to you as soon as possible.');
+      this.reset();
+    });
+  </script>
 </body>
 </html>
