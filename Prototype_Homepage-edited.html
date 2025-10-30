@@ -1,640 +1,546 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindCare - Chăm sóc sức khỏe tâm thần</title>
-    <style>
-        /* Biến màu sắc */
-        :root {
-            /* Palette 1 */
-            --dark-gray: #353535;
-            --teal: #33c6e7;
-            --white: #ffffff;
-            --light-gray: #d9d9d9;
-            --dark-blue: #284b63;
-            
-            /* Palette 2 */
-            --dark-navy: #01161e;
-            --navy: #124559;
-            --slate: #598392;
-            --sage: #aec3b0;
-            --light-cream: #eff6e0;
-        }
-        
-        /* Reset và cài đặt cơ bản */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--light-cream);
-            color: var(--dark-navy);
-            line-height: 1.6;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header */
-        header {
-            background-color: var(--navy);
-            color: var(--white);
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--teal);
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 25px;
-        }
-        
-        nav ul li a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        nav ul li a:hover {
-            color: var(--teal);
-        }
-        
-        .cta-button {
-            background-color: var(--teal);
-            color: var(--white);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .cta-button:hover {
-            background-color: #2ab4d1;
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--navy) 0%, var(--slate) 100%);
-            color: var(--white);
-            padding: 100px 0;
-            text-align: center;
-        }
-        
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-        
-        .hero-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        .btn-primary {
-            background-color: var(--teal);
-            color: var(--white);
-            padding: 12px 30px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary:hover {
-            background-color: #2ab4d1;
-            transform: translateY(-2px);
-        }
-        
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--white);
-            padding: 12px 30px;
-            border: 2px solid var(--white);
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .btn-secondary:hover {
-            background-color: var(--white);
-            color: var(--navy);
-        }
-        
-        /* Services Section */
-        .services {
-            padding: 80px 0;
-            background-color: var(--white);
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--dark-navy);
-            margin-bottom: 15px;
-        }
-        
-        .section-title p {
-            color: var(--slate);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .service-card {
-            background-color: var(--light-cream);
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .service-icon {
-            width: 70px;
-            height: 70px;
-            background-color: var(--sage);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            color: var(--navy);
-            font-size: 30px;
-        }
-        
-        .service-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--dark-navy);
-        }
-        
-        .service-card p {
-            color: var(--slate);
-            margin-bottom: 20px;
-        }
-        
-        /* About Section */
-        .about {
-            padding: 80px 0;
-            background-color: var(--light-cream);
-        }
-        
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            align-items: center;
-        }
-        
-        .about-text h2 {
-            font-size: 2.5rem;
-            color: var(--dark-navy);
-            margin-bottom: 20px;
-        }
-        
-        .about-text p {
-            margin-bottom: 20px;
-            color: var(--slate);
-        }
-        
-        .about-image {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .about-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        
-        /* Testimonials Section */
-        .testimonials {
-            padding: 80px 0;
-            background-color: var(--sage);
-        }
-        
-        .testimonials .section-title h2 {
-            color: var(--dark-navy);
-        }
-        
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .testimonial-card {
-            background-color: var(--white);
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 20px;
-            color: var(--dark-navy);
-        }
-        
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-        }
-        
-        .author-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: var(--light-gray);
-            margin-right: 15px;
-            overflow: hidden;
-        }
-        
-        .author-info h4 {
-            color: var(--dark-navy);
-            margin-bottom: 5px;
-        }
-        
-        .author-info p {
-            color: var(--slate);
-            font-size: 0.9rem;
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            padding: 80px 0;
-            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--navy) 100%);
-            color: var(--white);
-            text-align: center;
-        }
-        
-        .cta-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-        
-        .cta-section p {
-            max-width: 700px;
-            margin: 0 auto 30px;
-            opacity: 0.9;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--dark-navy);
-            color: var(--white);
-            padding: 60px 0 20px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-        
-        .footer-column h3 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            color: var(--teal);
-        }
-        
-        .footer-column ul {
-            list-style: none;
-        }
-        
-        .footer-column ul li {
-            margin-bottom: 10px;
-        }
-        
-        .footer-column ul li a {
-            color: var(--light-gray);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-column ul li a:hover {
-            color: var(--teal);
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .social-links a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: var(--navy);
-            border-radius: 50%;
-            color: var(--white);
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-        
-        .social-links a:hover {
-            background-color: var(--teal);
-        }
-        
-        .copyright {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid var(--navy);
-            color: var(--light-gray);
-            font-size: 0.9rem;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            nav ul {
-                margin-top: 20px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            nav ul li {
-                margin: 0 10px 10px;
-            }
-            
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn-primary, .btn-secondary {
-                width: 80%;
-                max-width: 300px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Buddy - Your Mental Health Companion</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Color Variables */
+    :root {
+      --primary-dark: #01161e;
+      --primary: #124559;
+      --primary-light: #598392;
+      --accent: #33c6e7;
+      --light: #aec3b0;
+      --background: #eff6e0;
+      --white: #ffffff;
+      --gray: #d9d9d9;
+      --text: #353535;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* Header Styles */
+    header {
+      background-color: var(--white);
+      padding: 15px 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-icon {
+      margin-right: 8px;
+      font-size: 28px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .signin-btn {
+      background-color: var(--accent);
+      color: var(--white);
+      border: none;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .signin-btn:hover {
+      background-color: #2ab4d1;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: var(--white);
+      padding: 80px 0;
+      text-align: center;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+
+    .cta-button {
+      background-color: var(--accent);
+      color: var(--white);
+      border: none;
+      padding: 12px 35px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta-button:hover {
+      background-color: #2ab4d1;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Main Content */
+    main {
+      display: flex;
+      gap: 30px;
+      margin: 40px auto;
+    }
+
+    /* Left Column */
+    .left-column {
+      flex: 2;
+    }
+
+    .feature-intro {
+      background-color: var(--white);
+      border-radius: 10px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .feature-intro h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+
+    .feature-intro p {
+      margin-bottom: 20px;
+    }
+
+    .feature-intro ul {
+      padding-left: 20px;
+    }
+
+    .feature-intro li {
+      margin-bottom: 10px;
+      position: relative;
+      padding-left: 10px;
+    }
+
+    .feature-intro li:before {
+      content: "•";
+      color: var(--accent);
+      font-weight: bold;
+      position: absolute;
+      left: -10px;
+    }
+
+    /* Feature Cards */
+    .feature-card {
+      background-color: var(--white);
+      border-radius: 10px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .feature-info {
+      width: 60%;
+    }
+
+    .feature-info h4 {
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+    }
+
+    .feature-image {
+      width: 35%;
+      height: 150px;
+      border-radius: 8px;
+      background-color: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-weight: 500;
+      overflow: hidden;
+    }
+
+    .feature-image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--light) 0%, var(--primary-light) 100%);
+    }
+
+    /* Right Column */
+    .right-column {
+      flex: 1;
+    }
+
+    .perks-box, .subscription-box, .faq-box {
+      background-color: var(--white);
+      border-radius: 10px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .perks-box h4, .subscription-box h4, .faq-box h4 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+
+    .perks-box ul {
+      padding-left: 20px;
+    }
+
+    .perks-box li {
+      margin-bottom: 10px;
+      position: relative;
+      padding-left: 10px;
+    }
+
+    .perks-box li:before {
+      content: "✓";
+      color: var(--accent);
+      font-weight: bold;
+      position: absolute;
+      left: -10px;
+    }
+
+    .subscription-box p {
+      margin-bottom: 15px;
+    }
+
+    .subscription-btn {
+      background-color: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .subscription-btn:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .faq-item {
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--gray);
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+
+    .faq-item p {
+      margin-bottom: 5px;
+    }
+
+    .faq-question {
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .faq-form textarea {
+      width: 100%;
+      height: 40px;
+      border: 1px solid var(--gray);
+      border-radius: 5px;
+      padding: 10px;
+      margin-top: 10px;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    .submit-btn {
+      background-color: var(--accent);
+      color: var(--white);
+      border: none;
+      padding: 8px 20px;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .submit-btn:hover {
+      background-color: #2ab4d1;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--primary-dark);
+      color: var(--white);
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 50px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      main {
+        flex-direction: column;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      nav {
+        margin: 15px 0;
+      }
+      
+      nav a {
+        margin: 0 10px;
+      }
+      
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .feature-card {
+        flex-direction: column;
+      }
+      
+      .feature-info, .feature-image {
+        width: 100%;
+      }
+      
+      .feature-image {
+        margin-top: 15px;
+        height: 120px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-content">
-            <div class="logo">MindCare</div>
-            <nav>
-                <ul>
-                    <li><a href="#">Trang chủ</a></li>
-                    <li><a href="#">Dịch vụ</a></li>
-                    <li><a href="#">Chuyên gia</a></li>
-                    <li><a href="#">Bài viết</a></li>
-                    <li><a href="#">Về chúng tôi</a></li>
-                </ul>
-            </nav>
-            <button class="cta-button">Đặt lịch tư vấn</button>
-        </div>
-    </header>
+  <!-- Header -->
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <span class="logo-icon">🤖</span>
+        AI Buddy
+      </div>
+      <nav>
+        <a href="Prototype_Homepage.html">Home</a>
+        <a href="Prototype_Chatbot.html">Chatbot</a>
+        <a href="Prototype_EmotionTracker.html">Emotion Tracker</a>
+        <a href="Prototype_Focus.html">Focus</a>
+        <a href="Prototype_Profile.html">Profile</a>
+        <a href="Prototype_About.html">About</a>
+      </nav>
+      <button class="signin-btn">Sign In</button>
+    </div>
+  </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container hero-content">
-            <h1>Chăm sóc sức khỏe tâm thần của bạn</h1>
-            <p>MindCare cung cấp các dịch vụ chăm sóc sức khỏe tâm thần chuyên nghiệp, giúp bạn tìm lại sự cân bằng và hạnh phúc trong cuộc sống.</p>
-            <div class="hero-buttons">
-                <button class="btn-primary">Bắt đầu hành trình</button>
-                <button class="btn-secondary">Tìm hiểu thêm</button>
-            </div>
-        </div>
-    </section>
+  <!-- Hero Banner -->
+  <section class="hero">
+    <div class="container hero-content">
+      <h1>AI Buddy - Your Mental Health Companion</h1>
+      <p>An intelligent AI assistant that helps you track emotions, relax, and improve your mental wellbeing every day</p>
+      <button class="cta-button">Start Chatting Now</button>
+    </div>
+  </section>
 
-    <!-- Services Section -->
-    <section class="services">
-        <div class="container">
-            <div class="section-title">
-                <h2>Dịch vụ của chúng tôi</h2>
-                <p>Các giải pháp chăm sóc sức khỏe tâm thần toàn diện được thiết kế riêng cho nhu cầu của bạn</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">🧠</div>
-                    <h3>Tư vấn tâm lý</h3>
-                    <p>Gặp gỡ các chuyên gia tâm lý được đào tạo bài bản để thảo luận về những vấn đề bạn đang gặp phải.</p>
-                    <a href="#" class="btn-secondary">Tìm hiểu thêm</a>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">💬</div>
-                    <h3>Trị liệu nhóm</h3>
-                    <p>Tham gia các buổi trị liệu nhóm để chia sẻ và học hỏi từ những người có trải nghiệm tương tự.</p>
-                    <a href="#" class="btn-secondary">Tìm hiểu thêm</a>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">📱</div>
-                    <h3>Tư vấn trực tuyến</h3>
-                    <p>Nhận hỗ trợ từ xa thông qua các phiên tư vấn video, cuộc gọi hoặc trò chuyện trực tuyến.</p>
-                    <a href="#" class="btn-secondary">Tìm hiểu thêm</a>
-                </div>
-            </div>
+  <!-- Main content layout -->
+  <div class="container">
+    <main>
+      <!-- Left column -->
+      <div class="left-column">
+        <!-- Quick Introduction -->
+        <div class="feature-intro">
+          <h3>Key Features of AI Buddy</h3>
+          <p>AI Buddy is a companion chatbot that helps you track emotions, relax, and suggests solutions to improve your mental health comprehensively.</p>
+          <ul>
+            <li><strong>NLP Emotion Chat:</strong> Natural conversation with intelligent AI that understands your feelings</li>
+            <li><strong>Emotion Journaling:</strong> Track and analyze your daily moods</li>
+            <li><strong>Focus/Meditation Recommendations:</strong> Personalized relaxation and focus exercises tailored for you</li>
+          </ul>
         </div>
-    </section>
 
-    <!-- About Section -->
-    <section class="about">
-        <div class="container about-content">
-            <div class="about-text">
-                <h2>Về MindCare</h2>
-                <p>MindCare được thành lập với sứ mệnh cung cấp dịch vụ chăm sóc sức khỏe tâm thần chất lượng cao, dễ tiếp cận cho mọi người.</p>
-                <p>Đội ngũ của chúng tôi bao gồm các chuyên gia tâm lý, bác sĩ tâm thần và nhà trị liệu được cấp phép, giàu kinh nghiệm và tận tâm với công việc.</p>
-                <p>Chúng tôi tin rằng sức khỏe tâm thần là nền tảng cho một cuộc sống hạnh phúc và viên mãn.</p>
-                <button class="btn-primary">Tìm hiểu thêm về chúng tôi</button>
-            </div>
-            <div class="about-image">
-                <!-- Placeholder for image -->
-                <div style="width:100%; height:300px; background-color:var(--slate); display:flex; align-items:center; justify-content:center; color:var(--white);">
-                    Hình ảnh về đội ngũ MindCare
-                </div>
-            </div>
+        <!-- Feature blocks -->
+        <div class="feature-card">
+          <div class="feature-info">
+            <h4>Emotion Chatbot</h4>
+            <p>Experience natural conversation with advanced NLP technology. AI Buddy not only listens but understands your emotions, providing helpful advice and immediate support when you need it.</p>
+          </div>
+          <div class="feature-image">
+            <div class="feature-image-placeholder">Friendly Chat UI</div>
+          </div>
         </div>
-    </section>
 
-    <!-- Testimonials Section -->
-    <section class="testimonials">
-        <div class="container">
-            <div class="section-title">
-                <h2>Câu chuyện thành công</h2>
-                <p>Những chia sẻ từ những người đã tìm thấy sự hỗ trợ tại MindCare</p>
-            </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"MindCare đã thay đổi cuộc đời tôi. Nhờ sự hỗ trợ của các chuyên gia, tôi đã học được cách quản lý căng thẳng và tìm lại niềm vui trong cuộc sống."</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">
-                            <!-- Placeholder for avatar -->
-                            <div style="width:100%; height:100%; background-color:var(--light-gray); display:flex; align-items:center; justify-content:center;">A</div>
-                        </div>
-                        <div class="author-info">
-                            <h4>An Nguyễn</h4>
-                            <p>Khách hàng 2 năm</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"Tôi rất biết ơn đội ngũ tại MindCare. Họ không chỉ lắng nghe mà còn cung cấp cho tôi những công cụ thực tế để đối mặt với lo âu hàng ngày."</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">
-                            <!-- Placeholder for avatar -->
-                            <div style="width:100%; height:100%; background-color:var(--light-gray); display:flex; align-items:center; justify-content:center;">B</div>
-                        </div>
-                        <div class="author-info">
-                            <h4>Bình Trần</h4>
-                            <p>Khách hàng 6 tháng</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"Dịch vụ tư vấn trực tuyến của MindCare rất tiện lợi. Tôi có thể nhận được sự hỗ trợ cần thiết ngay tại nhà mà không phải lo lắng về việc di chuyển."</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">
-                            <!-- Placeholder for avatar -->
-                            <div style="width:100%; height:100%; background-color:var(--light-gray); display:flex; align-items:center; justify-content:center;">C</div>
-                        </div>
-                        <div class="author-info">
-                            <h4>Chi Lê</h4>
-                            <p>Khách hàng 1 năm</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="feature-card">
+          <div class="feature-info">
+            <h4>Emotion Tracker</h4>
+            <p>Record your daily moods and view your emotion charts by week and month. Analyze emotional trends to help you identify factors affecting your mental state.</p>
+          </div>
+          <div class="feature-image">
+            <div class="feature-image-placeholder">Visual Mood Chart</div>
+          </div>
         </div>
-    </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <h2>Sẵn sàng bắt đầu hành trình chăm sóc sức khỏe tâm thần?</h2>
-            <p>Liên hệ với chúng tôi ngay hôm nay để được tư vấn miễn phí và tìm ra giải pháp phù hợp nhất cho bạn.</p>
-            <button class="btn-primary">Đặt lịch tư vấn ngay</button>
+        <div class="feature-card">
+          <div class="feature-info">
+            <h4>Focus / Meditation</h4>
+            <p>Join short focus and meditation sessions with voice guidance and breathing animations. Reduce stress and enhance concentration in just a few minutes each day.</p>
+          </div>
+          <div class="feature-image">
+            <div class="feature-image-placeholder">Relaxing Breathing Animation</div>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>MindCare</h3>
-                    <p>Chăm sóc sức khỏe tâm thần cho mọi người với chất lượng dịch vụ tốt nhất.</p>
-                    <div class="social-links">
-                        <a href="#">FB</a>
-                        <a href="#">IG</a>
-                        <a href="#">TW</a>
-                        <a href="#">YT</a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h3>Liên kết nhanh</h3>
-                    <ul>
-                        <li><a href="#">Trang chủ</a></li>
-                        <li><a href="#">Dịch vụ</a></li>
-                        <li><a href="#">Chuyên gia</a></li>
-                        <li><a href="#">Bài viết</a></li>
-                        <li><a href="#">Liên hệ</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Dịch vụ</h3>
-                    <ul>
-                        <li><a href="#">Tư vấn tâm lý</a></li>
-                        <li><a href="#">Trị liệu nhóm</a></li>
-                        <li><a href="#">Tư vấn trực tuyến</a></li>
-                        <li><a href="#">Đào tạo kỹ năng</a></li>
-                        <li><a href="#">Hỗ trợ khẩn cấp</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Liên hệ</h3>
-                    <ul>
-                        <li>Địa chỉ: 123 Đường ABC, Quận 1, TP.HCM</li>
-                        <li>Điện thoại: (028) 1234 5678</li>
-                        <li>Email: info@mindcare.vn</li>
-                        <li>Giờ làm việc: T2-T6: 8:00-18:00</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2023 MindCare. Tất cả các quyền được bảo lưu.</p>
-            </div>
+      <!-- Right column -->
+      <div class="right-column">
+        <div class="perks-box">
+          <h4>Benefits</h4>
+          <p>We're here to help you:</p>
+          <ul>
+            <li>Receive daily focus and relaxation reminders</li>
+            <li>Securely store your emotion journal</li>
+            <li>Access personalized virtual coaching</li>
+            <li>Track your mental health improvement progress</li>
+            <li>Access a rich library of exercises</li>
+          </ul>
         </div>
-    </footer>
+
+        <div class="subscription-box">
+          <h4>Enhanced Experience</h4>
+          <p>Experience the premium version with exclusive features and premium content in Focus Sessions.</p>
+          <a href="Prototype_Focus.html">
+            <button class="subscription-btn">View Premium Plan Details</button>
+          </a>
+        </div>
+
+        <div class="faq-box">
+          <h4>Frequently Asked Questions</h4>
+          
+          <div class="faq-item">
+            <p class="faq-question">What is AI Buddy?</p>
+            <p>AI Buddy is a mental health support application that uses artificial intelligence to listen, understand, and accompany you on your mental wellness journey.</p>
+          </div>
+          
+          <div class="faq-item">
+            <p class="faq-question">Do I need to log in for Focus Sessions?</p>
+            <p>You can try some basic features without logging in, but to save your progress and access all features, you need to create an account.</p>
+          </div>
+
+          <div class="faq-form">
+            <p class="faq-question">Send us your question</p>
+            <textarea placeholder="Enter your question..."></textarea>
+            <button class="submit-btn">Submit Question</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>AI Buddy Development Team | Contact: support@aibuddy.com | &#169; 2025 AI Buddy. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Add effect for CTA button
+    document.querySelector('.cta-button').addEventListener('click', function() {
+      window.location.href = 'Prototype_Chatbot.html';
+    });
+    
+    // Add effect for subscription button
+    document.querySelector('.subscription-btn').addEventListener('click', function() {
+      window.location.href = 'Prototype_Focus.html';
+    });
+    
+    // Handle FAQ form
+    document.querySelector('.submit-btn').addEventListener('click', function() {
+      const question = document.querySelector('.faq-form textarea').value;
+      if (question.trim() !== '') {
+        alert('Thank you for your question! We will respond as soon as possible.');
+        document.querySelector('.faq-form textarea').value = '';
+      } else {
+        alert('Please enter your question!');
+      }
+    });
+  </script>
 </body>
 </html>
