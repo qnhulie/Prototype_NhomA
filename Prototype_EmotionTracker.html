@@ -1,65 +1,375 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Buddy - Emotion Tracker</title>
-</head>
-<body style="font-family:Arial; margin:0; background:#f9f9f9;">
+<html lang="en">
 
-  <header style="display:flex; justify-content:space-between; align-items:center; padding:10px 30px; background-color:#ddd; border-bottom:2px solid #ccc;">
-    <div style="font-weight:bold;">[LOGO]</div>
-    <nav>
-      <a href="Prototype_Homepage.html" style="margin-right:15px;">Home</a>
-      <a href="Prototype_Chatbot.html" style="margin-right:15px;">Chatbot</a>
-      <a href="Prototype_EmotionTracker.html" style="margin-right:15px;">Emotion Tracker</a>
-      <a href="Prototype_Focus.html" style="margin-right:15px;">Focus</a>
-      <a href="Prototype_Profile.html" style="margin-right:15px;">Profile</a>
-      <a href="Prototype_About.html">About</a>
-    </nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Buddy · Emotion Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --primary-dark: #01161e;
+      --primary: #124559;
+      --primary-light: #598392;
+      --accent: #33c6e7;
+      --light: #aec3b0;
+      --background: #eff6e0;
+      --white: #ffffff;
+      --gray: #d9d9d9;
+      --text: #353535;
+      --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      --radius: 10px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* ===== Header ===== */
+    header {
+      background-color: var(--white);
+      padding: 15px 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-icon {
+      margin-right: 8px;
+      font-size: 28px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .signin-btn {
+      background-color: var(--accent);
+      color: var(--white);
+      border: none;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .signin-btn:hover {
+      background-color: #2ab4d1;
+    }
+
+    /* ===== Hero Section ===== */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: var(--white);
+      padding: 80px 0;
+      text-align: center;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 2.6rem;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    main {
+      display: flex;
+      gap: 30px;
+      margin: 40px auto 60px;
+      align-items: flex-start;
+    }
+
+    .left-column {
+      flex: 2;
+    }
+
+    .card {
+      background-color: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 25px;
+      margin-bottom: 25px;
+    }
+
+    .card h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    .mood-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .mood-btn {
+      background-color: #fff;
+      border: 1px solid var(--gray);
+      border-radius: var(--radius);
+      text-align: center;
+      padding: 12px;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .mood-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .mood-btn.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .mood-btn span {
+      font-size: 24px;
+      display: block;
+    }
+
+    .mood-btn small {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    textarea,
+    input {
+      width: 100%;
+      border: 1px solid var(--gray);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 1rem;
+      margin-bottom: 10px;
+      resize: vertical;
+    }
+
+    .btn {
+      background-color: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .entries {
+      margin-top: 15px;
+    }
+
+    .entry {
+      border: 1px solid var(--gray);
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .entry strong {
+      color: var(--primary);
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--light);
+      color: var(--primary-dark);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 0.8rem;
+      margin-right: 6px;
+    }
+
+    .right-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .chart-box,
+    .premium-box {
+      background-color: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .chart-placeholder {
+      height: 220px;
+      border: 2px dashed var(--gray);
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    .premium-box {
+      background: linear-gradient(135deg, var(--light), #dfeee0);
+      text-align: center;
+    }
+
+    .premium-box h4 {
+      color: var(--primary-dark);
+      margin-bottom: 10px;
+    }
+
+    .premium-box .btn {
+      background-color: var(--accent);
+      color: var(--white);
+    }
+
+    .premium-box .btn:hover {
+      background-color: #2ab4d1;
+    }
+
+    footer {
+      background-color: var(--primary-dark);
+      color: var(--white);
+      text-align: center;
+      padding: 25px 0;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      main {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <span class="logo-icon">🤖</span>
+        AI Buddy
+      </div>
+      <nav>
+        <a href="Prototype_Homepage.html">Home</a>
+        <a href="Prototype_Chatbot.html">Chatbot</a>
+        <a href="Prototype_EmotionTracker.html">Emotion Tracker</a>
+        <a href="Prototype_Focus.html">Focus</a>
+        <a href="Prototype_Profile.html">Profile</a>
+        <a href="Prototype_About.html">About</a>
+      </nav>
+      <button class="signin-btn">Sign In</button>
+    </div>
   </header>
 
-  <section style="margin:20px 30px; border:2px dashed #aaa; text-align:center; height:100px;">
-    [Banner: Theo dõi cảm xúc mỗi ngày cùng AI Buddy]
+  <section class="hero">
+    <div class="container hero-content">
+      <h1>Track Your Emotions with AI Buddy</h1>
+      <p>Log your daily moods, reflect with empathy, and visualize your emotional journey.</p>
+    </div>
   </section>
 
-  <main style="display:flex; gap:20px; margin:0 30px;">
-    <div style="flex:3;">
-      <!-- Form nhập cảm xúc -->
-      <div style="border:1px solid #aaa; background:#fff; padding:15px; margin-bottom:15px;">
-        <h4>[Ghi nhật ký cảm xúc]</h4>
-        <textarea rows="4" style="width:100%;" placeholder="[Nhập cảm xúc của bạn hôm nay...]"></textarea>
-        <br><button>Lưu lại</button>
+  <div class="container">
+    <main>
+      <div class="left-column">
+        <div class="card">
+          <h3>How are you feeling today?</h3>
+          <div class="mood-row" id="moodRow">
+            <div class="mood-btn" data-score="5" data-label="Joyful"><span>😊</span><small>Joyful</small></div>
+            <div class="mood-btn" data-score="4" data-label="Calm"><span>😌</span><small>Calm</small></div>
+            <div class="mood-btn" data-score="3" data-label="Okay"><span>🙂</span><small>Okay</small></div>
+            <div class="mood-btn" data-score="2" data-label="Tired"><span>🥱</span><small>Tired</small></div>
+            <div class="mood-btn" data-score="1" data-label="Sad"><span>😔</span><small>Sad</small></div>
+            <div class="mood-btn" data-score="0" data-label="Angry"><span>😠</span><small>Angry</small></div>
+          </div>
+
+          <textarea id="note" placeholder="Write a short reflection about your day..."></textarea>
+          <input id="tags" placeholder="Tags (comma separated e.g. exam, family, stress)">
+          <button class="btn" id="saveBtn">Save Entry</button>
+
+          <div class="entries" id="entries"></div>
+        </div>
       </div>
 
-      <!-- Mood Cards -->
-      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
-        <div style="border:1px dashed #999; padding:10px; background:#fff;">&#128522; Vui vẻ</div>
-        <div style="border:1px dashed #999; padding:10px; background:#fff;">&#128532; Buồn</div>
-        <div style="border:1px dashed #999; padding:10px; background:#fff;">&#128545; Tức giận</div>
-        <div style="border:1px dashed #999; padding:10px; background:#fff;">&#128564; Mệt mỏi</div>
-        <div style="border:1px dashed #999; padding:10px; background:#fff;">&#129321; Hào hứng</div>
+      <div class="right-column">
+        <div class="chart-box">
+          <h3>Mood Chart (7 Days)</h3>
+          <div class="chart-placeholder">[Mood chart visualization here]</div>
+        </div>
+
+        <div class="premium-box">
+          <h4>Want Deeper Insights?</h4>
+          <p>Unlock detailed emotion analytics and soothing voice sessions.</p>
+          <a href="Prototype_Focus.html"><button class="btn">Upgrade to Premium</button></a>
+        </div>
       </div>
-    </div>
+    </main>
+  </div>
 
-    <aside style="flex:1; border:1px solid #aaa; background:#fff; padding:10px;">
-      <h4>[Mood Chart]</h4>
-      <div style="border:1px dashed #999; height:150px; text-align:center;">[Biểu đồ cảm xúc theo ngày]</div>
-      <h4>[Bản nâng cao (premium)]</h4>
-      <ul>
-        <li>Phân tích xu hướng cảm xúc</li>
-        <li>So sánh mood theo tuần</li>
-        <li>Tự động gợi ý hoạt động phù hợp</li>
-      </ul>
-      <a href="Prototype_Focus.html">
-          <button>Mở khóa bản nâng cao</button>
-      </a>
-    </aside>
-  </main>
-
-  <!-- Footer -->
-  <footer style="margin-top:30px; background:#ddd; text-align:center; padding:10px;">
-    [Thông tin nhóm | Contact | &#169; 2025 AI Buddy]
+  <footer>
+    <p>© 2025 AI Buddy. All rights reserved.</p>
   </footer>
+
 </body>
+
 </html>
