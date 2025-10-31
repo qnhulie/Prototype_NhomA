@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cart - AI Buddy</title>
+
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary-dark: #01161e;
+      --primary: #124559;
+      --primary-light: #598392;
+      --accent: #33c6e7;
+      --light: #aec3b0;
+      --background: #eff6e0;
+      --white: #ffffff;
+      --gray: #d9d9d9;
+      --text: #353535;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: var(--background);
+      color: var(--text);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    header {
+      background-color: var(--white);
+      padding: 15px 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-icon {
+      font-size: 28px;
+      margin-right: 8px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .signin-btn {
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* HERO */
+    .page-hero {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      padding: 45px 0;
+      color: var(--white);
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 10px;
+      margin: 25px auto;
+      box-shadow: var(--card-shadow);
+    }
+
+    /* CART SECTION */
+    .cart-section {
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    .cart-content {
+      display: flex;
+      gap: 40px;
+    }
+
+    .cart-items {
+      flex: 2;
+      background: var(--white);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .cart-items h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 2px solid var(--light);
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      transition: 0.3s ease;
+      background: var(--white);
+    }
+
+    .cart-item:hover {
+      border-color: var(--primary-light);
+      transform: translateY(-3px);
+      box-shadow: var(--card-shadow);
+    }
+
+    .cart-info h3 {
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--white);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      margin-top: 5px;
+    }
+
+    .remove-btn {
+      color: #b30000;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .remove-btn:hover {
+      color: #ff0000;
+    }
+
+    /* SUMMARY */
+    .cart-summary {
+      flex: 1;
+      background: var(--white);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      height: fit-content;
+    }
+
+    .cart-summary h2 {
+      color: var(--primary);
+      margin-bottom: 25px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 1.05rem;
+    }
+
+    .summary-total {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--gray);
+    }
+
+    .checkout-btn {
+      margin-top: 25px;
+      background: var(--accent);
+      width: 100%;
+      padding: 14px 0;
+      border-radius: 8px;
+      border: none;
+      color: var(--white);
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .checkout-btn:hover {
+      background: #22bedd;
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: var(--primary-dark);
+      color: var(--white);
+      padding: 60px 0 20px;
+      margin-top: 50px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-column h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: var(--accent);
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 10px;
+      color: var(--light);
+    }
+
+    .footer-column ul li a {
+      color: var(--light);
+      text-decoration: none;
+    }
+
+    .footer-column ul li a:hover {
+      color: var(--accent);
+    }
+
+    .social-links a {
+      display: inline-flex;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--primary);
+      border-radius: 50%;
+      color: var(--white);
+      margin-right: 10px;
+      transition: 0.3s;
+    }
+
+    .social-links a:hover {
+      background-color: var(--accent);
+    }
+
+    .copyright {
+      border-top: 1px solid var(--primary);
+      text-align: center;
+      padding-top: 20px;
+      color: var(--light);
+    }
+
+    @media (max-width: 850px) {
+      .cart-content {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <span class="logo-icon">🤖</span> AI Buddy
+      </div>
+
+      <nav>
+        <a href="Prototype_Homepage.html">Home</a>
+        <a href="Prototype_Chatbot.html">Chatbot</a>
+        <a href="Prototype_EmotionTracker.html">Emotion Tracker</a>
+        <a href="Prototype_Focus.html">Focus</a>
+        <a href="Prototype_Profile.html">Profile</a>
+        <a href="Prototype_Contact.html">Contact</a>
+        <a href="Prototype_Cart.html">🛒 Cart</a>
+      </nav>
+
+      <button class="signin-btn">Sign In</button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    🛒 Your Cart
+  </section>
+
+  <!-- CART SECTION -->
+  <section class="cart-section container">
+
+    <div class="cart-content">
+
+      <!-- LEFT: ITEMS -->
+      <div class="cart-items">
+        <h2>Your Selected Plans</h2>
+
+        <div class="cart-item">
+          <div class="cart-info">
+            <h3>Essential Plan</h3>
+            <span class="tag">10 sessions + background music</span>
+          </div>
+          <div class="cart-price">
+            <strong>$5.49</strong>
+          </div>
+          <span class="remove-btn">X</span>
+        </div>
+
+        <div class="cart-item">
+          <div class="cart-info">
+            <h3>Premium Plan</h3>
+            <span class="tag">30 sessions + AI persona voices</span>
+          </div>
+          <div class="cart-price">
+            <strong>$8.49</strong>
+          </div>
+          <span class="remove-btn">X</span>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: SUMMARY -->
+      <div class="cart-summary">
+        <h2>Order Summary</h2>
+
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span>$13.98</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Discount:</span>
+          <span>$0.00</span>
+        </div>
+
+        <div class="summary-total">
+          Total Payment: $13.98
+        </div>
+
+        <button class="checkout-btn">Proceed to Checkout</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+
+        <div class="footer-column">
+          <h3>AI Buddy</h3>
+          <p>Your companion for mental wellness with intelligent AI support and personalized care.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="Prototype_Homepage.html">Home</a></li>
+            <li><a href="Prototype_Chatbot.html">Chatbot</a></li>
+            <li><a href="Prototype_EmotionTracker.html">Emotion Tracker</a></li>
+            <li><a href="Prototype_Focus.html">Focus</a></li>
+            <li><a href="Prototype_Contact.html">Contact</a></li>
+            <li><a href="Prototype_Cart.html">Cart</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Services</h3>
+          <ul>
+            <li><a href="#">Emotional Chat Support</a></li>
+            <li><a href="#">Mood Tracking</a></li>
+            <li><a href="#">Meditation Sessions</a></li>
+            <li><a href="#">Focus Exercises</a></li>
+            <li><a href="#">Personalized Insights</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
