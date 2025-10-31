@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -247,7 +248,9 @@
       flex: 1;
     }
 
-    .perks-box, .subscription-box, .faq-box {
+    .perks-box,
+    .subscription-box,
+    .faq-box {
       background-color: var(--white);
       border-radius: 10px;
       padding: 25px;
@@ -255,7 +258,9 @@
       box-shadow: var(--card-shadow);
     }
 
-    .perks-box h4, .subscription-box h4, .faq-box h4 {
+    .perks-box h4,
+    .subscription-box h4,
+    .faq-box h4 {
       color: var(--primary);
       margin-bottom: 15px;
       font-size: 1.3rem;
@@ -348,9 +353,46 @@
     footer {
       background-color: var(--primary-dark);
       color: var(--white);
+      padding: 60px 0 20px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-column h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: var(--accent);
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-column ul li a {
+      color: var(--light);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-column ul li a:hover {
+      color: var(--accent);
+    }
+
+    .copyright {
       text-align: center;
-      padding: 20px 0;
-      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid var(--primary);
+      color: var(--light);
+      font-size: 0.9rem;
     }
 
     /* Responsive Design */
@@ -358,32 +400,33 @@
       main {
         flex-direction: column;
       }
-      
+
       .header-content {
         flex-direction: column;
         text-align: center;
       }
-      
+
       nav {
         margin: 15px 0;
       }
-      
+
       nav a {
         margin: 0 10px;
       }
-      
+
       .hero h1 {
         font-size: 2.2rem;
       }
-      
+
       .feature-card {
         flex-direction: column;
       }
-      
-      .feature-info, .feature-image {
+
+      .feature-info,
+      .feature-image {
         width: 100%;
       }
-      
+
       .feature-image {
         margin-top: 15px;
         height: 120px;
@@ -391,6 +434,7 @@
     }
   </style>
 </head>
+
 <body>
   <!-- Header -->
   <header>
@@ -415,7 +459,8 @@
   <section class="hero">
     <div class="container hero-content">
       <h1>AI Buddy - Your Mental Health Companion</h1>
-      <p>An intelligent AI assistant that helps you track emotions, relax, and improve your mental wellbeing every day</p>
+      <p>An intelligent AI assistant that helps you track emotions, relax, and improve your mental wellbeing every day
+      </p>
       <button class="cta-button">Start Chatting Now</button>
     </div>
   </section>
@@ -428,11 +473,14 @@
         <!-- Quick Introduction -->
         <div class="feature-intro">
           <h3>Key Features of AI Buddy</h3>
-          <p>AI Buddy is a companion chatbot that helps you track emotions, relax, and suggests solutions to improve your mental health comprehensively.</p>
+          <p>AI Buddy is a companion chatbot that helps you track emotions, relax, and suggests solutions to improve
+            your mental health comprehensively.</p>
           <ul>
-            <li><strong>NLP Emotion Chat:</strong> Natural conversation with intelligent AI that understands your feelings</li>
+            <li><strong>NLP Emotion Chat:</strong> Natural conversation with intelligent AI that understands your
+              feelings</li>
             <li><strong>Emotion Journaling:</strong> Track and analyze your daily moods</li>
-            <li><strong>Focus/Meditation Recommendations:</strong> Personalized relaxation and focus exercises tailored for you</li>
+            <li><strong>Focus/Meditation Recommendations:</strong> Personalized relaxation and focus exercises tailored
+              for you</li>
           </ul>
         </div>
 
@@ -440,7 +488,8 @@
         <div class="feature-card">
           <div class="feature-info">
             <h4>Emotion Chatbot</h4>
-            <p>Experience natural conversation with advanced NLP technology. AI Buddy not only listens but understands your emotions, providing helpful advice and immediate support when you need it.</p>
+            <p>Experience natural conversation with advanced NLP technology. AI Buddy not only listens but understands
+              your emotions, providing helpful advice and immediate support when you need it.</p>
           </div>
           <div class="feature-image">
             <div class="feature-image-placeholder">Friendly Chat UI</div>
@@ -450,7 +499,8 @@
         <div class="feature-card">
           <div class="feature-info">
             <h4>Emotion Tracker</h4>
-            <p>Record your daily moods and view your emotion charts by week and month. Analyze emotional trends to help you identify factors affecting your mental state.</p>
+            <p>Record your daily moods and view your emotion charts by week and month. Analyze emotional trends to help
+              you identify factors affecting your mental state.</p>
           </div>
           <div class="feature-image">
             <div class="feature-image-placeholder">Visual Mood Chart</div>
@@ -460,7 +510,8 @@
         <div class="feature-card">
           <div class="feature-info">
             <h4>Focus / Meditation</h4>
-            <p>Join short focus and meditation sessions with voice guidance and breathing animations. Reduce stress and enhance concentration in just a few minutes each day.</p>
+            <p>Join short focus and meditation sessions with voice guidance and breathing animations. Reduce stress and
+              enhance concentration in just a few minutes each day.</p>
           </div>
           <div class="feature-image">
             <div class="feature-image-placeholder">Relaxing Breathing Animation</div>
@@ -492,15 +543,17 @@
 
         <div class="faq-box">
           <h4>Frequently Asked Questions</h4>
-          
+
           <div class="faq-item">
             <p class="faq-question">What is AI Buddy?</p>
-            <p>AI Buddy is a mental health support application that uses artificial intelligence to listen, understand, and accompany you on your mental wellness journey.</p>
+            <p>AI Buddy is a mental health support application that uses artificial intelligence to listen, understand,
+              and accompany you on your mental wellness journey.</p>
           </div>
-          
+
           <div class="faq-item">
             <p class="faq-question">Do I need to log in for Focus Sessions?</p>
-            <p>You can try some basic features without logging in, but to save your progress and access all features, you need to create an account.</p>
+            <p>You can try some basic features without logging in, but to save your progress and access all features,
+              you need to create an account.</p>
           </div>
 
           <div class="faq-form">
@@ -516,23 +569,65 @@
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>AI Buddy Development Team | Contact: support@aibuddy.com | &#169; 2025 AI Buddy. All rights reserved.</p>
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>AI Buddy</h3>
+          <p>Your companion for mental wellness with intelligent AI support and personalized care.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="Prototype_Homepage.html">Home</a></li>
+            <li><a href="Prototype_Chatbot.html">Chatbot</a></li>
+            <li><a href="Prototype_EmotionTracker.html">Emotion Tracker</a></li>
+            <li><a href="Prototype_Focus.html">Focus</a></li>
+            <li><a href="Prototype_Contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Services</h3>
+          <ul>
+            <li><a href="#">Emotional Chat Support</a></li>
+            <li><a href="#">Mood Tracking</a></li>
+            <li><a href="#">Meditation Sessions</a></li>
+            <li><a href="#">Focus Exercises</a></li>
+            <li><a href="#">Personalized Insights</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Contact</h3>
+          <ul>
+            <li><i class="fas fa-map-marker-alt"></i> 123 Wellness Street, Mindful District, CA 90210</li>
+            <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+            <li><i class="fas fa-envelope"></i> support@aibuddy.com</li>
+            <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 8:00 PM</li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2025 AI Buddy. All rights reserved. | Mental Health Companion</p>
+      </div>
     </div>
   </footer>
-
   <script>
     // Add effect for CTA button
-    document.querySelector('.cta-button').addEventListener('click', function() {
+    document.querySelector('.cta-button').addEventListener('click', function () {
       window.location.href = 'Prototype_Chatbot.html';
     });
-    
+
     // Add effect for subscription button
-    document.querySelector('.subscription-btn').addEventListener('click', function() {
+    document.querySelector('.subscription-btn').addEventListener('click', function () {
       window.location.href = 'Prototype_Focus.html';
     });
-    
+
     // Handle FAQ form
-    document.querySelector('.submit-btn').addEventListener('click', function() {
+    document.querySelector('.submit-btn').addEventListener('click', function () {
       const question = document.querySelector('.faq-form textarea').value;
       if (question.trim() !== '') {
         alert('Thank you for your question! We will respond as soon as possible.');
@@ -543,4 +638,5 @@
     });
   </script>
 </body>
+
 </html>
