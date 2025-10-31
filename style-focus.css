@@ -1,0 +1,145 @@
+/* ----------- RESET CƠ BẢN ----------- */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  background-color: #eff6e0; /* Nền sáng xanh nhạt - Ocean Serenity */
+  color: #353535;
+}
+
+/* ----------- HEADER ----------- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 30px;
+  background-color: #124559; /* Xanh đậm tinh tế */
+  color: #ffffff;
+  border-bottom: 3px solid #598392;
+}
+
+header div {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+header nav a {
+  color: #eff6e0;
+  text-decoration: none;
+  margin-right: 15px;
+  transition: color 0.3s ease;
+}
+
+header nav a:hover {
+  color: #aec3b0; /* Xanh bạc hà dịu */
+}
+
+/* ----------- BANNER ----------- */
+section {
+  margin: 25px 30px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #284b63 0%, #598392 100%);
+  color: #ffffff;
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 40px 0;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* ----------- MAIN LAYOUT ----------- */
+main {
+  display: flex;
+  gap: 25px;
+  margin: 0 30px;
+}
+
+/* ----------- LEFT SECTION (Breathing) ----------- */
+main > div {
+  flex: 2;
+  background-color: #ffffff;
+  border: 1px solid #d9d9d9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+/* Breathing circle animation */
+.breath-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #33c6e71 0%, #124559 100%);
+  margin: 0 auto 20px;
+  animation: breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.4); opacity: 1; }
+}
+
+/* ----------- RIGHT SIDEBAR (Packages) ----------- */
+aside {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+aside div {
+  background-color: #ffffff;
+  border: 1px solid #aec3b0;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+aside h4 {
+  color: #124559;
+  margin-bottom: 8px;
+}
+
+aside ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  color: #353535;
+}
+
+button {
+  background-color: #284b63;
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #124559;
+  transform: scale(1.05);
+}
+
+/* ----------- FOOTER ----------- */
+footer {
+  margin-top: 30px;
+  background-color: #284b63;
+  color: #eff6e0;
+  text-align: center;
+  padding: 15px;
+  border-top: 3px solid #124559;
+  font-size: 0.95rem;
+}
+
+/* ----------- BACKGROUND DECOR ----------- */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://www.transparenttextures.com/patterns/soft-wallpaper.png');
+  opacity: 0.15;
+  z-index: -1;
+}
