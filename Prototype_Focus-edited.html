@@ -1,19 +1,15 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Buddy - Focus / Meditation</title>
 
-  <!-- Font Awesome Icons -->
   <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    /* ---------------------------------------------------
-      COLOR SYSTEM (Ocean Serenity + Monochrome Beach)
-    ----------------------------------------------------- */
     :root {
       --primary-dark: #01161e;
       --primary: #124559;
@@ -27,9 +23,6 @@
       --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     }
 
-    /* ---------------------------------------------------
-      GLOBAL
-    ----------------------------------------------------- */
     * {
       margin: 0;
       padding: 0;
@@ -48,9 +41,6 @@
       margin: 0 auto;
     }
 
-    /* ---------------------------------------------------
-      HEADER
-    ----------------------------------------------------- */
     header {
       background-color: var(--white);
       padding: 15px 0;
@@ -101,9 +91,7 @@
       cursor: pointer;
     }
 
-    /* ---------------------------------------------------
-      BANNER
-    ----------------------------------------------------- */
+    /* HERO SECTION */
     .page-hero {
       background: linear-gradient(135deg,
           var(--primary) 0%,
@@ -118,16 +106,13 @@
       font-weight: bold;
     }
 
-    /* ---------------------------------------------------
-      MAIN - PAGE CONTENT
-    ----------------------------------------------------- */
+    /* MAIN CONTENT */
     main {
       display: flex;
       gap: 25px;
       margin: 30px;
     }
 
-    /* Left: Breathing Box */
     main>div {
       flex: 2;
       background-color: var(--white);
@@ -152,7 +137,6 @@
       50% { transform: scale(1.35); opacity: 1; }
     }
 
-    /* Right: Packages */
     aside {
       flex: 1;
       display: flex;
@@ -219,9 +203,7 @@
       transform: scale(1.06);
     }
 
-    /* ---------------------------------------------------
-      FOOTER (Y HỆT CONTACT)
-    ----------------------------------------------------- */
+    /* FOOTER */
     footer {
       background-color: var(--primary-dark);
       color: var(--white);
@@ -254,7 +236,7 @@
     .footer-column ul li a {
       color: var(--light);
       text-decoration: none;
-      transition: color 0.3s;
+      transition: 0.3s;
     }
 
     .footer-column ul li a:hover {
@@ -287,15 +269,13 @@
       font-size: 0.9rem;
     }
 
-    /* ---------------------------------------------------
-      RESPONSIVE
-    ----------------------------------------------------- */
     @media (max-width: 850px) {
-      main { flex-direction: column; }
+      main {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
-
 
 <body>
 
@@ -320,57 +300,55 @@
     </div>
   </header>
 
-  <!-- BANNER -->
+  <!-- HERO -->
   <section class="page-hero">
-    🌿 Tập trung – Hít thở – Bình tâm cùng <b>AI Buddy</b> 🌊
+    🌿 Focus – Breathe – Find Your Calm with <b>AI Buddy</b> 🌊
   </section>
 
   <!-- MAIN CONTENT -->
   <main>
-    <!-- Left: Breathing -->
+    <!-- Left Section -->
     <div>
       <div class="breath-circle"></div>
-      <p><b>Voice Guidance:</b> “Hít vào… Thở ra…”</p>
+      <p><b>Voice Guidance:</b> “Breathe in… Breathe out…”</p>
     </div>
 
-    <!-- Right: Packages -->
+    <!-- Right: Subscription Packages -->
     <aside>
       <div class="package-card">
-        <h4>🌼 Gói Free</h4>
+        <h4>🌼 Free Plan</h4>
         <ul>
-          <li>2 session ngắn (5 phút)</li>
-          <li>Voice cơ bản</li>
+          <li>2 short sessions (5 minutes)</li>
+          <li>Basic voice guide</li>
         </ul>
       </div>
 
       <div class="package-card">
-        <h4>🌿 Gói Essential</h4>
+        <h4>🌿 Essential Plan</h4>
         <ul>
-          <li>10 session + nhạc nền</li>
-          <li>Chọn giọng AI</li>
+          <li>10 sessions + background music</li>
+          <li>Select AI voice</li>
         </ul>
-        <button>Mua Ngay</button>
+        <button>Buy Now</button>
       </div>
 
       <div class="package-card">
-        <h4>🌸 Gói Premium</h4>
+        <h4>🌸 Premium Plan</h4>
         <ul>
-          <li>30 session đa dạng</li>
-          <li>Voice persona tùy chọn</li>
-          <li>Tự động nhắc lịch focus</li>
+          <li>30 diverse sessions</li>
+          <li>Custom AI voice personas</li>
+          <li>Automatic focus reminders</li>
         </ul>
-        <button>Mua Ngay</button>
+        <button>Buy Now</button>
       </div>
     </aside>
   </main>
 
-
-  <!-- FOOTER (Y NHƯ TRANG CONTACT) -->
+  <!-- FOOTER -->
   <footer>
     <div class="container">
 
       <div class="footer-content">
-
         <div class="footer-column">
           <h3>AI Buddy</h3>
           <p>Your companion for mental wellness with intelligent AI support and personalized care.</p>
@@ -417,7 +395,7 @@
       </div>
 
       <div class="copyright">
-        <p>© 2025 AI Buddy. All rights reserved. | Mental Health Companion</p>
+        © 2025 AI Buddy. All rights reserved. | Mental Health Companion
       </div>
 
     </div>
@@ -426,3 +404,4 @@
 </body>
 
 </html>
+
