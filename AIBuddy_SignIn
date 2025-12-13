@@ -75,12 +75,19 @@
             font-size: 28px;
         }
 
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
         nav a {
-            margin: 0 15px;
+            margin: 0 10px;
             text-decoration: none;
             color: var(--primary);
             font-weight: 500;
             transition: color 0.3s;
+            white-space: nowrap;
+            font-size: 0.95rem;
         }
 
         nav a:hover {
@@ -96,6 +103,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-left: 10px;
         }
 
         .signin-btn:hover {
@@ -424,6 +432,13 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            nav a {
+                margin: 0 8px;
+                font-size: 0.9rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -438,7 +453,8 @@
             }
 
             nav a {
-                margin: 0 10px 5px;
+                margin: 0 8px 5px;
+                font-size: 0.9rem;
             }
 
             .signin-card {
@@ -458,6 +474,10 @@
             .social-login {
                 flex-direction: column;
             }
+
+            .signin-btn {
+                margin: 10px 0 0 0;
+            }
         }
 
         @media (max-width: 480px) {
@@ -475,6 +495,11 @@
 
             .form-input {
                 padding: 12px 15px 12px 45px;
+            }
+
+            nav a {
+                margin: 0 5px 5px;
+                font-size: 0.85rem;
             }
         }
 
@@ -515,7 +540,7 @@
 </head>
 
 <body>
-    <!-- Header (giống Homepage) -->
+    <!-- Header với navigation mới -->
     <header>
         <div class="container header-content">
             <a href="Prototype_Homepage.html" class="logo">
@@ -526,12 +551,16 @@
                 <a href="Prototype_Homepage.html">Home</a>
                 <a href="Prototype_Chatbot.html">Chatbot</a>
                 <a href="Prototype_EmotionTracker.html">Emotion Tracker</a>
-                <!-- Đã đổi từ "Focus" thành "Trial" -->
                 <a href="Prototype_Trial.html">Trial</a>
                 <a href="Prototype_Profile.html">Profile</a>
                 <a href="Prototype_About.html">About</a>
+                <!-- Đã thêm Terms và Privacy -->
+                <a href="Prototype_Terms.html">Terms</a>
+                <a href="Prototype_Privacy.html">Privacy</a>
             </nav>
-            <button class="signin-btn">Sign In</button>
+            <a href="Prototype_SignIn.html">
+                <button class="signin-btn">Sign In</button>
+            </a>
         </div>
     </header>
 
@@ -596,14 +625,14 @@
 
                     <div class="signup-link">
                         Don't have an account?
-                        <a href="#" id="signupLink">Sign up now</a>
+                        <a href="Prototype_SignUp.html" id="signupLink">Sign up now</a>
                     </div>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- Footer (giống Homepage) -->
+    <!-- Footer với Legal Section -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -623,19 +652,17 @@
                         <li><a href="Prototype_Homepage.html">Home</a></li>
                         <li><a href="Prototype_Chatbot.html">Chatbot</a></li>
                         <li><a href="Prototype_EmotionTracker.html">Emotion Tracker</a></li>
-                        <!-- Đã đổi từ "Focus" thành "Trial" -->
                         <li><a href="Prototype_Trial.html">Trial</a></li>
                         <li><a href="Prototype_Contact.html">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3>Services</h3>
+                    <h3>Legal</h3>
                     <ul>
-                        <li><a href="#">Emotional Chat Support</a></li>
-                        <li><a href="#">Mood Tracking</a></li>
-                        <li><a href="#">Meditation Sessions</a></li>
-                        <li><a href="#">Focus Exercises</a></li>
-                        <li><a href="#">Personalized Insights</a></li>
+                        <li><a href="Prototype_Terms.html">Terms of Service</a></li>
+                        <li><a href="Prototype_Privacy.html">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Disclaimer</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -707,8 +734,7 @@
         if (signupLink) {
             signupLink.addEventListener('click', function(e) {
                 e.preventDefault();
-                showAlert('Redirecting to sign up page...', 'info');
-                // window.location.href = 'Prototype_SignUp.html';
+                window.location.href = 'Prototype_SignUp.html';
             });
         }
         
@@ -795,5 +821,4 @@
         window.addEventListener('resize', adjustNavigation);
     </script>
 </body>
-
 </html>
