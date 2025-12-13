@@ -45,7 +45,7 @@
             padding: 0 15px;
         }
 
-        /* Header Styles (giống Homepage) */
+        /* Header với navigation mới */
         header {
             background-color: var(--white);
             padding: 15px 0;
@@ -75,12 +75,19 @@
             font-size: 28px;
         }
 
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
         nav a {
-            margin: 0 15px;
+            margin: 0 10px;
             text-decoration: none;
             color: var(--primary);
             font-weight: 500;
             transition: color 0.3s;
+            white-space: nowrap;
+            font-size: 0.95rem;
         }
 
         nav a:hover {
@@ -96,6 +103,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-left: 10px;
         }
 
         .signin-btn:hover {
@@ -342,7 +350,7 @@
             text-decoration: underline;
         }
 
-        /* Footer (giống Homepage) */
+        /* Footer với Legal Section */
         footer {
             background-color: var(--primary-dark);
             color: var(--white);
@@ -406,6 +414,13 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            nav a {
+                margin: 0 8px;
+                font-size: 0.9rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -420,7 +435,8 @@
             }
 
             nav a {
-                margin: 0 10px 5px;
+                margin: 0 8px 5px;
+                font-size: 0.9rem;
             }
 
             .signup-card {
@@ -434,6 +450,10 @@
             .form-row {
                 flex-direction: column;
                 gap: 0;
+            }
+
+            .signin-btn {
+                margin: 10px 0 0 0;
             }
         }
 
@@ -452,6 +472,11 @@
 
             .form-input, .form-select {
                 padding: 12px 15px 12px 45px;
+            }
+
+            nav a {
+                margin: 0 5px 5px;
+                font-size: 0.85rem;
             }
         }
 
@@ -512,7 +537,7 @@
 </head>
 
 <body>
-    <!-- Header (giống Homepage) -->
+    <!-- Header với navigation mới -->
     <header>
         <div class="container header-content">
             <a href="Prototype_Homepage.html" class="logo">
@@ -526,6 +551,9 @@
                 <a href="Prototype_Trial.html">Trial</a>
                 <a href="Prototype_Profile.html">Profile</a>
                 <a href="Prototype_About.html">About</a>
+                <!-- Đã thêm Terms và Privacy -->
+                <a href="Prototype_Terms.html">Terms</a>
+                <a href="Prototype_Privacy.html">Privacy</a>
             </nav>
             <a href="Prototype_SignIn.html">
                 <button class="signin-btn">Sign In</button>
@@ -622,10 +650,10 @@
                     <!-- Terms and Conditions -->
                     <div class="terms-group">
                         <div class="terms-checkbox">
-                            <input type="checkbox" id="termsAgreement">
+                            <input type="checkbox" id="termsAgreement" required>
                             <label for="termsAgreement" class="terms-text">
-                                I agree with the <a href="#" id="termsLink">Terms of Service</a> and acknowledge the 
-                                <a href="#" id="privacyLink">Privacy Policy</a>. I understand that AI Buddy is a mental wellness companion and not a substitute for professional medical advice.
+                                I agree with the <a href="Prototype_Terms.html" id="termsLink" target="_blank">Terms of Service</a> and acknowledge the 
+                                <a href="Prototype_Privacy.html" id="privacyLink" target="_blank">Privacy Policy</a>. I understand that AI Buddy is a mental wellness companion and not a substitute for professional medical advice.
                             </label>
                         </div>
                         <div id="termsError" class="error-message" style="margin-top: 10px;">You must agree to the terms to continue</div>
@@ -650,7 +678,7 @@
         </div>
     </section>
 
-    <!-- Footer (giống Homepage) -->
+    <!-- Footer với Legal Section -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -675,13 +703,12 @@
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3>Services</h3>
+                    <h3>Legal</h3>
                     <ul>
-                        <li><a href="#">Emotional Chat Support</a></li>
-                        <li><a href="#">Mood Tracking</a></li>
-                        <li><a href="#">Meditation Sessions</a></li>
-                        <li><a href="#">Focus Exercises</a></li>
-                        <li><a href="#">Personalized Insights</a></li>
+                        <li><a href="Prototype_Terms.html">Terms of Service</a></li>
+                        <li><a href="Prototype_Privacy.html">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Disclaimer</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -708,6 +735,8 @@
         const termsAgreement = document.getElementById('termsAgreement');
         const signupButton = document.getElementById('signupButton');
         const successMessage = document.getElementById('successMessage');
+        const termsLink = document.getElementById('termsLink');
+        const privacyLink = document.getElementById('privacyLink');
 
         // Toggle password visibility
         if (togglePassword) {
@@ -716,6 +745,21 @@
                 passwordInput.setAttribute('type', type);
                 this.querySelector('i').classList.toggle('fa-eye');
                 this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        }
+
+        // Terms and Privacy links - mở trong tab mới
+        if (termsLink) {
+            termsLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.open(this.href, '_blank');
+            });
+        }
+
+        if (privacyLink) {
+            privacyLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.open(this.href, '_blank');
             });
         }
 
@@ -813,13 +857,12 @@
             const phone = document.getElementById('phone').value.trim();
             const errorElement = document.getElementById('phoneError');
             const inputElement = document.getElementById('phone');
-            const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
             
             // Remove all non-digit characters except +
             const cleanedPhone = phone.replace(/[^\d+]/g, '');
             
             if (cleanedPhone.length < 10) {
-                showError(errorElement, inputElement, 'Please enter a valid phone number');
+                showError(errorElement, inputElement, 'Please enter a valid phone number (at least 10 digits)');
                 return false;
             } else {
                 clearError(errorElement, inputElement);
@@ -887,10 +930,16 @@
                         successMessage.style.display = 'block';
                         signupButton.style.display = 'none';
                         
-                        // In a real application, you would:
-                        // 1. Send data to your backend server
-                        // 2. Handle the response
-                        // 3. Redirect to sign in page
+                        // Collect form data for demo
+                        const formData = {
+                            fullName: document.getElementById('fullName').value,
+                            email: document.getElementById('email').value,
+                            dob: document.getElementById('dob').value,
+                            gender: document.getElementById('gender').value,
+                            phone: document.getElementById('phone').value
+                        };
+                        
+                        console.log('Form submitted:', formData);
                         
                         // Redirect to sign in page after 2 seconds
                         setTimeout(() => {
@@ -908,17 +957,6 @@
             });
         }
 
-        // Terms and Privacy links
-        document.getElementById('termsLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Terms of Service page would open here. For demo purposes only.');
-        });
-
-        document.getElementById('privacyLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Privacy Policy page would open here. For demo purposes only.');
-        });
-
         // Responsive navigation for mobile
         function adjustNavigation() {
             const nav = document.querySelector('nav');
@@ -935,5 +973,4 @@
         window.addEventListener('resize', adjustNavigation);
     </script>
 </body>
-
 </html>
