@@ -45,7 +45,7 @@
             padding: 0 15px;
         }
 
-        /* Header Styles (giống Homepage) */
+        /* Header với navigation mới */
         header {
             background-color: var(--white);
             padding: 15px 0;
@@ -75,12 +75,19 @@
             font-size: 28px;
         }
 
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
         nav a {
-            margin: 0 15px;
+            margin: 0 10px;
             text-decoration: none;
             color: var(--primary);
             font-weight: 500;
             transition: color 0.3s;
+            white-space: nowrap;
+            font-size: 0.95rem;
         }
 
         nav a:hover {
@@ -96,6 +103,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-left: 10px;
         }
 
         .signin-btn:hover {
@@ -203,7 +211,7 @@
             font-size: 1.1rem;
         }
 
-        /* Footer (giống Homepage) */
+        /* Footer với Legal Section */
         footer {
             background-color: var(--primary-dark);
             color: var(--white);
@@ -294,6 +302,13 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            nav a {
+                margin: 0 8px;
+                font-size: 0.9rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -308,7 +323,8 @@
             }
 
             nav a {
-                margin: 0 10px 5px;
+                margin: 0 8px 5px;
+                font-size: 0.9rem;
             }
 
             .terms-container {
@@ -321,6 +337,10 @@
 
             .terms-section-block h2 {
                 font-size: 1.3rem;
+            }
+
+            .signin-btn {
+                margin: 10px 0 0 0;
             }
         }
 
@@ -336,12 +356,17 @@
             .terms-section-block {
                 margin-bottom: 25px;
             }
+
+            nav a {
+                margin: 0 5px 5px;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- Header (giống Homepage) -->
+    <!-- Header với navigation mới -->
     <header>
         <div class="container header-content">
             <a href="Prototype_Homepage.html" class="logo">
@@ -355,6 +380,9 @@
                 <a href="Prototype_Trial.html">Trial</a>
                 <a href="Prototype_Profile.html">Profile</a>
                 <a href="Prototype_About.html">About</a>
+                <!-- Đã thêm Terms và Privacy -->
+                <a href="Prototype_Terms.html">Terms</a>
+                <a href="Prototype_Privacy.html">Privacy</a>
             </nav>
             <a href="Prototype_SignIn.html">
                 <button class="signin-btn">Sign In</button>
@@ -460,7 +488,7 @@
 
                     <div class="back-button">
                         <button class="back-btn" onclick="window.history.back()">
-                            <i class="fas fa-arrow-left"></i> Back to Sign Up
+                            <i class="fas fa-arrow-left"></i> Back to Previous Page
                         </button>
                     </div>
                 </div>
@@ -468,7 +496,7 @@
         </div>
     </section>
 
-    <!-- Footer (giống Homepage) -->
+    <!-- Footer với Legal Section -->
     <footer>
         <div class="container">
             <div class="footer-content">
