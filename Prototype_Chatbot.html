@@ -6,6 +6,93 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
+
+    /* Animation cho trạng thái đang nghe (Listening) */
+    .mic-active {
+      background-color: #ff4b4b !important;
+      color: white !important;
+      animation: pulse-red 1.5s infinite;
+      box-shadow: 0 0 15px rgba(255, 75, 75, 0.5);
+    }
+    
+    /* Animation cho trạng thái AI đang nói (Speaking) */
+    .ai-speaking {
+      background-color: #28a745 !important; /* Màu xanh lá */
+      color: white !important;
+      box-shadow: 0 0 15px rgba(40, 167, 69, 0.5);
+    }
+
+    @keyframes pulse-red {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+          /* Style cho History Item để chứa nút edit/delete */
+      #history-list li {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 8px 10px;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background 0.2s;
+      }
+
+      #history-list li:hover {
+          background-color: #f0f0f0;
+      }
+
+      /* Phần chứa tiêu đề chat */
+      .chat-link {
+          flex-grow: 1;
+          text-decoration: none;
+          color: var(--primary);
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          margin-right: 10px;
+          display: block;
+      }
+
+      /* Container cho nút Edit/Delete */
+      .chat-actions {
+          display: flex;
+          gap: 8px;
+          opacity: 0; /* Ẩn mặc định, hover mới hiện */
+          transition: opacity 0.2s;
+      }
+
+      #history-list li:hover .chat-actions {
+          opacity: 1;
+      }
+
+      .action-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-size: 0.85rem;
+          color: #888;
+          padding: 2px;
+      }
+
+      .action-btn:hover {
+          color: var(--accent);
+      }
+
+      .action-btn.delete:hover {
+          color: #dc3545; /* Màu đỏ cho nút xóa */
+      }
+      /* Animation cho nút Mic khi đang nghe */
+    .listening-pulse {
+      color: #ff4b4b !important; /* Chuyển màu đỏ */
+      animation: pulse-red 1.5s infinite;
+    }
+
+    @keyframes pulse-red {
+      0% { transform: scale(1); text-shadow: 0 0 0 rgba(255, 75, 75, 0.7); }
+      70% { transform: scale(1.2); text-shadow: 0 0 10px rgba(255, 75, 75, 0); }
+      100% { transform: scale(1); text-shadow: 0 0 0 rgba(255, 75, 75, 0); }
+    }
     /* ============================================
       1. BIẾN MÀU (VARIABLES) - Lấy từ Homepage
       ============================================
@@ -24,7 +111,7 @@
     }
 
     /* ============================================
-      2. GLOBAL & HEADER STYLES - Lấy từ Homepage
+      2. <GLOBA>L & HEADER STYLES - Lấy từ Homepage
       ============================================
     */
     * {
@@ -553,7 +640,7 @@
   <div class="chat-layout-container">
 
     <aside class="sidebar-left" id="sidebar-left">
-      <button class="new-chat-btn">
+      <button class="new-chat-btn" onclick="startNewChat()">
         <i class="fa-solid fa-plus"></i> Start a new chat
       </button>
 
@@ -573,15 +660,12 @@
         
         </div>
 
-      <div class="chat-history-list">
-        <h4>Chat History</h4>
-        <ul>
-          <li><a href="#">Felt a bit sad yesterday...</a></li>
-          <li><a href="#">How to focus for exams</a></li>
-          <li><a href="#">New Conversation</a></li>
-          <li><a href="#">Peer Pressure</a></li>
-        </ul>
-      </div>
+        <div class="chat-history-list">
+            <h4>Chat History</h4>
+            <ul id="history-list">
+              <li><p style="color:#888; font-size:0.9rem; padding:10px;">Loading history...</p></li>
+            </ul>
+          </div>
 
     </aside>
 
@@ -608,17 +692,24 @@
 
       </div>
 
-      <div class="chat-input-area">
-        <button class="input-btn" title="Integrations (Save to journal,...)">
+<div class="chat-input-area">
+        <button class="input-btn" title="Integrations">
           <i class="fa-solid fa-plus"></i>
         </button>
+        
         <textarea id="message-input" placeholder="Type your message..." rows="1"></textarea>
-        <button class="input-btn" title="Voice Mode (Premium)">
-          <i class="fa-solid fa-microphone"></i>
+        
+        <button class="input-btn" id="call-btn" title="Start/Stop Call Mode" style="border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; background: #f0f0f0;">
+          <i class="fa-solid fa-headset"></i>
         </button>
+        
         <button class="input-btn" id="send-btn" title="Send">
           <i class="fa-solid fa-paper-plane"></i>
         </button>
+      </div>
+      
+      <div id="call-status" style="text-align: center; font-size: 12px; margin-top: 5px; color: #666; height: 20px;">
+        Tap the headset icon to start a voice conversation
       </div>
 
     </main>
@@ -628,11 +719,11 @@
       <div class="widget-box">
         <h4>Topic Suggestions</h4>
         <div class="topic-pills">
-          <span class="pill">Today's mood</span>
-          <span class="pill">Study pressure</span>
-          <span class="pill">Work motivation</span>
-          <span class="pill">Relationships</span>
-          <span class="pill">Ways to relax</span>
+          <span class="pill" data-id="1" onclick="selectTopic(this)">Today's mood</span>
+          <span class="pill" data-id="2" onclick="selectTopic(this)">Study pressure</span>
+          <span class="pill" data-id="3" onclick="selectTopic(this)">Work motivation</span>
+          <span class="pill" data-id="4" onclick="selectTopic(this)">Relationships</span>
+          <span class="pill" data-id="5" onclick="selectTopic(this)">Ways to relax</span>
         </div>
       </div>
 
@@ -701,179 +792,345 @@
   </script>
 
   <script>
-  // --- CẤU HÌNH BAN ĐẦU ---
+  // --- CONFIGURATION ---
   const CURRENT_USER_ID = 1; 
-  let currentPersonaId = 7;  // <--- SỬA SỐ NÀY (Ví dụ đổi thành 7 nếu Friend là 7)
-  let currentTopicId = 1;
-  let isVoiceMode = false;
+  let currentPersonaId = 7;  // ID mặc định (Friend)
+  let currentTopicId = 1;    
+  let currentSessionId = null;
+  
+  // Voice Config
+  let isVoiceMode = false; // Trạng thái Voice Mode (để Auto-read)
+  let recognition;         // Biến Speech Recognition
+  let synth = window.speechSynthesis; // Biến Speech Synthesis
 
-  // --- 1. XỬ LÝ CHỌN PERSONA ---
-  function selectPersona(element) {
-    // Xóa class active cũ
-    document.querySelectorAll('.persona-card').forEach(el => el.classList.remove('active'));
-    // Thêm class active mới
-    element.classList.add('active');
-    // Cập nhật ID
-    currentPersonaId = element.getAttribute('data-id');
-    console.log("Selected Persona ID:", currentPersonaId);
+  // --- INIT ---
+  document.addEventListener('DOMContentLoaded', () => {
+    loadChatHistory(); 
+    setupEventListeners();
+    setupVoiceFeatures(); // Khởi tạo tính năng Voice
+  });
+
+  // --- 1. VOICE FUNCTIONS (NEW) ---
+
+  function setupVoiceFeatures() {
+    // 1.1. Setup Speech to Text (Nghe)
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = 'en-US'; // Nghe tiếng Anh (có thể đổi 'vi-VN' nếu muốn)
+      recognition.interimResults = false; // Chỉ lấy kết quả cuối cùng
+
+      recognition.onstart = function() {
+        document.getElementById('mic-btn').classList.add('listening-pulse');
+        document.getElementById('message-input').placeholder = "Listening...";
+      };
+
+      recognition.onend = function() {
+        document.getElementById('mic-btn').classList.remove('listening-pulse');
+        document.getElementById('message-input').placeholder = "Type your message...";
+      };
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        console.log("Heard:", transcript);
+        document.getElementById('message-input').value = transcript;
+        // Tự động gửi sau khi nói xong (giống Siri)
+        setTimeout(sendMessage, 500);
+      };
+
+      recognition.onerror = function(event) {
+        console.error("Speech Error:", event.error);
+        document.getElementById('mic-btn').classList.remove('listening-pulse');
+      };
+    } else {
+      console.warn("Browser does not support Speech Recognition");
+      document.getElementById('mic-btn').style.display = 'none'; // Ẩn nút nếu không hỗ trợ
+    }
+
+    // 1.2. Setup Voice Toggle Button (Nút bật tắt chế độ đọc)
+    // Tìm nút "Voice Mode" ở trên khung chat (nếu có) hoặc dùng nút Mic làm toggle luôn cũng được
+    // Ở đây ta dùng nút "Voice Mode" có sẵn trong HTML cũ
+    const voiceToggleBtn = document.querySelector('button:contains("Voice Mode")') || 
+                           document.querySelector('button[title="Voice Mode (Premium)"]'); 
     
-    // Thông báo nhỏ (Optional)
-    appendSystemMessage(`Bạn đã chuyển sang trò chuyện với <b>${element.querySelector('strong').innerText}</b>.`);
+    // Nếu trong HTML cũ bro dùng nút khác, hãy đảm bảo selector đúng. 
+    // Trong prototype cũ có nút: <button>🎤 Voice Mode</button>
   }
 
-  // --- 2. XỬ LÝ GỬI TIN NHẮN ---
-  document.addEventListener('DOMContentLoaded', () => {
-    const sendBtn = document.getElementById('send-btn');
+  // Hàm kích hoạt Nghe (Gắn vào nút Mic)
+  function toggleListening() {
+    if (!recognition) return;
+    try {
+      recognition.start();
+    } catch (e) {
+      // Nếu đang nghe mà bấm thì dừng
+      recognition.stop();
+    }
+  }
+
+  // Hàm Đọc văn bản (Nói)
+  function speakText(text) {
+    if (!isVoiceMode) return; // Chỉ đọc nếu Voice Mode đang bật
+    if (synth.speaking) synth.cancel(); // Dừng câu cũ nếu đang đọc dở
+
+    // Lọc bỏ các ký tự Markdown (*, #) để đọc mượt hơn
+    const cleanText = text.replace(/[*#]/g, '');
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'en-US'; 
+    utterance.rate = 1.0; // Tốc độ đọc
+    utterance.pitch = 1.0; // Cao độ
+
+    // Chọn giọng đọc (Ưu tiên giọng Google US English hoặc Microsoft Zira)
+    const voices = synth.getVoices();
+    const preferredVoice = voices.find(v => v.name.includes("Google US English") || v.name.includes("Zira"));
+    if (preferredVoice) utterance.voice = preferredVoice;
+
+    synth.speak(utterance);
+  }
+
+  // --- 2. CORE LOGIC (Cập nhật để gọi speakText) ---
+
+  async function sendMessage() {
     const inputField = document.getElementById('message-input');
-    const chatWindow = document.getElementById('chat-window');
+    const messageText = inputField.value.trim();
+    if (!messageText) return;
 
-    // Sự kiện Click nút Gửi
-    sendBtn.addEventListener('click', sendMessage);
+    appendMessage('user', messageText);
+    inputField.value = ''; 
+    scrollToBottom();
 
-    // Sự kiện Nhấn Enter
-    inputField.addEventListener('keypress', (e) => {
+    const loadingId = showTypingIndicator();
+
+    try {
+      const response = await fetch('api_chat_send.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: CURRENT_USER_ID,
+          persona_id: currentPersonaId,
+          topic_id: currentTopicId,
+          message: messageText,
+          session_id: currentSessionId 
+        })
+      });
+
+      const data = await response.json();
+      removeTypingIndicator(loadingId);
+
+      if (response.status === 200) {
+        if (!currentSessionId && data.data.session_id) {
+          currentSessionId = data.data.session_id;
+          loadChatHistory();
+        }
+
+        const aiResponse = data.data.response;
+        appendMessage('ai', aiResponse, false);
+        
+        // [QUAN TRỌNG] Gọi hàm đọc sau khi hiện tin nhắn
+        speakText(aiResponse); 
+
+      } else if (response.status === 403) {
+        showPremiumPopup(data.detail);
+      } else {
+        appendMessage('ai', `⚠️ ${data.message}`, true);
+      }
+
+    } catch (error) {
+      removeTypingIndicator(loadingId);
+      appendMessage('ai', `⚠️ Connection Error: ${error.message}`, true);
+    }
+    scrollToBottom();
+  }
+
+  // --- 3. EVENT LISTENERS ---
+  function setupEventListeners() {
+    document.getElementById('send-btn').addEventListener('click', sendMessage);
+    
+    // Gắn sự kiện cho nút Mic
+    const micBtn = document.getElementById('mic-btn');
+    if (micBtn) {
+        micBtn.addEventListener('click', toggleListening);
+    }
+
+    // Gắn sự kiện Enter
+    document.getElementById('message-input').addEventListener('keypress', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault(); // Ngăn xuống dòng
+        e.preventDefault(); 
         sendMessage();
       }
     });
 
-    async function sendMessage() {
-      // Thêm dòng này để kiểm tra
-      console.log("Đang gửi đi - PersonaID:", currentPersonaId);
-      const messageText = inputField.value.trim();
-      if (!messageText) return; // Không gửi nếu rỗng
-
-      // 2.1. Hiển thị tin nhắn User ngay lập tức
-      appendMessage('user', messageText);
-      inputField.value = ''; // Xóa ô nhập
-      scrollToBottom();
-
-      // 2.2. Hiển thị hiệu ứng "Typing..."
-      const loadingId = showTypingIndicator();
-
-      try {
-        // 2.3. Gọi API Backend (PHP)
-        const response = await fetch('api_chat_send.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            user_id: CURRENT_USER_ID,
-            persona_id: currentPersonaId,
-            topic_id: currentTopicId,
-            message: messageText
-          })
-        });
-
-        const data = await response.json();
-        
-        // Xóa hiệu ứng typing
-        removeTypingIndicator(loadingId);
-
-        // 2.4. Xử lý phản hồi từ Server
-        if (response.status === 200) {
-          // Success: Hiển thị tin nhắn AI
-          appendMessage('ai', data.data.response, false);
-          
-          // Nếu có Audio (Voice Mode)
-          if (isVoiceMode && data.data.audioUrl) {
-            playAudio(data.data.audioUrl);
-          }
-        } 
-        else if (response.status === 403) {
-          // Lỗi Premium: Hiển thị thông báo bán hàng
-          appendSystemMessage(`🔒 <b>Tính năng giới hạn:</b> ${data.detail} <br><a href="#all-packages-popup" style="color:var(--accent); font-weight:bold;">Nâng cấp Premium ngay</a>`);
-          // Trigger mở popup (nếu dùng CSS :target)
-          window.location.hash = "all-packages-popup";
-        } 
-        else {
-          // Lỗi từ Backend trả về (ví dụ: DB chết, API Key sai)
-          appendMessage('ai', `⚠️ ${data.message || "Lỗi không xác định"}`, true);
+    // Nút Voice Mode (Toggle Auto-read) - Tìm nút nằm trong khung chat
+    const voiceModeBtn = document.querySelector('button[title="Voice Mode"]'); // Tìm nút có chữ Voice Mode
+    // Hoặc tìm nút có class trong HTML cũ
+    const allBtns = document.querySelectorAll('button');
+    allBtns.forEach(btn => {
+        if(btn.innerText.includes("Voice Mode")) {
+            btn.addEventListener('click', function() {
+                isVoiceMode = !isVoiceMode;
+                // Đổi màu để biết đang bật/tắt
+                this.style.backgroundColor = isVoiceMode ? 'var(--accent)' : '';
+                this.style.color = isVoiceMode ? '#fff' : '';
+                
+                // Alert nhỏ (hoặc thay bằng toast notification sau này)
+                alert(isVoiceMode ? "Voice Mode ON: I will read my replies aloud." : "Voice Mode OFF");
+            });
         }
+    });
+  }
 
-      } catch (error) {
-        removeTypingIndicator(loadingId);
-        console.error('Error:', error);
-        // In luôn lỗi chi tiết ra để debug
-        appendMessage('ai', `⚠️ Lỗi: ${error.message || "Không thể kết nối tới Server"}`, true);
+  // --- 4. OTHER HELPERS (Giữ nguyên như cũ) ---
+  function startNewChat() {
+    currentSessionId = null;
+    document.getElementById('chat-window').innerHTML = ''; 
+    appendMessage('ai', "Hi there! I'm ready to listen. Pick a topic or just start chatting.", false);
+    document.querySelectorAll('.topic-pills .pill').forEach(el => el.style.backgroundColor = 'var(--white)');
+    // Nếu có đang nói dở thì dừng lại
+    if (synth.speaking) synth.cancel();
+  }
+
+  async function selectTopic(element) {
+    // ... (Code cũ giữ nguyên)
+    // Thêm dòng này vào cuối khối try/success để đọc câu chào
+    // if (response.status === 200) { ... speakText(data.data.response); }
+    // Copy lại logic selectTopic ở bước trước và thêm speakText()
+    const topicId = element.getAttribute('data-id');
+    currentTopicId = topicId;
+    document.querySelectorAll('.topic-pills .pill').forEach(el => el.style.backgroundColor = 'var(--white)');
+    element.style.backgroundColor = 'var(--light)'; 
+    document.getElementById('chat-window').innerHTML = '';
+    const loadingId = showTypingIndicator();
+
+    try {
+      const response = await fetch('api_init_topic.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: CURRENT_USER_ID,
+          persona_id: currentPersonaId,
+          topic_id: topicId
+        })
+      });
+
+      const data = await response.json();
+      removeTypingIndicator(loadingId);
+
+      if (response.status === 200) {
+        currentSessionId = data.data.session_id;
+        appendMessage('ai', data.data.response, false);
+        loadChatHistory();
+        speakText(data.data.response); // <-- ĐỌC CÂU CHÀO
+      } else if (response.status === 403) {
+        showPremiumPopup(data.detail);
+      } else {
+        appendMessage('ai', `⚠️ Error: ${data.message}`, true);
       }
-      
-      scrollToBottom();
+    } catch (error) {
+      removeTypingIndicator(loadingId);
+      appendMessage('ai', `⚠️ Connection Error`, true);
     }
-  });
+  }
 
-  // --- 3. CÁC HÀM UI HELPER ---
+  function loadChatHistory() { /* ... Giữ nguyên ... */ 
+      // Copy lại hàm loadChatHistory từ bước trước
+      const listContainer = document.getElementById('history-list');
+      fetch(`api_get_history.php?user_id=${CURRENT_USER_ID}`)
+      .then(res => res.json())
+      .then(data => {
+          if (data.status === 200 && data.data) {
+            listContainer.innerHTML = ''; 
+            data.data.forEach(session => {
+              const li = document.createElement('li');
+              if (currentSessionId == session.SessionID) li.style.backgroundColor = '#eef';
+              li.innerHTML = `
+                <div class="chat-link" onclick="loadSession(${session.SessionID})">
+                    ${session.Title || 'Untitled Chat'}
+                </div>
+                <div class="chat-actions">
+                    <button class="action-btn" onclick="renameChat(${session.SessionID}, '${session.Title}')"><i class="fa-solid fa-pen"></i></button>
+                    <button class="action-btn delete" onclick="deleteChat(${session.SessionID})"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              `;
+              listContainer.appendChild(li);
+            });
+          }
+      });
+  }
+  
+  // Các hàm loadSession, deleteChat, renameChat, showPremiumPopup, showTypingIndicator, removeTypingIndicator, scrollToBottom, appendSystemMessage, appendMessage, selectPersona
+  // GIỮ NGUYÊN NHƯ BƯỚC TRƯỚC (Bro copy lại hoặc để nguyên nếu chưa xóa)
+  // Chỉ cần đảm bảo hàm loadSession cũng gọi speakText nếu muốn (nhưng thường load lại lịch sử thì không nên đọc)
 
-  // Hàm vẽ tin nhắn lên màn hình
-  function appendMessage(sender, text, isError = false) {
+  async function loadSession(sessionId) {
+    currentSessionId = sessionId;
+    const chatWindow = document.getElementById('chat-window');
+    chatWindow.innerHTML = '<p style="text-align:center; color:#888; margin-top:20px;">Loading conversation...</p>';
+    try {
+      const response = await fetch(`api_get_messages.php?user_id=${CURRENT_USER_ID}&session_id=${sessionId}`);
+      const data = await response.json();
+      if (response.status === 200) {
+        chatWindow.innerHTML = ''; 
+        data.data.messages.forEach(msg => {
+          const sender = msg.Sender === 'User' ? 'user' : 'ai';
+          appendMessage(sender, msg.Content, false);
+        });
+        scrollToBottom();
+      }
+    } catch (error) {}
+  }
+
+  async function deleteChat(sessionId) { /* Copy code cũ */ 
+      if (!confirm("Delete this chat?")) return;
+      await fetch('api_delete_session.php', { method: 'POST', body: JSON.stringify({ user_id: CURRENT_USER_ID, session_id: sessionId }) });
+      if (currentSessionId === sessionId) startNewChat(); else loadChatHistory();
+  }
+  
+  async function renameChat(sessionId, oldTitle) { /* Copy code cũ */
+      const newTitle = prompt("New title:", oldTitle);
+      if (newTitle && newTitle !== oldTitle) {
+          await fetch('api_update_session.php', { method: 'POST', body: JSON.stringify({ user_id: CURRENT_USER_ID, session_id: sessionId, title: newTitle }) });
+          loadChatHistory();
+      }
+  }
+
+  function appendMessage(sender, text, isError) { /* Copy code cũ */
     const chatWindow = document.getElementById('chat-window');
     const div = document.createElement('div');
-    
     if (sender === 'user') {
       div.className = 'message msg-user';
       div.innerHTML = `<p>${text}</p>`;
     } else {
       div.className = 'message msg-ai';
       if (isError) div.style.borderColor = 'red';
-      div.innerHTML = `
-        <span class="ai-avatar">${isError ? '⚠️' : '🤖'}</span>
-        <p>${text}</p>
-      `;
+      div.innerHTML = `<span class="ai-avatar">${isError ? '⚠️' : '🤖'}</span><p>${text}</p>`;
     }
     chatWindow.appendChild(div);
   }
 
-  // Hàm thông báo hệ thống (căn giữa, nhỏ)
-  function appendSystemMessage(htmlText) {
+  function showPremiumPopup(detail) { /* Copy code cũ */
+    appendSystemMessage(`🔒 <b>Restricted:</b> ${detail} <br><a href="#all-packages-popup" style="color:var(--accent); font-weight:bold;">Upgrade Now</a>`);
+    window.location.hash = "all-packages-popup";
+  }
+
+  function appendSystemMessage(htmlText) { /* Copy code cũ */
     const chatWindow = document.getElementById('chat-window');
     const div = document.createElement('div');
-    div.style.textAlign = 'center';
-    div.style.fontSize = '0.85rem';
-    div.style.color = '#888';
-    div.style.margin = '10px 0';
+    div.style.textAlign = 'center'; div.style.fontSize = '0.85rem'; div.style.color = '#888'; div.style.margin = '10px 0';
     div.innerHTML = htmlText;
     chatWindow.appendChild(div);
     scrollToBottom();
   }
-
-  // Hiệu ứng đang nhập...
-  function showTypingIndicator() {
-    const chatWindow = document.getElementById('chat-window');
-    const id = 'loading-' + Date.now();
-    const div = document.createElement('div');
-    div.id = id;
-    div.className = 'message msg-ai';
-    div.innerHTML = `
-      <span class="ai-avatar">🤖</span>
-      <p><i>Đang suy nghĩ...</i></p>
-    `;
-    chatWindow.appendChild(div);
-    scrollToBottom();
-    return id;
-  }
-
-  function removeTypingIndicator(id) {
-    const el = document.getElementById(id);
-    if (el) el.remove();
-  }
-
-  function scrollToBottom() {
-    const chatWindow = document.getElementById('chat-window');
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-  }
   
-  // Xử lý Voice Toggle (Giả lập)
-  const voiceBtn = document.querySelector('button[title="Voice Mode (Premium)"]');
-  if(voiceBtn){
-      voiceBtn.addEventListener('click', function(){
-          isVoiceMode = !isVoiceMode;
-          this.style.color = isVoiceMode ? 'var(--accent)' : 'var(--primary-light)';
-          alert(isVoiceMode ? "Đã bật Voice Mode" : "Đã tắt Voice Mode");
-      });
+  function showTypingIndicator() { /* Copy code cũ */
+      const cw = document.getElementById('chat-window'); const id = 'l-'+Date.now();
+      const d = document.createElement('div'); d.id=id; d.className='message msg-ai'; d.innerHTML='<span class="ai-avatar">🤖</span><p><i>Thinking...</i></p>';
+      cw.appendChild(d); scrollToBottom(); return id;
   }
+  function removeTypingIndicator(id) { const el=document.getElementById(id); if(el) el.remove(); }
+  function scrollToBottom() { const cw = document.getElementById('chat-window'); cw.scrollTop = cw.scrollHeight; }
 
 </script>
-
 
 </body>
 
