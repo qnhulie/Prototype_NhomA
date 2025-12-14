@@ -1,66 +1,407 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Buddy - Focus / Meditation</title>
-</head>
-<body style="font-family:Arial; margin:0; background:#f9f9f9;">
+<html lang="en">
 
-  <header style="display:flex; justify-content:space-between; align-items:center; padding:10px 30px; background-color:#ddd; border-bottom:2px solid #ccc;">
-    <div style="font-weight:bold;">[LOGO]</div>
-    <nav>
-      <a href="Prototype_Homepage.html" style="margin-right:15px;">Home</a>
-      <a href="Prototype_Chatbot.html" style="margin-right:15px;">Chatbot</a>
-      <a href="Prototype_EmotionTracker.html" style="margin-right:15px;">Emotion Tracker</a>
-      <a href="Prototype_Focus.html" style="margin-right:15px;">Focus</a>
-      <a href="Prototype_Profile.html" style="margin-right:15px;">Profile</a>
-      <a href="Prototype_About.html">About</a>
-    </nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Buddy - Focus / Meditation</title>
+
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary-dark: #01161e;
+      --primary: #124559;
+      --primary-light: #598392;
+      --accent: #33c6e7;
+      --light: #aec3b0;
+      --background: #eff6e0;
+      --white: #ffffff;
+      --gray: #d9d9d9;
+      --text: #353535;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--text);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      background-color: var(--white);
+      padding: 15px 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-icon {
+      margin-right: 8px;
+      font-size: 28px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .signin-btn {
+      background-color: var(--accent);
+      color: var(--white);
+      border: none;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* HERO SECTION */
+    .page-hero {
+      background: linear-gradient(135deg,
+          var(--primary) 0%,
+          var(--primary-light) 100%);
+      color: var(--white);
+      padding: 40px 0;
+      margin: 25px auto;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    /* MAIN CONTENT */
+    main {
+      display: flex;
+      gap: 25px;
+      margin: 30px;
+    }
+
+    main>div {
+      flex: 2;
+      background-color: var(--white);
+      border: 1px solid var(--gray);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+    }
+
+    .breath-circle {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #33c6e7 0%, #124559 100%);
+      margin: 10px auto 20px;
+      animation: breathe 4s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%,100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.35); opacity: 1; }
+    }
+
+    aside {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .package-card {
+      background-color: var(--white);
+      padding: 18px;
+      border-radius: 14px;
+      border: 2px solid var(--light);
+      box-shadow: var(--card-shadow);
+      transition: 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .package-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+      border-color: var(--primary-light);
+    }
+
+    .package-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 7px;
+      background: linear-gradient(90deg,
+          #284b63,
+          #598392,
+          #aec3b0);
+    }
+
+    .package-card h4 {
+      margin: 15px 0 10px;
+      color: var(--primary);
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .package-card h4::before {
+      content: "✨";
+    }
+
+    .package-card button {
+      margin-top: 10px;
+      background-color: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .package-card button:hover {
+      background-color: var(--primary-dark);
+      transform: scale(1.06);
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: var(--primary-dark);
+      color: var(--white);
+      padding: 60px 0 20px;
+      margin-top: 50px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-column h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: var(--accent);
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 10px;
+      color: var(--light);
+    }
+
+    .footer-column ul li a {
+      color: var(--light);
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .footer-column ul li a:hover {
+      color: var(--accent);
+    }
+
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: var(--primary);
+      border-radius: 50%;
+      color: var(--white);
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      margin-right: 12px;
+    }
+
+    .social-links a:hover {
+      background-color: var(--accent);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--primary);
+      color: var(--light);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 850px) {
+      main {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <span class="logo-icon">🤖</span>
+        AI Buddy
+      </div>
+
+      <nav>
+        <a href="Prototype_Homepage.html">Home</a>
+        <a href="Prototype_Chatbot.html">Chatbot</a>
+        <a href="Prototype_EmotionTracker.html">Emotion Tracker</a>
+        <a href="Prototype_Focus.html">Focus</a>
+        <a href="Prototype_Profile.html">Profile</a>
+        <a href="Prototype_Contact.html">Contact</a>
+      </nav>
+
+      <button class="signin-btn">Sign In</button>
+    </div>
   </header>
 
-  <section style="margin:20px 30px; border:2px dashed #aaa; text-align:center; height:120px;">
-    [Banner: “Tập trung - Hít thở - Bình tâm cùng AI Buddy”]
+  <!-- HERO -->
+  <section class="page-hero">
+    🌿 Focus – Breathe – Find Your Calm with <b>AI Buddy</b> 🌊
   </section>
 
-  <main style="display:flex; gap:20px; margin:0 30px;">
-    <div style="flex:2;">
-      <!-- Breathing animation -->
-      <div style="border:1px solid #aaa; padding:15px; text-align:center; background:#fff;">
-        <div style="border:1px dashed #999; height:250px; display:flex; align-items:center; justify-content:center;">
-          [Breathing Animation Circle + Voice hướng dẫn]
-        </div>
-        <p>Voice Guidance: “Hít vào... Thở ra...”</p>
-      </div>
+  <!-- MAIN CONTENT -->
+  <main>
+    <!-- Left Section -->
+    <div>
+      <div class="breath-circle"></div>
+      <p><b>Voice Guidance:</b> “Breathe in… Breathe out…”</p>
     </div>
 
-    <!-- Buy Sessions -->
-    <aside style="flex:1;">
-      <div style="border:1px solid #aaa; background:#fff; padding:15px; margin-bottom:15px;">
-        <h4>[Gói Free]</h4>
-        <ul><li>2 session ngắn (5 phút)</li><li>Voice cơ bản</li></ul>
-      </div>
-      <div style="border:1px solid #aaa; background:#fff; padding:15px; margin-bottom:15px;">
-        <h4>[Gói Essential]</h4>
-        <ul><li>10 session + nhạc nền</li><li>Chọn giọng AI</li></ul>
-        <a href="Prototype_Checkout.html">
-          <button>Mua Ngay</button>
-        </a>
+    <!-- Right: Subscription Packages -->
+    <aside>
+      <div class="package-card">
+        <h4>🌼 Free Plan</h4>
+        <ul>
+          <li>2 short sessions (5 minutes)</li>
+          <li>Basic voice guide</li>
+        </ul>
       </div>
 
-      <div style="border:1px solid #aaa; background:#fff; padding:15px;">
-        <h4>[Gói Premium]</h4>
-        <ul><li>30 session đa dạng</li><li>Voice persona tùy chọn</li><li>Tự động nhắc lịch focus</li></ul>
-        <a href="Prototype_Checkout.html">
-          <button>Mua Ngay</button>
-        </a>
+      <div class="package-card">
+        <h4>🌿 Essential Plan</h4>
+        <ul>
+          <li>10 sessions + background music</li>
+          <li>Select AI voice</li>
+        </ul>
+        <button>Buy Now</button>
+      </div>
+
+      <div class="package-card">
+        <h4>🌸 Premium Plan</h4>
+        <ul>
+          <li>30 diverse sessions</li>
+          <li>Custom AI voice personas</li>
+          <li>Automatic focus reminders</li>
+        </ul>
+        <button>Buy Now</button>
       </div>
     </aside>
   </main>
 
-  <!-- Footer -->
-  <footer style="margin-top:30px; background:#ddd; text-align:center; padding:10px;">
-    [Thông tin nhóm | Contact | &#169; 2025 AI Buddy]
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>AI Buddy</h3>
+          <p>Your companion for mental wellness with intelligent AI support and personalized care.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="Prototype_Homepage.html">Home</a></li>
+            <li><a href="Prototype_Chatbot.html">Chatbot</a></li>
+            <li><a href="Prototype_EmotionTracker.html">Emotion Tracker</a></li>
+            <li><a href="Prototype_Focus.html">Focus</a></li>
+            <li><a href="Prototype_Contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Services</h3>
+          <ul>
+            <li><a href="#">Emotional Chat Support</a></li>
+            <li><a href="#">Mood Tracking</a></li>
+            <li><a href="#">Meditation Sessions</a></li>
+            <li><a href="#">Focus Exercises</a></li>
+            <li><a href="#">Personalized Insights</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Contact</h3>
+          <ul>
+            <li><i class="fas fa-map-marker-alt"></i> 123 Wellness Street, Mindful District, CA 90210</li>
+            <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+            <li><i class="fas fa-envelope"></i> support@aibuddy.com</li>
+            <li><i class="fas fa-clock"></i> Mon–Fri: 8AM – 8PM</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="copyright">
+        © 2025 AI Buddy. All rights reserved. | Mental Health Companion
+      </div>
+
+    </div>
   </footer>
+
 </body>
+
 </html>
+
