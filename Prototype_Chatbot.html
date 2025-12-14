@@ -230,17 +230,20 @@
     .chat-main {
       display: flex;
       flex-direction: column;
-      height: 100%; /* Quan trọng */
-      background-color: #f7f9fc; /* Hơi khác background 1 chút */
+      height: 100%; 
+      background-color: #f7f9fc;
+      overflow: hidden; /* Quan trọng: Ngăn main bị tràn */
+      position: relative;
     }
 
     .chat-window {
-      flex-grow: 1; /* Chiếm hết không gian còn lại */
-      overflow-y: auto; /* Cho phép scroll tin nhắn */
+      flex: 1; /* Chiếm toàn bộ không gian còn lại */
+      overflow-y: auto; /* Chỉ scroll phần tin nhắn */
       padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 15px;
+      min-height: 0; /* Quan trọng cho Firefox/Flexbox nested */
     }
 
     .message {
@@ -280,6 +283,7 @@
 
     /* Input Area */
     .chat-input-area {
+      flex-shrink: 0; /* Không bao giờ bị co lại */
       display: flex;
       align-items: center;
       gap: 10px;
@@ -287,6 +291,7 @@
       background: var(--white);
       border-top: 1px solid var(--gray);
       box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+      z-index: 10;
     }
     
     .chat-input-area .input-btn {
@@ -555,40 +560,18 @@
       <div class="persona-list">
         <h4>Choose Persona</h4>
         
-        <div class="persona-card active">
+        <div class="persona-card active" data-id="7" onclick="selectPersona(this)">
           <span class="icon">&#129489;</span>
-          <div class="info">
-            <strong>Friend</strong>
-            <span>A friend who always listens</span>
-          </div>
+          <div class="info"><strong>Friend</strong><span>A friend who always listens</span></div>
         </div>
         
-        <div class="persona-card">
-          <span class="icon">&#128188;</span>
-          <div class="info">
-            <strong>Career Mentor</strong>
-            <span>Gives advice on study & work</span>
-          </div>
-        </div>
-
-        <div class="persona-card">
+        <div class="persona-card" data-id="10" onclick="selectPersona(this)">
           <span class="icon">&#128105;&#8205;&#9877;&#65039;</span>
-          <div class="info">
-            <strong>Psychologist</strong>
-            <span>In-depth support (Premium)</span>
-          </div>
+          <div class="info"><strong>Psychologist</strong><span>In-depth support (Premium)</span></div>
           <i class="fa-solid fa-lock premium-lock"></i>
         </div>
         
-        <div class="persona-card">
-          <span class="icon">&#128104;&#8205;&#128105;&#8205;&#128103;&#8205;&#128102;</span>
-          <div class="info">
-            <strong>Parent</strong>
-            <span>Caring and understanding (Premium)</span>
-          </div>
-          <i class="fa-solid fa-lock premium-lock"></i>
         </div>
-      </div>
 
       <div class="chat-history-list">
         <h4>Chat History</h4>
@@ -716,6 +699,181 @@
       });
     });
   </script>
+
+  <script>
+  // --- CẤU HÌNH BAN ĐẦU ---
+  const CURRENT_USER_ID = 1; 
+  let currentPersonaId = 7;  // <--- SỬA SỐ NÀY (Ví dụ đổi thành 7 nếu Friend là 7)
+  let currentTopicId = 1;
+  let isVoiceMode = false;
+
+  // --- 1. XỬ LÝ CHỌN PERSONA ---
+  function selectPersona(element) {
+    // Xóa class active cũ
+    document.querySelectorAll('.persona-card').forEach(el => el.classList.remove('active'));
+    // Thêm class active mới
+    element.classList.add('active');
+    // Cập nhật ID
+    currentPersonaId = element.getAttribute('data-id');
+    console.log("Selected Persona ID:", currentPersonaId);
+    
+    // Thông báo nhỏ (Optional)
+    appendSystemMessage(`Bạn đã chuyển sang trò chuyện với <b>${element.querySelector('strong').innerText}</b>.`);
+  }
+
+  // --- 2. XỬ LÝ GỬI TIN NHẮN ---
+  document.addEventListener('DOMContentLoaded', () => {
+    const sendBtn = document.getElementById('send-btn');
+    const inputField = document.getElementById('message-input');
+    const chatWindow = document.getElementById('chat-window');
+
+    // Sự kiện Click nút Gửi
+    sendBtn.addEventListener('click', sendMessage);
+
+    // Sự kiện Nhấn Enter
+    inputField.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault(); // Ngăn xuống dòng
+        sendMessage();
+      }
+    });
+
+    async function sendMessage() {
+      // Thêm dòng này để kiểm tra
+      console.log("Đang gửi đi - PersonaID:", currentPersonaId);
+      const messageText = inputField.value.trim();
+      if (!messageText) return; // Không gửi nếu rỗng
+
+      // 2.1. Hiển thị tin nhắn User ngay lập tức
+      appendMessage('user', messageText);
+      inputField.value = ''; // Xóa ô nhập
+      scrollToBottom();
+
+      // 2.2. Hiển thị hiệu ứng "Typing..."
+      const loadingId = showTypingIndicator();
+
+      try {
+        // 2.3. Gọi API Backend (PHP)
+        const response = await fetch('api_chat_send.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: CURRENT_USER_ID,
+            persona_id: currentPersonaId,
+            topic_id: currentTopicId,
+            message: messageText
+          })
+        });
+
+        const data = await response.json();
+        
+        // Xóa hiệu ứng typing
+        removeTypingIndicator(loadingId);
+
+        // 2.4. Xử lý phản hồi từ Server
+        if (response.status === 200) {
+          // Success: Hiển thị tin nhắn AI
+          appendMessage('ai', data.data.response, false);
+          
+          // Nếu có Audio (Voice Mode)
+          if (isVoiceMode && data.data.audioUrl) {
+            playAudio(data.data.audioUrl);
+          }
+        } 
+        else if (response.status === 403) {
+          // Lỗi Premium: Hiển thị thông báo bán hàng
+          appendSystemMessage(`🔒 <b>Tính năng giới hạn:</b> ${data.detail} <br><a href="#all-packages-popup" style="color:var(--accent); font-weight:bold;">Nâng cấp Premium ngay</a>`);
+          // Trigger mở popup (nếu dùng CSS :target)
+          window.location.hash = "all-packages-popup";
+        } 
+        else {
+          // Lỗi từ Backend trả về (ví dụ: DB chết, API Key sai)
+          appendMessage('ai', `⚠️ ${data.message || "Lỗi không xác định"}`, true);
+        }
+
+      } catch (error) {
+        removeTypingIndicator(loadingId);
+        console.error('Error:', error);
+        // In luôn lỗi chi tiết ra để debug
+        appendMessage('ai', `⚠️ Lỗi: ${error.message || "Không thể kết nối tới Server"}`, true);
+      }
+      
+      scrollToBottom();
+    }
+  });
+
+  // --- 3. CÁC HÀM UI HELPER ---
+
+  // Hàm vẽ tin nhắn lên màn hình
+  function appendMessage(sender, text, isError = false) {
+    const chatWindow = document.getElementById('chat-window');
+    const div = document.createElement('div');
+    
+    if (sender === 'user') {
+      div.className = 'message msg-user';
+      div.innerHTML = `<p>${text}</p>`;
+    } else {
+      div.className = 'message msg-ai';
+      if (isError) div.style.borderColor = 'red';
+      div.innerHTML = `
+        <span class="ai-avatar">${isError ? '⚠️' : '🤖'}</span>
+        <p>${text}</p>
+      `;
+    }
+    chatWindow.appendChild(div);
+  }
+
+  // Hàm thông báo hệ thống (căn giữa, nhỏ)
+  function appendSystemMessage(htmlText) {
+    const chatWindow = document.getElementById('chat-window');
+    const div = document.createElement('div');
+    div.style.textAlign = 'center';
+    div.style.fontSize = '0.85rem';
+    div.style.color = '#888';
+    div.style.margin = '10px 0';
+    div.innerHTML = htmlText;
+    chatWindow.appendChild(div);
+    scrollToBottom();
+  }
+
+  // Hiệu ứng đang nhập...
+  function showTypingIndicator() {
+    const chatWindow = document.getElementById('chat-window');
+    const id = 'loading-' + Date.now();
+    const div = document.createElement('div');
+    div.id = id;
+    div.className = 'message msg-ai';
+    div.innerHTML = `
+      <span class="ai-avatar">🤖</span>
+      <p><i>Đang suy nghĩ...</i></p>
+    `;
+    chatWindow.appendChild(div);
+    scrollToBottom();
+    return id;
+  }
+
+  function removeTypingIndicator(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+
+  function scrollToBottom() {
+    const chatWindow = document.getElementById('chat-window');
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+  
+  // Xử lý Voice Toggle (Giả lập)
+  const voiceBtn = document.querySelector('button[title="Voice Mode (Premium)"]');
+  if(voiceBtn){
+      voiceBtn.addEventListener('click', function(){
+          isVoiceMode = !isVoiceMode;
+          this.style.color = isVoiceMode ? 'var(--accent)' : 'var(--primary-light)';
+          alert(isVoiceMode ? "Đã bật Voice Mode" : "Đã tắt Voice Mode");
+      });
+  }
+
+</script>
+
 
 </body>
 </html>
