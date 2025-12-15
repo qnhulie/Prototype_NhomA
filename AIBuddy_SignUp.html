@@ -215,7 +215,8 @@
             font-size: 1.2rem;
         }
 
-        .form-input, .form-select {
+        .form-input,
+        .form-select {
             width: 100%;
             padding: 14px 15px 14px 50px;
             border: 2px solid var(--gray);
@@ -235,7 +236,8 @@
             padding-right: 40px;
         }
 
-        .form-input:focus, .form-select:focus {
+        .form-input:focus,
+        .form-select:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(51, 198, 231, 0.2);
@@ -470,7 +472,8 @@
                 font-size: 2.5rem;
             }
 
-            .form-input, .form-select {
+            .form-input,
+            .form-select {
                 padding: 12px 15px 12px 45px;
             }
 
@@ -486,6 +489,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -522,7 +526,8 @@
             display: none;
         }
 
-        .form-input.error, .form-select.error {
+        .form-input.error,
+        .form-select.error {
             border-color: #e74c3c;
         }
 
@@ -540,10 +545,10 @@
     <!-- Header với navigation mới -->
     <header>
         <div class="container header-content">
-            <a href="Prototype_Homepage.html" class="logo">
+            <div class="logo">
                 <span class="logo-icon">🤖</span>
                 AI Buddy
-            </a>
+            </div>
             <nav>
                 <a href="Prototype_Homepage.html">Home</a>
                 <a href="Prototype_Chatbot.html">Chatbot</a>
@@ -551,11 +556,9 @@
                 <a href="Prototype_Trial.html">Trial</a>
                 <a href="Prototype_Profile.html">Profile</a>
                 <a href="Prototype_About.html">About</a>
-                <!-- Đã thêm Terms và Privacy -->
-                <a href="Prototype_Terms.html">Terms</a>
-                <a href="Prototype_Privacy.html">Privacy</a>
+                <a href="Prototype_Contact.html">Contact</a>
             </nav>
-            <a href="Prototype_SignIn.html">
+            <a href="AIBuddy_SignIn.html">
                 <button class="signin-btn">Sign In</button>
             </a>
         </div>
@@ -579,7 +582,8 @@
                         <label class="form-label required" for="fullName">Full Name</label>
                         <div class="input-with-icon">
                             <i class="fas fa-user"></i>
-                            <input type="text" id="fullName" class="form-input" placeholder="Enter your full name" required>
+                            <input type="text" id="fullName" class="form-input" placeholder="Enter your full name"
+                                required>
                         </div>
                         <div id="fullNameError" class="error-message">Please enter your full name</div>
                     </div>
@@ -599,7 +603,8 @@
                         <label class="form-label required" for="password">Password</label>
                         <div class="input-with-icon">
                             <i class="fas fa-lock"></i>
-                            <input type="password" id="password" class="form-input" placeholder="Create a password (min. 8 characters)" required>
+                            <input type="password" id="password" class="form-input"
+                                placeholder="Create a password (min. 8 characters)" required>
                             <button type="button" class="password-toggle" id="togglePassword">
                                 <i class="fas fa-eye"></i>
                             </button>
@@ -642,7 +647,8 @@
                         <label class="form-label required" for="phone">Phone Number</label>
                         <div class="input-with-icon">
                             <i class="fas fa-phone"></i>
-                            <input type="tel" id="phone" class="form-input" placeholder="Enter your phone number" required>
+                            <input type="tel" id="phone" class="form-input" placeholder="Enter your phone number"
+                                required>
                         </div>
                         <div id="phoneError" class="error-message">Please enter a valid phone number</div>
                     </div>
@@ -652,11 +658,15 @@
                         <div class="terms-checkbox">
                             <input type="checkbox" id="termsAgreement" required>
                             <label for="termsAgreement" class="terms-text">
-                                I agree with the <a href="Prototype_Terms.html" id="termsLink" target="_blank">Terms of Service</a> and acknowledge the 
-                                <a href="Prototype_Privacy.html" id="privacyLink" target="_blank">Privacy Policy</a>. I understand that AI Buddy is a mental wellness companion and not a substitute for professional medical advice.
+                                I agree with the <a href="Prototype_Terms.html" id="termsLink" target="_blank">Terms of
+                                    Service</a> and acknowledge the
+                                <a href="Prototype_Privacy.html" id="privacyLink" target="_blank">Privacy Policy</a>. I
+                                understand that AI Buddy is a mental wellness companion and not a substitute for
+                                professional medical advice.
                             </label>
                         </div>
-                        <div id="termsError" class="error-message" style="margin-top: 10px;">You must agree to the terms to continue</div>
+                        <div id="termsError" class="error-message" style="margin-top: 10px;">You must agree to the terms
+                            to continue</div>
                     </div>
 
                     <!-- Success Message -->
@@ -672,7 +682,7 @@
 
                 <div class="signin-link">
                     Already have an account?
-                    <a href="Prototype_SignIn.html" id="signinLink">Sign In</a>
+                    <a href="AIBuddy_SignIn.html" id="signinLink">Sign In</a>
                 </div>
             </div>
         </div>
@@ -705,8 +715,8 @@
                 <div class="footer-column">
                     <h3>Legal</h3>
                     <ul>
-                        <li><a href="Prototype_Terms.html">Terms of Service</a></li>
-                        <li><a href="Prototype_Privacy.html">Privacy Policy</a></li>
+                        <li><a href="AIBuddy_Terms of Service.html">Terms of Service</a></li>
+                        <li><a href="AIBuddy_Privacy Policy.html">Privacy Policy</a></li>
                         <li><a href="#">Cookie Policy</a></li>
                         <li><a href="#">Disclaimer</a></li>
                     </ul>
@@ -740,7 +750,7 @@
 
         // Toggle password visibility
         if (togglePassword) {
-            togglePassword.addEventListener('click', function() {
+            togglePassword.addEventListener('click', function () {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
                 this.querySelector('i').classList.toggle('fa-eye');
@@ -750,14 +760,14 @@
 
         // Terms and Privacy links - mở trong tab mới
         if (termsLink) {
-            termsLink.addEventListener('click', function(e) {
+            termsLink.addEventListener('click', function (e) {
                 e.preventDefault();
                 window.open(this.href, '_blank');
             });
         }
 
         if (privacyLink) {
-            privacyLink.addEventListener('click', function(e) {
+            privacyLink.addEventListener('click', function (e) {
                 e.preventDefault();
                 window.open(this.href, '_blank');
             });
@@ -768,7 +778,7 @@
             const fullName = document.getElementById('fullName').value.trim();
             const errorElement = document.getElementById('fullNameError');
             const inputElement = document.getElementById('fullName');
-            
+
             if (fullName.length < 2) {
                 showError(errorElement, inputElement, 'Full name must be at least 2 characters');
                 return false;
@@ -783,7 +793,7 @@
             const errorElement = document.getElementById('emailError');
             const inputElement = document.getElementById('email');
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            
+
             if (!emailRegex.test(email)) {
                 showError(errorElement, inputElement, 'Please enter a valid email address');
                 return false;
@@ -797,7 +807,7 @@
             const password = document.getElementById('password').value;
             const errorElement = document.getElementById('passwordError');
             const inputElement = document.getElementById('password');
-            
+
             if (password.length < 8) {
                 showError(errorElement, inputElement, 'Password must be at least 8 characters');
                 return false;
@@ -811,7 +821,7 @@
             const dob = document.getElementById('dob').value;
             const errorElement = document.getElementById('dobError');
             const inputElement = document.getElementById('dob');
-            
+
             if (!dob) {
                 showError(errorElement, inputElement, 'Please select your date of birth');
                 return false;
@@ -821,11 +831,11 @@
                 const today = new Date();
                 const age = today.getFullYear() - dobDate.getFullYear();
                 const monthDiff = today.getMonth() - dobDate.getMonth();
-                
+
                 if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
                     age--;
                 }
-                
+
                 if (age < 13) {
                     showError(errorElement, inputElement, 'You must be at least 13 years old');
                     return false;
@@ -843,7 +853,7 @@
             const gender = document.getElementById('gender').value;
             const errorElement = document.getElementById('genderError');
             const inputElement = document.getElementById('gender');
-            
+
             if (!gender) {
                 showError(errorElement, inputElement, 'Please select your gender');
                 return false;
@@ -857,10 +867,10 @@
             const phone = document.getElementById('phone').value.trim();
             const errorElement = document.getElementById('phoneError');
             const inputElement = document.getElementById('phone');
-            
+
             // Remove all non-digit characters except +
             const cleanedPhone = phone.replace(/[^\d+]/g, '');
-            
+
             if (cleanedPhone.length < 10) {
                 showError(errorElement, inputElement, 'Please enter a valid phone number (at least 10 digits)');
                 return false;
@@ -872,7 +882,7 @@
 
         function validateTerms() {
             const errorElement = document.getElementById('termsError');
-            
+
             if (!termsAgreement.checked) {
                 errorElement.style.display = 'block';
                 return false;
@@ -905,9 +915,9 @@
 
         // Form submission
         if (signupForm) {
-            signupForm.addEventListener('submit', function(e) {
+            signupForm.addEventListener('submit', function (e) {
                 e.preventDefault();
-                
+
                 // Validate all fields
                 const isFullNameValid = validateFullName();
                 const isEmailValid = validateEmail();
@@ -916,20 +926,20 @@
                 const isGenderValid = validateGender();
                 const isPhoneValid = validatePhone();
                 const isTermsValid = validateTerms();
-                
-                if (isFullNameValid && isEmailValid && isPasswordValid && 
+
+                if (isFullNameValid && isEmailValid && isPasswordValid &&
                     isDOBValid && isGenderValid && isPhoneValid && isTermsValid) {
-                    
+
                     // Show loading state
                     signupButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
                     signupButton.disabled = true;
-                    
+
                     // Simulate API call (in real app, send data to server)
                     setTimeout(() => {
                         // Show success message
                         successMessage.style.display = 'block';
                         signupButton.style.display = 'none';
-                        
+
                         // Collect form data for demo
                         const formData = {
                             fullName: document.getElementById('fullName').value,
@@ -938,14 +948,14 @@
                             gender: document.getElementById('gender').value,
                             phone: document.getElementById('phone').value
                         };
-                        
+
                         console.log('Form submitted:', formData);
-                        
+
                         // Redirect to sign in page after 2 seconds
                         setTimeout(() => {
-                            window.location.href = 'Prototype_SignIn.html';
+                            window.location.href = 'AIBuddy_SignIn.html';
                         }, 2000);
-                        
+
                     }, 1500);
                 } else {
                     // Scroll to first error
@@ -968,9 +978,10 @@
                 }
             }
         }
-        
+
         window.addEventListener('load', adjustNavigation);
         window.addEventListener('resize', adjustNavigation);
     </script>
 </body>
+
 </html>
