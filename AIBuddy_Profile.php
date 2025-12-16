@@ -694,7 +694,7 @@ require_once 'config.php';
         });
 
         document.getElementById("logout-btn").addEventListener("click", () => {
-            window.location.href = "AIBuddy_SignIn.html";
+            window.location.href = "AIBuddy_SignIn.php";
         });
     </script>
 
@@ -702,3 +702,4 @@ require_once 'config.php';
 
 
 </html>
+
