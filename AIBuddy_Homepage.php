@@ -1098,18 +1098,18 @@
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="Prototype_Homepage.html">Home</a></li>
-                        <li><a href="Prototype_Chatbot.html">Chatbot</a></li>
-                        <li><a href="Prototype_EmotionTracker.html">Emotion Tracker</a></li>
-                        <li><a href="Prototype_Trial.html">Trial</a></li>
-                        <li><a href="Prototype_Contact.html">Contact</a></li>
+                        <li><a href="AIBuddy_Homepage.php">Home</a></li>
+                        <li><a href="AIBuddy_Chatbot.php">Chatbot</a></li>
+                        <li><a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a></li>
+                        <li><a href="AIBuddy_Trial.php">Trial</a></li>
+                        <li><a href="AIBuddy_Contact.php">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Legal</h3>
                     <ul>
-                        <li><a href="AIBuddy_Terms of Service.html">Terms of Service</a></li>
-                        <li><a href="AIBuddy_Privacy Policy.html">Privacy Policy</a></li>
+                        <li><a href="AIBuddy_Terms of Service.php">Terms of Service</a></li>
+                        <li><a href="AIBuddy_Privacy Policy.php">Privacy Policy</a></li>
                         <li><a href="#">Cookie Policy</a></li>
                         <li><a href="#">Disclaimer</a></li>
                     </ul>
