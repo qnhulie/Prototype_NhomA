@@ -437,8 +437,15 @@
 
                     <div class="terms-section-block">
                         <h2>4. Privacy and Data</h2>
-                        <p>Your privacy is important to us. Please review our <a href="AIBuddy_Privacy.php" style="color: var(--accent);">Privacy Policy</a> to understand how we collect, use, and protect your personal information.</p>
-                        <p>By using AI Buddy, you consent to:</p>
+                    <p>
+                    Your privacy is important to us.
+                    Please review our
+                    <a href="AIBuddy_PrivacyPolicy.php" style="color: var(--accent);">
+                        Privacy Policy
+                    </a>
+                     to understand how we collect, use, and protect your personal information.
+                    </p>                        
+                    <p>By using AI Buddy, you consent to:</p>
                         <ul>
                             <li>The collection of emotion tracking data for personalized insights</li>
                             <li>Anonymous, aggregated data usage for service improvement</li>
