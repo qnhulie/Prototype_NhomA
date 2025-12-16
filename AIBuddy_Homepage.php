@@ -912,6 +912,7 @@
         <a href="AIBuddy_Focus.php">Focus</a>
         <a href="AIBuddy_Profile.php">Profile</a>
         <a href="AIBuddy_About.php">About</a>
+        <a href="AIBuddy_Contact.php">Contact</a>
       </nav>
       <button class="signin-btn" onclick="window.location.href='AiBuddy_SignIn.php'">
     Sign In</button>
