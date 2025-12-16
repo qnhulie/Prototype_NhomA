@@ -1,3 +1,9 @@
+<!--
+PAGE: Checkout
+DEPENDENCY:
+table: orders, order_items
+-->
+
 <?php
 require_once 'config.php';
 session_start();
@@ -671,6 +677,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </h2>
     </section>
 
+    <!-- Payment Section -->
     <section class="payment-section">
         <form method="post">
             <div class="payment-container">
@@ -888,6 +895,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 
 </body>
-
 
 </html>
