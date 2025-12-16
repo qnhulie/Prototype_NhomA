@@ -369,22 +369,20 @@
     <!-- Header với navigation mới -->
     <header>
         <div class="container header-content">
-            <a href="Prototype_Homepage.html" class="logo">
+            <a href="AIBuddy_Homepage.php" class="logo">
                 <span class="logo-icon">🤖</span>
                 AI Buddy
             </a>
             <nav>
-                <a href="Prototype_Homepage.html">Home</a>
-                <a href="Prototype_Chatbot.html">Chatbot</a>
-                <a href="Prototype_EmotionTracker.html">Emotion Tracker</a>
-                <a href="Prototype_Trial.html">Trial</a>
-                <a href="Prototype_Profile.html">Profile</a>
-                <a href="Prototype_About.html">About</a>
-                <!-- Đã thêm Terms và Privacy -->
-                <a href="Prototype_Terms.html">Terms</a>
-                <a href="Prototype_Privacy.html">Privacy</a>
+                <a href="AIBuddy_Homepage.php">Home</a>
+                <a href="AIBuddy_Chatbot.php">Chatbot</a>
+                <a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a>
+                <a href="AIBuddy_Trial.php">Trial</a>
+                <a href="AIBuddy_Profile.php">Profile</a>
+                <a href="AIBuddy_About.php">About</a>
+                <a href="AIBuddy_Contact.php">Contact</a>
             </nav>
-            <a href="Prototype_SignIn.html">
+            <a href="AIBuddy_SignIn.php">
                 <button class="signin-btn">Sign In</button>
             </a>
         </div>
@@ -439,7 +437,7 @@
 
                     <div class="terms-section-block">
                         <h2>4. Privacy and Data</h2>
-                        <p>Your privacy is important to us. Please review our <a href="Prototype_Privacy.html" style="color: var(--accent);">Privacy Policy</a> to understand how we collect, use, and protect your personal information.</p>
+                        <p>Your privacy is important to us. Please review our <a href="AIBuddy_Privacy.php" style="color: var(--accent);">Privacy Policy</a> to understand how we collect, use, and protect your personal information.</p>
                         <p>By using AI Buddy, you consent to:</p>
                         <ul>
                             <li>The collection of emotion tracking data for personalized insights</li>
@@ -496,7 +494,7 @@
         </div>
     </section>
 
-    <!-- Footer với Legal Section -->
+      <!-- Footer với Legal Section -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -523,8 +521,8 @@
                 <div class="footer-column">
                     <h3>Legal</h3>
                     <ul>
-                        <li><a href="Prototype_Terms.html">Terms of Service</a></li>
-                        <li><a href="Prototype_Privacy.html">Privacy Policy</a></li>
+                        <li><a href="AIBuddy_Terms of Service.php">Terms of Service</a></li>
+                        <li><a href="AIBuddy_PrivacyPolicy.php">Privacy Policy</a></li>
                         <li><a href="#">Cookie Policy</a></li>
                         <li><a href="#">Disclaimer</a></li>
                     </ul>
