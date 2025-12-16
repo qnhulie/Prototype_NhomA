@@ -11,7 +11,7 @@ if (!isset($_SESSION['userid'])) {
     exit;
 }
 
-$userID = $_SESSION['user_id'];
+$userID = $_SESSION['userid'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -137,6 +137,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .signin-btn:hover {
       background-color: #2ab4d1;
     }
+
+        .user-account {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 8px 16px;
+      border-radius: 20px;
+
+      background-color: var(--background);
+      color: var(--primary);
+
+      font-weight: 600;
+      text-decoration: none;
+
+      transition: all 0.25s ease;
+    }
+
+    .user-account i {
+      font-size: 18px;
+      color: var(--primary);
+    }
+
+    .user-account:hover {
+      background-color: var(--accent);
+      color: var(--white);
+    }
+
+    .user-account:hover i {
+      color: var(--white);
+    }
+
 
     /* Page Hero */
     .page-hero {
@@ -504,10 +536,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="AIBuddy_Contact.php">Contact</a>
 
             </nav>
-            <a href="AIBuddy_SignIn.php">
-
-                <button class="signin-btn">Sign In</button>
-            </a>
+            <?php if (!empty($_SESSION['user_name'])): ?>
+  <a href="AIBuddy_Profile.php" class="user-account">
+    <i class="fa-regular fa-user"></i>
+    <span><?= htmlspecialchars($_SESSION['user_name']) ?></span>
+  </a>
+<?php endif; ?>
         </div>
     </header>
 
@@ -586,12 +620,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <?= htmlspecialchars($successMsg) ?>
     </p>
   <?php endif; ?>
-
-  <?php if (!empty($successMsg)): ?>
-  <p style="color: green; font-weight: 600; margin-bottom: 15px;">
-    <?= htmlspecialchars($successMsg) ?>
-  </p>
-<?php endif; ?>
 
 <?php if (!empty($errorMsg)): ?>
   <p style="color: red; font-weight: 600; margin-bottom: 15px;">
