@@ -1,3 +1,37 @@
+<?php
+require_once 'db.php';
+session_start();
+
+$successMsg = null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Nếu có đăng nhập thì lấy UserID, không thì NULL
+    $userID = $_SESSION['UserID'] ?? null;
+
+    $topic   = trim($_POST['topic']);
+    $content = trim($_POST['content']);
+
+    if ($topic && $content) {
+
+        $stmt = $pdo->prepare("
+            INSERT INTO form
+            (UserID, AdminID, FormTopic, FormContent, FormStatus, FormCreationTime)
+            VALUES (?, NULL, ?, ?, 'Pending', NOW())
+        ");
+
+        $stmt->execute([
+            $userID,
+            $topic,
+            $content
+        ]);
+
+        $successMsg = "Your request has been sent to Customer Support.";
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -449,29 +483,34 @@
 <body>
   <!-- Header -->
   <header>
-    <div class="container header-content">
-      <div class="logo">
-        <span class="logo-icon">🤖</span>
-        AI Buddy
-      </div>
-      <nav>
-        <a href="Prototype_Homepage.html">Home</a>
-        <a href="Prototype_Chatbot.html">Chatbot</a>
-        <a href="Prototype_EmotionTracker.html">Emotion Tracker</a>
-        <a href="Prototype_Focus.html">Focus</a>
-        <a href="Prototype_Profile.html">Profile</a>
-        <a href="Prototype_Contact.html">Contact</a>
-      </nav>
-      <button class="signin-btn">Sign In</button>
-    </div>
-  </header>
+        <div class="container header-content">
+            <a href="AIBuddy_Homepage.php" class="logo">
+                <span class="logo-icon">🤖</span>
+                AI Buddy
+            </a>
+            <nav>
+                <a href="AIBuddy_Homepage.php">Home</a>
+                <a href="AIBuddy_Chatbot.php">Chatbot</a>
+                <a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a>
+                <a href="AIBuddy_Trial.php">Trial</a>
+                <a href="AIBuddy_Profile.php">Profile</a>
+                <a href="AIBuddy_About.php">About</a>
+                <a href="AIBuddy_Contact.php">Contact</a>
+
+            </nav>
+            <a href="AIBuddy_SignIn.php">
+
+                <button class="signin-btn">Sign In</button>
+            </a>
+        </div>
+    </header>
 
   <!-- Page Hero -->
   <section class="page-hero">
     <div class="container">
       <h1>Contact Us</h1>
       <ul class="breadcrumb">
-        <li><a href="Prototype_Homepage.html">Home</a></li>
+        <li><a href="AIBuddy_Homepage.php">Home</a></li>
         <li class="current">Contact</li>
       </ul>
     </div>
@@ -534,38 +573,47 @@
       </div>
 
       <div class="contact-form">
-        <h2>Send Us a Message</h2>
-        <form id="contactForm">
-          <div class="form-group">
-            <label for="name">Full Name *</label>
-            <input type="text" id="name" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address *</label>
-            <input type="email" id="email" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="subject">Subject</label>
-            <select id="subject" class="form-control">
-              <option value="">Select a subject</option>
-              <option value="general">General Inquiry</option>
-              <option value="support">Technical Support</option>
-              <option value="feedback">Feedback</option>
-              <option value="partnership">Partnership</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="message">Message *</label>
-            <textarea id="message" class="form-control" required></textarea>
-          </div>
-          <button type="submit" class="btn-primary">Send Message</button>
-        </form>
-      </div>
+  <h2>Customer Support Form</h2>
+
+  <?php if (!empty($successMsg)): ?>
+    <p style="color: green; font-weight: 600; margin-bottom: 15px;">
+      <?= htmlspecialchars($successMsg) ?>
+    </p>
+  <?php endif; ?>
+
+  <form method="POST" action="">
+    <!-- Full Name -->
+    <div class="form-group">
+      <label>Full Name *</label>
+      <input type="text" name="fullname" class="form-control" required>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label>Email *</label>
+      <input type="email" name="email" class="form-control" required>
+    </div>
+
+    <!-- Subject -->
+    <div class="form-group">
+      <label>Subject</label>
+      <select name="topic" class="form-control">
+        <option value="General Inquiry">General Inquiry</option>
+        <option value="Technical Support">Technical Support</option>
+        <option value="Feedback">Feedback</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <!-- Message -->
+    <div class="form-group">
+      <label>Message *</label>
+      <textarea name="content" class="form-control" required></textarea>
+    </div>
+
+    <button type="submit" class="btn-primary">Send Message</button>
+  </form>
+</div>
     </div>
   </section>
 
@@ -577,33 +625,65 @@
         <p>Find answers to common questions about our services</p>
       </div>
 
-      <div class="faq-container">
-        <div class="faq-item">
-          <div class="faq-question">
-            <span>How quickly can I expect a response to my inquiry?</span>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">
-            <span>Is AI Buddy suitable for crisis situations?</span>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">
-            <span>Can I use AI Buddy without creating an account?</span>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">
-            <span>Is my data and privacy protected?</span>
-          </div>
+       <div class="faq-item">
+      <div class="faq-question">
+        How quickly can I expect a response?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+        <div class="faq-answer">
+          <p>
+            Our customer support team typically responds within <strong>24 hours</strong>
+            on business days. During peak periods, responses may take slightly longer,
+            but we always strive to assist you as quickly as possible.
+          </p>
         </div>
       </div>
+
+          <div class="faq-item">
+        <div class="faq-question">
+          <span>Is AI Buddy suitable for crisis situations?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>
+            AI Buddy is designed to provide emotional support and self-reflection tools.
+            However, it is <strong>not a replacement for professional medical or emergency care</strong>.
+            If you are in immediate danger, please contact local emergency services or a licensed professional.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Can I use AI Buddy without creating an account?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>
+            Yes, you can explore some basic features without an account.
+            However, creating an account allows you to access personalized features
+            such as emotion tracking, session history, and subscription benefits.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Is my data and privacy protected?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>
+            Absolutely. We take privacy seriously.
+            Your personal data is securely stored and processed in accordance with our
+            privacy policy. We never share your information with third parties without consent.
+          </p>
+        </div>
+      </div>
+
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- Map Section -->
   <section class="map-section">
@@ -633,11 +713,11 @@
         <div class="footer-column">
           <h3>Quick Links</h3>
           <ul>
-            <li><a href="Prototype_Homepage.html">Home</a></li>
-            <li><a href="Prototype_Chatbot.html">Chatbot</a></li>
-            <li><a href="Prototype_EmotionTracker.html">Emotion Tracker</a></li>
-            <li><a href="Prototype_Focus.html">Focus</a></li>
-            <li><a href="Prototype_Contact.html">Contact</a></li>
+            <li><a href="AIBuddy_Homepage.php">Home</a></li>
+            <li><a href="AIBuddy_Chatbot.php">Chatbot</a></li>
+            <li><a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a></li>
+            <li><a href="AIBuddy_Focus.php">Focus</a></li>
+            <li><a href="AIBuddy_Contact.php">Contact</a></li>
           </ul>
         </div>
         <div class="footer-column">
@@ -665,6 +745,15 @@
       </div>
     </div>
   </footer>
+
+  <script>
+  document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+      const faqItem = question.parentElement;
+      faqItem.classList.toggle('active');
+    });
+  });
+</script>
 
 </body>
 
