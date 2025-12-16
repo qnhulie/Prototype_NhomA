@@ -1,3 +1,34 @@
+<?php
+session_start();
+include 'db.php';
+
+$error = null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+
+    $stmt = $pdo->prepare(
+    "SELECT UserID, UserName, UserPassword
+     FROM users
+     WHERE UserEmail = ?"
+);
+$stmt->execute([$email]);
+$user = $stmt->fetch();
+
+
+    if ($user && password_verify($password, $user['UserPassword'])) {
+        $_SESSION['user_id'] = $user['UserID'];
+        $_SESSION['user_name'] = $user['UserName'];
+
+        header("Location: AIBuddy_Profile.php");
+        exit;
+    } else {
+        $error = "Wrong email address or password";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -509,7 +540,6 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -541,23 +571,23 @@
 </head>
 
 <body>
-    <!-- Header với navigation mới -->
+    <!-- Header với navigation  -->
     <header>
         <div class="container header-content">
-            <div class="logo">
+            <a href="AIBuddy_Homepage.php" class="logo">
                 <span class="logo-icon">🤖</span>
                 AI Buddy
-            </div>
+            </a>
             <nav>
-                <a href="Prototype_Homepage.html">Home</a>
-                <a href="Prototype_Chatbot.html">Chatbot</a>
-                <a href="Prototype_EmotionTracker.html">Emotion Tracker</a>
-                <a href="Prototype_Trial.html">Trial</a>
-                <a href="Prototype_Profile.html">Profile</a>
-                <a href="Prototype_About.html">About</a>
-                <a href="Prototype_Contact.html">Contact</a>
+                <a href="AIBuddy_Homepage.php">Home</a>
+                <a href="AIBuddy_Chatbot.php">Chatbot</a>
+                <a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a>
+                <a href="AIBuddy_Trial.php">Trial</a>
+                <a href="AIBuddy_Profile.php">Profile</a>
+                <a href="AIBuddy_About.php">About</a>
+                <a href="AIBuddy_Contact.php">Contact</a>
             </nav>
-            <a href="AIBuddy_SignIn.html">
+            <a href="AIBuddy_SignIn.php">
                 <button class="signin-btn">Sign In</button>
             </a>
         </div>
@@ -574,13 +604,33 @@
                     <h1>Welcome Back</h1>
                     <p>Sign in to continue your mental wellness journey with AI Buddy</p>
                 </div>
+                <?php if (!empty($error)): ?>
+    <div style="
+        background:#F44336;
+        color:white;
+        padding:12px;
+        border-radius:6px;
+        margin-bottom:20px;
+        text-align:center;
+    ">
+        <?= $error ?>
+    </div>
+<?php endif; ?>
 
-                <form id="signinForm">
+                <form method="POST" action="AIBuddy_SignIn.php">
                     <div class="form-group">
                         <label class="form-label" for="email">Email Address</label>
                         <div class="input-with-icon">
                             <i class="fas fa-envelope"></i>
-                            <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
+                            <input
+    type="email"
+    id="email"
+    name="email"
+    class="form-input"
+    placeholder="you@example.com"
+    required
+>
+
                         </div>
                     </div>
 
@@ -588,8 +638,15 @@
                         <label class="form-label" for="password">Password</label>
                         <div class="input-with-icon">
                             <i class="fas fa-lock"></i>
-                            <input type="password" id="password" class="form-input" placeholder="Enter your password"
-                                required>
+                            <input
+    type="password"
+    id="password"
+    name="password"
+    class="form-input"
+    placeholder="Enter your password"
+    required
+>
+
                             <button type="button" class="password-toggle" id="togglePassword">
                                 <i class="fas fa-eye"></i>
                             </button>
@@ -601,38 +658,26 @@
                             <input type="checkbox" id="remember">
                             <span>Remember me</span>
                         </label>
-                        <a href="#" class="forgot-password">Forgot Password?</a>
+                        <a href="change_password.php" class="forgot-password">Forgot Password?</a>                    
                     </div>
 
                     <button type="submit" class="signin-form-btn">
                         <i class="fas fa-sign-in-alt"></i> Sign In
                     </button>
 
-                    <div class="divider">
-                        <span>Or continue with</span>
-                    </div>
 
-                    <div class="social-login">
-                        <button type="button" class="social-btn google">
-                            <i class="fab fa-google"></i>
-                            <span>Google</span>
-                        </button>
-                        <button type="button" class="social-btn apple">
-                            <i class="fab fa-apple"></i>
-                            <span>Apple</span>
-                        </button>
                     </div>
 
                     <div class="signup-link">
                         Don't have an account?
-                        <a href="AIBuddy_SignUp.php" id="signupLink">Sign up now</a>
+                        <a href="AiBuddy_SignUp.php" id="signupLink">Sign up now</a>
                     </div>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- Footer với Legal Section -->
+      <!-- Footer với Legal Section -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -649,18 +694,18 @@
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="Prototype_Homepage.html">Home</a></li>
-                        <li><a href="Prototype_Chatbot.html">Chatbot</a></li>
-                        <li><a href="Prototype_EmotionTracker.html">Emotion Tracker</a></li>
-                        <li><a href="Prototype_Trial.html">Trial</a></li>
-                        <li><a href="Prototype_Contact.html">Contact</a></li>
+                        <li><a href="AIBuddy_Homepage.php">Home</a></li>
+                        <li><a href="AIBuddy_Chatbot.php">Chatbot</a></li>
+                        <li><a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a></li>
+                        <li><a href="AIBuddy_Trial.php">Trial</a></li>
+                        <li><a href="AIBuddy_Contact.php">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Legal</h3>
                     <ul>
-                        <li><a href="AIBuddy_Terms of Service.html">Terms of Service</a></li>
-                        <li><a href="AIBuddy_Privacy Policy.html">Privacy Policy</a></li>
+                        <li><a href="AIBuddy_Terms of Service.php">Terms of Service</a></li>
+                        <li><a href="AIBuddy_Privacy Policy.php">Privacy Policy</a></li>
                         <li><a href="#">Cookie Policy</a></li>
                         <li><a href="#">Disclaimer</a></li>
                     </ul>
@@ -685,109 +730,16 @@
         // Toggle hiển thị mật khẩu
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('password');
-
+        
         if (togglePassword) {
-            togglePassword.addEventListener('click', function () {
+            togglePassword.addEventListener('click', function() {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
                 this.querySelector('i').classList.toggle('fa-eye');
                 this.querySelector('i').classList.toggle('fa-eye-slash');
             });
         }
-
-        // Xử lý form submit
-        const signinForm = document.getElementById('signinForm');
-        if (signinForm) {
-            signinForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-
-                // Kiểm tra đơn giản
-                if (!email || !password) {
-                    showAlert('Please fill in all fields', 'error');
-                    return;
-                }
-
-                // Hiệu ứng loading
-                const submitBtn = this.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
-                submitBtn.disabled = true;
-
-                // Giả lập gửi dữ liệu (trong thực tế sẽ gửi đến server)
-                setTimeout(() => {
-                    // Giả sử đăng nhập thành công
-                    showAlert('Welcome back to AI Buddy!', 'success');
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-
-                    // Trong thực tế, bạn sẽ redirect đến trang chính
-                    // window.location.href = 'Prototype_Profile.html';
-                }, 1500);
-            });
-        }
-
-        // Xử lý link Sign Up
-        const signupLink = document.getElementById('signupLink');
-        if (signupLink) {
-            signupLink.addEventListener('click', function (e) {
-                e.preventDefault();
-                window.location.href = 'AIBuddy_SignUp.html';
-            });
-        }
-
-        // Xử lý link Forgot Password
-        const forgotPasswordLink = document.querySelector('.forgot-password');
-        if (forgotPasswordLink) {
-            forgotPasswordLink.addEventListener('click', function (e) {
-                e.preventDefault();
-                const email = prompt('Please enter your email to reset password:');
-                if (email) {
-                    showAlert(`Password reset link sent to ${email} (demo)`, 'success');
-                }
-            });
-        }
-
-        // Hiển thị thông báo
-        function showAlert(message, type) {
-            // Tạo alert element
-            const alertEl = document.createElement('div');
-            alertEl.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                border-radius: 8px;
-                color: white;
-                font-weight: 500;
-                z-index: 1000;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                animation: slideIn 0.3s ease-out;
-            `;
-
-            // Màu sắc theo loại thông báo
-            if (type === 'success') {
-                alertEl.style.backgroundColor = '#4CAF50';
-            } else if (type === 'error') {
-                alertEl.style.backgroundColor = '#F44336';
-            } else {
-                alertEl.style.backgroundColor = 'var(--primary)';
-            }
-
-            alertEl.textContent = message;
-            document.body.appendChild(alertEl);
-
-            // Tự động xóa sau 3 giây
-            setTimeout(() => {
-                alertEl.style.animation = 'slideOut 0.3s ease-out';
-                setTimeout(() => {
-                    document.body.removeChild(alertEl);
-                }, 300);
-            }, 3000);
-        }
-
+              
         // Thêm CSS cho animation
         const style = document.createElement('style');
         style.textContent = `
@@ -801,12 +753,12 @@
             }
         `;
         document.head.appendChild(style);
-
+        
         // Responsive navigation cho mobile
         function adjustNavigation() {
             const nav = document.querySelector('nav');
             const headerContent = document.querySelector('.header-content');
-
+            
             if (window.innerWidth <= 768) {
                 if (nav) {
                     nav.style.display = 'flex';
@@ -815,11 +767,10 @@
                 }
             }
         }
-
+        
         // Chạy khi load và khi resize
         window.addEventListener('load', adjustNavigation);
         window.addEventListener('resize', adjustNavigation);
     </script>
 </body>
-
 </html>
