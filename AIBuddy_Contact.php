@@ -1,18 +1,26 @@
 <?php
-require_once 'db.php';
 session_start();
+require_once 'db.php';
 
 $successMsg = null;
+$errorMsg = null;
+
+/* BẮT BUỘC PHẢI ĐĂNG NHẬP */
+if (!isset($_SESSION['userid'])) {
+    header("Location: AIBuddy_SignIn.php");
+    exit;
+}
+
+$userID = $_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Nếu có đăng nhập thì lấy UserID, không thì NULL
-    $userID = $_SESSION['UserID'] ?? null;
+    $topic   = trim($_POST['topic'] ?? '');
+    $content = trim($_POST['content'] ?? '');
 
-    $topic   = trim($_POST['topic']);
-    $content = trim($_POST['content']);
-
-    if ($topic && $content) {
+    if ($topic === '' || $content === '') {
+        $errorMsg = "Please fill in all required fields.";
+    } else {
 
         $stmt = $pdo->prepare("
             INSERT INTO form
@@ -20,16 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             VALUES (?, NULL, ?, ?, 'Pending', NOW())
         ");
 
-        $stmt->execute([
-            $userID,
-            $topic,
-            $content
-        ]);
+        $stmt->execute([$userID, $topic, $content]);
 
         $successMsg = "Your request has been sent to Customer Support.";
     }
 }
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -581,39 +587,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </p>
   <?php endif; ?>
 
-  <form method="POST" action="">
-    <!-- Full Name -->
-    <div class="form-group">
-      <label>Full Name *</label>
-      <input type="text" name="fullname" class="form-control" required>
-    </div>
+  <?php if (!empty($successMsg)): ?>
+  <p style="color: green; font-weight: 600; margin-bottom: 15px;">
+    <?= htmlspecialchars($successMsg) ?>
+  </p>
+<?php endif; ?>
 
-    <!-- Email -->
-    <div class="form-group">
-      <label>Email *</label>
-      <input type="email" name="email" class="form-control" required>
-    </div>
+<?php if (!empty($errorMsg)): ?>
+  <p style="color: red; font-weight: 600; margin-bottom: 15px;">
+    <?= htmlspecialchars($errorMsg) ?>
+  </p>
+<?php endif; ?>
 
-    <!-- Subject -->
-    <div class="form-group">
-      <label>Subject</label>
-      <select name="topic" class="form-control">
-        <option value="General Inquiry">General Inquiry</option>
-        <option value="Technical Support">Technical Support</option>
-        <option value="Feedback">Feedback</option>
-        <option value="Other">Other</option>
-      </select>
-    </div>
 
-    <!-- Message -->
-    <div class="form-group">
-      <label>Message *</label>
-      <textarea name="content" class="form-control" required></textarea>
-    </div>
+  <form method="POST">
 
-    <button type="submit" class="btn-primary">Send Message</button>
-  </form>
-</div>
+  <div class="form-group">
+    <label>Subject *</label>
+    <select name="topic" class="form-control" required>
+      <option value="General Inquiry">General Inquiry</option>
+      <option value="Technical Support">Technical Support</option>
+      <option value="Feedback">Feedback</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Message *</label>
+    <textarea name="content" class="form-control" required></textarea>
+  </div>
+
+  <button type="submit" class="btn-primary">Send Message</button>
+</form>
+      </div>
     </div>
   </section>
 
@@ -710,41 +716,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="#"><i class="fab fa-linkedin-in"></i></a>
           </div>
         </div>
-        <div class="footer-column">
-          <h3>Quick Links</h3>
-          <ul>
-            <li><a href="AIBuddy_Homepage.php">Home</a></li>
-            <li><a href="AIBuddy_Chatbot.php">Chatbot</a></li>
-            <li><a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a></li>
-            <li><a href="AIBuddy_Focus.php">Focus</a></li>
-            <li><a href="AIBuddy_Contact.php">Contact</a></li>
-          </ul>
+         <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="AIBuddy_Homepage.php">Home</a></li>
+                        <li><a href="AIBuddy_Chatbot.php">Chatbot</a></li>
+                        <li><a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a></li>
+                        <li><a href="AIBuddy_Trial.php">Trial</a></li>
+                        <li><a href="AIBuddy_Contact.php">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="AIBuddy_Terms of Service.php">Terms of Service</a></li>
+                        <li><a href="AIBuddy_PrivacyPolicy.php">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Disclaimer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Wellness Street, Mindful District, CA 90210</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> support@aibuddy.com</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 8:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 AI Buddy. All rights reserved. | Mental Health Companion</p>
+            </div>
         </div>
-        <div class="footer-column">
-          <h3>Services</h3>
-          <ul>
-            <li><a href="#">Emotional Chat Support</a></li>
-            <li><a href="#">Mood Tracking</a></li>
-            <li><a href="#">Meditation Sessions</a></li>
-            <li><a href="#">Focus Exercises</a></li>
-            <li><a href="#">Personalized Insights</a></li>
-          </ul>
-        </div>
-        <div class="footer-column">
-          <h3>Contact</h3>
-          <ul>
-            <li><i class="fas fa-map-marker-alt"></i> 123 Wellness Street, Mindful District, CA 90210</li>
-            <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
-            <li><i class="fas fa-envelope"></i> support@aibuddy.com</li>
-            <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 8:00 PM</li>
-          </ul>
-        </div>
-      </div>
-      <div class="copyright">
-        <p>&copy; 2025 AI Buddy. All rights reserved. | Mental Health Companion</p>
-      </div>
-    </div>
-  </footer>
+    </footer>
+
 
   <script>
   document.querySelectorAll('.faq-question').forEach(question => {
