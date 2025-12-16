@@ -625,7 +625,7 @@
 
                     <div class="signup-link">
                         Don't have an account?
-                        <a href="AIBuddy_SignUp.html" id="signupLink">Sign up now</a>
+                        <a href="AIBuddy_SignUp.php" id="signupLink">Sign up now</a>
                     </div>
                 </form>
             </div>
