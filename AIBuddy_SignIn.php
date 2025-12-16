@@ -18,8 +18,8 @@ $user = $stmt->fetch();
 
 
     if ($user && password_verify($password, $user['UserPassword'])) {
-        $_SESSION['user_id'] = $user['UserID'];
-        $_SESSION['user_name'] = $user['UserName'];
+        $_SESSION['userid'] = $user['UserID'];
+        $_SESSION['username'] = $user['UserName'];
 
         header("Location: AIBuddy_Profile.php");
         exit;
@@ -705,7 +705,7 @@ $user = $stmt->fetch();
                     <h3>Legal</h3>
                     <ul>
                         <li><a href="AIBuddy_Terms of Service.php">Terms of Service</a></li>
-                        <li><a href="AIBuddy_Privacy Policy.php">Privacy Policy</a></li>
+                        <li><a href="AIBuddy_PrivacyPolicy.php">Privacy Policy</a></li>
                         <li><a href="#">Cookie Policy</a></li>
                         <li><a href="#">Disclaimer</a></li>
                     </ul>
