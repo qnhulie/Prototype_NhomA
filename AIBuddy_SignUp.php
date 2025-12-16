@@ -836,7 +836,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a href="#"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
-                <div class="footer-column">
+                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul>
                         <li><a href="AIBuddy_Homepage.php">Home</a></li>
@@ -850,7 +850,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h3>Legal</h3>
                     <ul>
                         <li><a href="AIBuddy_Terms of Service.php">Terms of Service</a></li>
-                        <li><a href="AIBuddy_Privacy Policy.php">Privacy Policy</a></li>
+                        <li><a href="AIBuddy_PrivacyPolicy.php">Privacy Policy</a></li>
                         <li><a href="#">Cookie Policy</a></li>
                         <li><a href="#">Disclaimer</a></li>
                     </ul>
@@ -870,6 +870,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </footer>
+
 
     <script>
         // Toggle hiển thị mật khẩu
