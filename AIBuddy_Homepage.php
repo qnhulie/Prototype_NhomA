@@ -349,6 +349,48 @@
       background-color: #2ab4d1;
     }
 
+    /* =========================
+   FAQ ENHANCEMENT STYLES
+   ========================= */
+
+.faq-box {
+  border-left: 5px solid var(--accent);
+}
+
+.faq-item {
+  padding: 12px 0;
+}
+
+.faq-question {
+  font-size: 1.05rem;
+}
+
+.faq-item p:last-child {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+/* Button riêng cho FAQ support */
+.faq-support-btn {
+  background-color: var(--accent);
+  color: var(--white);
+  border: none;
+  padding: 12px 28px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.faq-support-btn:hover {
+  background-color: #2ab4d1;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+
     /* Footer */
     footer {
       background-color: var(--primary-dark);
@@ -864,14 +906,15 @@
         AI Buddy
       </div>
       <nav>
-        <a href="Prototype_Homepage.html">Home</a>
-        <a href="Prototype_Chatbot.html">Chatbot</a>
-        <a href="Prototype_EmotionTracker.html">Emotion Tracker</a>
-        <a href="Prototype_Focus.html">Focus</a>
-        <a href="Prototype_Profile.html">Profile</a>
-        <a href="Prototype_About.html">About</a>
+        <a href="AIBuddy_Homepage.php">Home</a>
+        <a href="AIBuddy_Chatbot.php">Chatbot</a>
+        <a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a>
+        <a href="AIBuddy_Focus.php">Focus</a>
+        <a href="AIBuddy_Profile.php">Profile</a>
+        <a href="AIBuddy_About.php">About</a>
       </nav>
-      <button class="signin-btn">Sign In</button>
+      <button class="signin-btn" onclick="window.location.href='AiBuddy_SignIn.php'">
+    Sign In</button>
     </div>
   </header>
 
@@ -979,6 +1022,17 @@
             <textarea placeholder="Enter your question..."></textarea>
             <button class="submit-btn">Submit Question</button>
           </div>
+          <div style="text-align:center; margin-top:40px;">
+  <p style="margin-bottom:15px; font-size:1.05rem;">
+    Can't find the answer you're looking for?
+  </p>
+  <a href="AIBuddy_Contact.php">
+    <button class="faq-support-btn">
+      Contact Customer Support
+    </button>
+  </a>
+</div>
+
         </div>
       </div>
     </main>
@@ -1009,7 +1063,7 @@
         <li><i class="fas fa-check"></i> Select AI voice</li>
         <li class="disabled"><i class="fas fa-times"></i> Automatic reminders</li>
       </ul>
-      <button class="btn-primary" onclick="location.href='Prototype_Checkout.html'">Upgrade Now</button>
+      <button class="btn-primary" onclick="location.href='AIBuddy_Checkout.php'">Upgrade Now</button>
     </div>
 
     <div class="pricing-card">
@@ -1021,61 +1075,60 @@
         <li><i class="fas fa-check"></i> Automatic focus reminders</li>
         <li><i class="fas fa-check"></i> Deeper analytics</li>
       </ul>
-      <button class="btn-primary" onclick="location.href='Prototype_Checkout.html'">Get Premium</button>
+      <button class="btn-primary" onclick="location.href='AIBuddy_Checkout.php'">Get Premium</button>
     </div>
   </div>
 </section>
   </div>
 
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-column">
-          <h3>AI Buddy</h3>
-          <p>Your companion for mental wellness with intelligent AI support and personalized care.</p>
-          <div class="social-links">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-          </div>
+    <!-- Footer với Legal Section -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AI Buddy</h3>
+                    <p>Your companion for mental wellness with intelligent AI support and personalized care.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="Prototype_Homepage.html">Home</a></li>
+                        <li><a href="Prototype_Chatbot.html">Chatbot</a></li>
+                        <li><a href="Prototype_EmotionTracker.html">Emotion Tracker</a></li>
+                        <li><a href="Prototype_Trial.html">Trial</a></li>
+                        <li><a href="Prototype_Contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="AIBuddy_Terms of Service.html">Terms of Service</a></li>
+                        <li><a href="AIBuddy_Privacy Policy.html">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Disclaimer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Wellness Street, Mindful District, CA 90210</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> support@aibuddy.com</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 8:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 AI Buddy. All rights reserved. | Mental Health Companion</p>
+            </div>
         </div>
-        <div class="footer-column">
-          <h3>Quick Links</h3>
-          <ul>
-            <li><a href="Prototype_Homepage.html">Home</a></li>
-            <li><a href="Prototype_Chatbot.html">Chatbot</a></li>
-            <li><a href="Prototype_EmotionTracker.html">Emotion Tracker</a></li>
-            <li><a href="Prototype_Focus.html">Focus</a></li>
-            <li><a href="Prototype_Contact.html">Contact</a></li>
-          </ul>
-        </div>
-        <div class="footer-column">
-          <h3>Services</h3>
-          <ul>
-            <li><a href="#">Emotional Chat Support</a></li>
-            <li><a href="#">Mood Tracking</a></li>
-            <li><a href="#">Meditation Sessions</a></li>
-            <li><a href="#">Focus Exercises</a></li>
-            <li><a href="#">Personalized Insights</a></li>
-          </ul>
-        </div>
-        <div class="footer-column">
-          <h3>Contact</h3>
-          <ul>
-            <li><i class="fas fa-map-marker-alt"></i> 123 Wellness Street, Mindful District, CA 90210</li>
-            <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
-            <li><i class="fas fa-envelope"></i> support@aibuddy.com</li>
-            <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 8:00 PM</li>
-          </ul>
-        </div>
-      </div>
-      <div class="copyright">
-        <p>&copy; 2025 AI Buddy. All rights reserved. | Mental Health Companion</p>
-      </div>
-    </div>
-  </footer>
+    </footer>
   <!-- Modal HTML (moved out of <script>) -->
   <div class="modal-overlay" id="pricing-modal-overlay">
     <div class="modal-content" id="pricing-modal-content">
@@ -1108,7 +1161,7 @@
               <li><i class="fas fa-check"></i> Select AI voice</li>
               <li class="disabled"><i class="fas fa-times"></i> Automatic reminders</li>
             </ul>
-            <button class="btn-primary" onclick="location.href='Prototype_Checkout.html'">Upgrade Now</button>
+            <button class="btn-primary" onclick="location.href='AIBuddy_Checkout.php'">Upgrade Now</button>
           </div>
       
           <div class="pricing-card">
@@ -1120,7 +1173,7 @@
               <li><i class="fas fa-check"></i> Automatic focus reminders</li>
               <li><i class="fas fa-check"></i> Deeper analytics</li>
             </ul>
-            <button class="btn-primary" onclick="location.href='Prototype_Checkout.html'">Get Premium</button>
+            <button class="btn-primary" onclick="location.href='AIBuddy_Checkout.php'">Get Premium</button>
           </div>
         </div>
       </section>
@@ -1131,7 +1184,7 @@
 <script>
   // --- Script cũ của ông (CTA, FAQ) ---
   document.querySelector('.cta-button').addEventListener('click', function () {
-    window.location.href = 'Prototype_Chatbot.html';
+    window.location.href = 'AIBuddy_Chatbot.php';
   });
 
   // --- Script cũ cho nút "submit-btn" (FAQ) ---
@@ -1172,7 +1225,7 @@
   
   // *** LƯU Ý: ***
   // Tôi đã xóa code cũ của nút ".subscription-btn" 
-  // (cái mà "window.location.href = 'Prototype_Focus.html'")
+  // (cái mà "window.location.href = 'AIBuddy_Focus.php'")
   // vì bây giờ nút đó dùng để mở modal. Như vậy là đúng logic.
 
 </script>
