@@ -1,9 +1,3 @@
-<!--
-PAGE: Checkout
-DEPENDENCY:
-table: orders, order_items
--->
-
 <?php
 require_once 'config.php';
 session_start();
@@ -897,3 +891,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </body>
 
 </html>
+
