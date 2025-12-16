@@ -316,6 +316,43 @@ session_start();
       font-weight: 600;
       color: var(--primary);
     }
+
+    /* ===== CHART TOOLTIP ===== */
+    .chart-tip {
+      position: absolute;
+      pointer-events: none;
+      background: #ffffff;
+      border: 1px solid #e6eef0;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, .10);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--text);
+      min-width: 170px;
+      max-width: 260px;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity .12s ease, transform .12s ease;
+      z-index: 5;
+    }
+
+    .chart-tip.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .chart-tip strong {
+      display: block;
+      color: var(--primary);
+      margin-bottom: 4px;
+      font-size: 12.5px
+    }
+
+    .chart-tip .muted {
+      color: #6b7b85;
+      font-size: 11.5px;
+      margin-top: 4px
+    }
   </style>
 </head>
 
@@ -443,7 +480,7 @@ session_start();
   </footer>
 
   <script>
-
+    /* ========= CONSTANTS ========= */
     const moodEmoji = {
       5: '😊',
       4: '😌',
@@ -453,6 +490,16 @@ session_start();
       0: '😠'
     };
 
+    const moodColor = {
+      5: '#62c370',
+      4: '#8bd17c',
+      3: '#33c6e7',
+      2: '#8aa6ff',
+      1: '#6f8fd6',
+      0: '#ff6b6b'
+    };
+
+    /* ========= DOM ========= */
     const moods = document.querySelectorAll('.mood-btn');
     const dateEl = document.getElementById('entryDate');
     const noteEl = document.getElementById('note');
@@ -461,10 +508,31 @@ session_start();
     const ctx = canvas.getContext('2d');
     const weekLabel = document.getElementById('weekLabel');
 
+    const saveBtn = document.getElementById('saveBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const prevWeek = document.getElementById('prevWeek');
+    const nextWeek = document.getElementById('nextWeek');
+
+    /* ========= STATE ========= */
     let selected = moods[2];
     let weekOffset = 0;
+    let chartPoints = [];
+    let tipEl = null;
+
     dateEl.valueAsDate = new Date();
 
+    /* ========= TOOLTIP ========= */
+    function ensureTooltip() {
+      if (tipEl) return;
+      const wrap = canvas.parentElement;
+      wrap.style.position = 'relative';
+      tipEl = document.createElement('div');
+      tipEl.className = 'chart-tip';
+      wrap.appendChild(tipEl);
+    }
+    ensureTooltip();
+
+    /* ========= EVENTS ========= */
     moods.forEach(btn => {
       btn.onclick = () => {
         moods.forEach(b => b.classList.remove('active'));
@@ -473,6 +541,26 @@ session_start();
       };
     });
 
+    saveBtn.onclick = () => {
+      const data = loadData();
+      data.push({
+        date: dateEl.value,
+        score: Number(selected.dataset.score),
+        mood: selected.innerText,
+        note: noteEl.value,
+        time: Date.now()
+      });
+      saveData(data);
+      noteEl.value = '';
+      render();
+    };
+
+    clearBtn.onclick = () => noteEl.value = '';
+
+    prevWeek.onclick = () => { weekOffset--; drawChart(); };
+    nextWeek.onclick = () => { weekOffset++; drawChart(); };
+
+    /* ========= STORAGE ========= */
     function loadData() {
       return JSON.parse(localStorage.getItem('aiBuddyEntries') || '[]');
     }
@@ -480,25 +568,45 @@ session_start();
       localStorage.setItem('aiBuddyEntries', JSON.stringify(d));
     }
 
-    saveBtn.onclick = () => {
-      const d = loadData();
-      d.push({
-        date: entryDate.value,
-        score: Number(selected.dataset.score),
-        mood: selected.innerText,
-        note: noteEl.value,
-        time: Date.now()
-      });
-      saveData(d);
-      noteEl.value = '';
-      render();
-    };
+    /* ========= TOOLTIP HOVER ========= */
+    canvas.addEventListener('mousemove', e => {
+      if (!tipEl) return;
 
-    clearBtn.onclick = () => noteEl.value = '';
+      const r = canvas.getBoundingClientRect();
+      const mx = (e.clientX - r.left) * (canvas.width / r.width);
+      const my = (e.clientY - r.top) * (canvas.height / r.height);
 
-    prevWeek.onclick = () => { weekOffset--; drawChart(); }
-    nextWeek.onclick = () => { weekOffset++; drawChart(); }
+      let hit = null;
+      for (const p of chartPoints) {
+        const dx = mx - p.x;
+        const dy = my - p.y;
+        if (dx * dx + dy * dy <= p.hitR) {
+          hit = p;
+          break;
+        }
+      }
 
+      if (!hit) {
+        tipEl.classList.remove('show');
+        return;
+      }
+
+      tipEl.innerHTML = `
+    <strong>${hit.emoji} ${hit.moodText}</strong>
+    <div>${hit.note || 'No note.'}</div>
+    <div class="muted">${hit.date}</div>
+  `;
+
+      tipEl.style.left = Math.min(hit.x + 14, canvas.width - 260) + 'px';
+      tipEl.style.top = Math.max(hit.y - 60, 8) + 'px';
+      tipEl.classList.add('show');
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      if (tipEl) tipEl.classList.remove('show');
+    });
+
+    /* ========= RENDER ========= */
     function render() {
       const data = loadData().slice().reverse();
       entriesEl.innerHTML = data.map(e => `
@@ -513,11 +621,13 @@ session_start();
       drawChart();
     }
 
+    /* ========= CHART ========= */
     function drawChart() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      chartPoints = [];
       const data = loadData();
 
-      // ===== TÍNH TUẦN =====
+      /* ===== WEEK RANGE ===== */
       const base = new Date();
       base.setDate(base.getDate() + weekOffset * 7);
       base.setDate(base.getDate() - ((base.getDay() + 6) % 7));
@@ -528,82 +638,114 @@ session_start();
         return d.toISOString().split('T')[0];
       });
 
-      weekLabel.textContent = days[0] + ' → ' + days[6];
+      /* ===== WEEK LABEL LOGIC ===== */
+      const start = new Date(days[0]);
+      const end = new Date(days[6]);
+      const now = new Date();
 
-      const values = days.map(day => {
-        const items = data.filter(e => e.date === day);
-        return items.length
-          ? items.reduce((s, e) => s + e.score, 0) / items.length
-          : null;
+      const fmt = d => d.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
       });
 
-      const pad = 45;
-      const w = canvas.width - pad * 2;
-      const h = canvas.height - pad * 2;
+      const isThisWeek = start <= now && now <= end;
+      weekLabel.textContent = isThisWeek
+        ? 'This week'
+        : `${fmt(start)} – ${fmt(end)}`;
 
-      /* ===== GRID Y ===== */
-      ctx.strokeStyle = '#eef2f3';
-      ctx.lineWidth = 1;
-      for (let i = 0; i <= 5; i++) {
-        const y = pad + h - (i / 5) * h;
+      /* ===== DAY DATA ===== */
+      const info = days.map(day => {
+        const items = data.filter(e => e.date === day);
+        if (!items.length) return null;
+        const avg = items.reduce((s, e) => s + e.score, 0) / items.length;
+        return { avg, rep: items.at(-1) };
+      });
+
+      const padX = 50;
+      const padY = 40;
+      const w = canvas.width - padX * 2;
+      const h = canvas.height - padY * 2;
+
+      /* ===== MAP POINTS ===== */
+      const pts = info.map((d, i) => {
+        const x = padX + (w / 6) * i;
+        if (!d) return { x, y: null };
+        const y = padY + h - (d.avg / 5) * h;
+        return { x, y, v: d.avg, rep: d.rep, date: days[i] };
+      });
+
+      /* ===== GHOST LINE ===== */
+      ctx.strokeStyle = 'rgba(180,190,195,.35)';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      pts.forEach((p, i) => {
+        const y = p.y ?? padY + h * 0.5;
+        if (i === 0) ctx.moveTo(p.x, y);
+        else ctx.lineTo(p.x, y);
+      });
+      ctx.stroke();
+
+      const valid = pts.filter(p => p.y !== null);
+      if (valid.length < 2) return;
+
+      /* ===== SMOOTH LINE ===== */
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      for (let i = 0; i < valid.length - 1; i++) {
+        const p0 = valid[i - 1] || valid[i];
+        const p1 = valid[i];
+        const p2 = valid[i + 1];
+        const p3 = valid[i + 2] || p2;
+
+        const c1 = {
+          x: p1.x + (p2.x - p0.x) / 6,
+          y: p1.y + (p2.y - p0.y) / 6
+        };
+        const c2 = {
+          x: p2.x - (p3.x - p1.x) / 6,
+          y: p2.y - (p3.y - p1.y) / 6
+        };
+
+        const g = ctx.createLinearGradient(p1.x, p1.y, p2.x, p2.y);
+        g.addColorStop(0, moodColor[Math.round(p1.v)]);
+        g.addColorStop(1, moodColor[Math.round(p2.v)]);
+        ctx.strokeStyle = g;
+
         ctx.beginPath();
-        ctx.moveTo(pad, y);
-        ctx.lineTo(pad + w, y);
+        ctx.moveTo(p1.x, p1.y);
+        ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, p2.x, p2.y);
         ctx.stroke();
-
-        ctx.fillStyle = '#9aa5ab';
-        ctx.font = '11px Segoe UI';
-        ctx.fillText(i, pad - 18, y + 4);
       }
 
-      /* ===== AXIS ===== */
-      ctx.strokeStyle = '#cfd8dc';
-      ctx.beginPath();
-      ctx.moveTo(pad, pad);
-      ctx.lineTo(pad, pad + h);
-      ctx.lineTo(pad + w, pad + h);
-      ctx.stroke();
+      /* ===== EMOJI POINTS ===== */
+      valid.forEach(p => {
+        const s = Math.round(p.v);
+        const size = 22 + s * 2;
+        const emoji = moodEmoji[s];
 
-      /* ===== DAY LABEL ===== */
-      ctx.fillStyle = '#607d8b';
-      ctx.font = '12px Segoe UI';
-      ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].forEach((d, i) => {
-        ctx.fillText(d, pad + (w / 6) * i - 12, pad + h + 22);
-      });
-
-      /* ===== LINE ===== */
-      ctx.strokeStyle = '#33c6e7';
-      ctx.lineWidth = 3;
-      ctx.lineJoin = 'round';
-      ctx.lineCap = 'round';
-      ctx.beginPath();
-
-      values.forEach((v, i) => {
-        if (v === null) return;
-        const x = pad + (w / 6) * i;
-        const y = pad + h - (v / 5) * h;
-        i === 0 || values[i - 1] === null ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-      });
-      ctx.stroke();
-
-      /* ===== DOT ===== */
-      values.forEach((v, i) => {
-        if (v === null) return;
-
-        const x = pad + (w / 6) * i;
-        const y = pad + h - (v / 5) * h;
-
-        ctx.font = '22px Segoe UI Emoji';
+        ctx.font = `${size}px Segoe UI Emoji`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(moodEmoji[Math.round(v)], x, y);
+        ctx.fillText(emoji, p.x, p.y);
+
+        chartPoints.push({
+          x: p.x,
+          y: p.y,
+          hitR: 18 * 18,
+          emoji,
+          moodText: p.rep.mood,
+          note: p.rep.note,
+          date: p.date
+        });
       });
-
     }
-
 
     render();
   </script>
+
 
 </body>
 
