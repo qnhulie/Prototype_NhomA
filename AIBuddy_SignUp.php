@@ -1,3 +1,63 @@
+<?php
+session_start();
+require_once 'db.php';
+
+$error = null;
+$success = null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // LẤY DATA TỪ FORM
+    $username = trim($_POST['username']);
+    $email    = trim($_POST['email']);
+    $password = $_POST['password'];
+    $birth    = !empty($_POST['birthdate']) ? $_POST['birthdate'] : null;
+    $phone    = !empty($_POST['phone']) ? $_POST['phone'] : null;
+    $gender   = !empty($_POST['gender']) ? $_POST['gender'] : null;
+
+    // VALIDATE CƠ BẢN
+    if (!$username || !$email || !$password) {
+        $error = "Vui lòng nhập đầy đủ thông tin bắt buộc";
+    } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Email không hợp lệ";
+    } else if (strlen($password) < 6) {
+        $error = "Mật khẩu phải có ít nhất 6 ký tự";
+    } else {
+        // CHECK EMAIL TỒN TẠI
+        $stmt = $pdo->prepare("SELECT UserID FROM users WHERE UserEmail = ?");
+        $stmt->execute([$email]);
+
+        if ($stmt->fetch()) {
+            $error = "Email đã được đăng ký";
+        } else {
+            // HASH PASSWORD
+            $hashed = password_hash($password, PASSWORD_DEFAULT);
+
+            // INSERT
+            $stmt = $pdo->prepare("
+                INSERT INTO users
+                (UserName, UserEmail, UserPassword, BirthDate, PhoneNumber, Gender)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ");
+
+            if ($stmt->execute([
+                $username,
+                $email,
+                $hashed,
+                $birth,
+                $phone,
+                $gender
+            ])) {
+                $success = "Tạo tài khoản thành công! Vui lòng đăng nhập.";
+                // Có thể tự động đăng nhập sau khi đăng ký
+                // Hoặc chuyển hướng đến trang đăng nhập
+            } else {
+                $error = "Đã xảy ra lỗi. Vui lòng thử lại!";
+            }
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +67,7 @@
     <title>AI Buddy - Sign Up</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Color Variables từ Homepage */
+        /* Color Variables từ Homepage - Giữ nguyên từ SignIn */
         :root {
             --primary-dark: #01161e;
             --primary: #124559;
@@ -19,9 +79,11 @@
             --gray: #d9d9d9;
             --text: #353535;
             --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --error: #F44336;
+            --success: #4CAF50;
         }
 
-        /* Global Styles */
+        /* Global Styles - Giữ nguyên */
         * {
             margin: 0;
             padding: 0;
@@ -45,7 +107,7 @@
             padding: 0 15px;
         }
 
-        /* Header với navigation mới */
+        /* Header Styles (giống SignIn) */
         header {
             background-color: var(--white);
             padding: 15px 0;
@@ -94,7 +156,7 @@
             color: var(--accent);
         }
 
-        .signin-btn {
+        .signup-btn {
             background-color: var(--accent);
             color: var(--white);
             border: none;
@@ -106,7 +168,7 @@
             margin-left: 10px;
         }
 
-        .signin-btn:hover {
+        .signup-btn:hover {
             background-color: #2ab4d1;
         }
 
@@ -116,13 +178,13 @@
             justify-content: center;
             align-items: center;
             flex: 1;
-            padding: 30px 0;
+            padding: 40px 0;
             margin: 20px 0;
         }
 
         .signup-container {
             width: 100%;
-            max-width: 550px;
+            max-width: 500px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -179,16 +241,6 @@
             position: relative;
         }
 
-        .form-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-col {
-            flex: 1;
-        }
-
         .form-label {
             display: block;
             margin-bottom: 8px;
@@ -196,10 +248,9 @@
             color: var(--primary);
         }
 
-        .required::after {
-            content: "*";
-            color: #e74c3c;
-            margin-left: 4px;
+        .form-label span.required {
+            color: var(--error);
+            margin-left: 3px;
         }
 
         .input-with-icon {
@@ -215,8 +266,7 @@
             font-size: 1.2rem;
         }
 
-        .form-input,
-        .form-select {
+        .form-input {
             width: 100%;
             padding: 14px 15px 14px 50px;
             border: 2px solid var(--gray);
@@ -224,20 +274,14 @@
             font-size: 1rem;
             transition: all 0.3s;
             background-color: rgba(174, 195, 176, 0.05);
-            color: var(--text);
         }
 
-        .form-select {
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23598392' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            background-size: 16px;
-            padding-right: 40px;
+        /* Không có icon */
+        .form-input.no-icon {
+            padding: 14px 15px;
         }
 
-        .form-input:focus,
-        .form-select:focus {
+        .form-input:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(51, 198, 231, 0.2);
@@ -259,42 +303,75 @@
             color: var(--primary-light);
             cursor: pointer;
             font-size: 1.2rem;
-            z-index: 10;
+            z-index: 2;
+        }
+
+        /* Password Strength Indicator */
+        .password-strength {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .strength-bar {
+            flex: 1;
+            height: 4px;
+            background-color: var(--gray);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+        }
+
+        /* Alert Messages */
+        .alert-message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .alert-error {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: var(--error);
+            border-left: 4px solid var(--error);
+        }
+
+        .alert-success {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+            border-left: 4px solid var(--success);
         }
 
         /* Terms and Conditions */
         .terms-group {
-            margin: 25px 0;
-            padding: 20px;
-            background-color: rgba(174, 195, 176, 0.1);
-            border-radius: 8px;
-            border-left: 4px solid var(--accent);
-        }
-
-        .terms-checkbox {
             display: flex;
             align-items: flex-start;
-            gap: 12px;
+            gap: 10px;
+            margin: 25px 0;
+            font-size: 0.95rem;
         }
 
-        .terms-checkbox input {
-            margin-top: 4px;
+        .terms-group input {
+            margin-top: 3px;
             accent-color: var(--accent);
         }
 
-        .terms-text {
-            font-size: 0.95rem;
-            color: var(--text);
-            line-height: 1.5;
-        }
-
-        .terms-text a {
+        .terms-group a {
             color: var(--accent);
             text-decoration: none;
             font-weight: 500;
         }
 
-        .terms-text a:hover {
+        .terms-group a:hover {
             text-decoration: underline;
         }
 
@@ -325,7 +402,7 @@
         }
 
         .signup-form-btn:disabled {
-            opacity: 0.6;
+            background: var(--gray);
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
@@ -352,7 +429,7 @@
             text-decoration: underline;
         }
 
-        /* Footer với Legal Section */
+        /* Footer (giống SignIn) */
         footer {
             background-color: var(--primary-dark);
             color: var(--white);
@@ -449,12 +526,11 @@
                 font-size: 1.8rem;
             }
 
-            .form-row {
+            .social-signup {
                 flex-direction: column;
-                gap: 0;
             }
 
-            .signin-btn {
+            .signup-btn {
                 margin: 10px 0 0 0;
             }
         }
@@ -472,8 +548,7 @@
                 font-size: 2.5rem;
             }
 
-            .form-input,
-            .form-select {
+            .form-input {
                 padding: 12px 15px 12px 45px;
             }
 
@@ -489,10 +564,20 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
             }
         }
 
@@ -518,25 +603,28 @@
             background: var(--primary);
         }
 
-        /* Validation Styles */
-        .error-message {
-            color: #e74c3c;
+        /* Form validation styles */
+        .form-input.invalid {
+            border-color: var(--error);
+            box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
+        }
+
+        .form-input.valid {
+            border-color: var(--success);
+        }
+
+        .form-hint {
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            margin-top: 5px;
+            display: block;
+        }
+
+        .field-error {
+            color: var(--error);
             font-size: 0.85rem;
             margin-top: 5px;
-            display: none;
-        }
-
-        .form-input.error,
-        .form-select.error {
-            border-color: #e74c3c;
-        }
-
-        .success-message {
-            color: #2ecc71;
-            font-size: 0.9rem;
-            margin-top: 10px;
-            text-align: center;
-            display: none;
+            display: block;
         }
     </style>
 </head>
@@ -545,21 +633,22 @@
     <!-- Header với navigation mới -->
     <header>
         <div class="container header-content">
-            <div class="logo">
+            <a href="AIBuddy_Homepage.php" class="logo">
                 <span class="logo-icon">🤖</span>
                 AI Buddy
-            </div>
+            </a>
             <nav>
-                <a href="Prototype_Homepage.html">Home</a>
-                <a href="Prototype_Chatbot.html">Chatbot</a>
-                <a href="Prototype_EmotionTracker.html">Emotion Tracker</a>
-                <a href="Prototype_Trial.html">Trial</a>
-                <a href="Prototype_Profile.html">Profile</a>
-                <a href="Prototype_About.html">About</a>
-                <a href="Prototype_Contact.html">Contact</a>
+                <a href="AIBuddy_Homepage.php">Home</a>
+                <a href="AIBuddy_Chatbot.php">Chatbot</a>
+                <a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a>
+                <a href="AIBuddy_Trial.php">Trial</a>
+                <a href="AIBuddy_Profile.php">Profile</a>
+                <a href="AIBuddy_About.php">About</a>
+                <a href="AIBuddy_Terms of Service.php">Terms</a>
+                <a href="AIBuddy_PrivacyPolicy.php">Privacy</a>
             </nav>
-            <a href="AIBuddy_SignIn.html">
-                <button class="signin-btn">Sign In</button>
+            <a href="AIBuddy_SignIn.php">
+                <button class="signup-btn">Sign In</button>
             </a>
         </div>
     </header>
@@ -572,118 +661,163 @@
                     <div class="signup-icon">
                         <i class="fas fa-user-plus"></i>
                     </div>
-                    <h1>Create Your Account</h1>
-                    <p>Join AI Buddy to start your mental wellness journey today</p>
+                    <h1>Create Account</h1>
+                    <p>Join AI Buddy today and start your mental wellness journey</p>
                 </div>
 
-                <form id="signupForm">
-                    <!-- Full Name -->
+                <?php if ($error): ?>
+                    <div class="alert-message alert-error">
+                        <?php echo htmlspecialchars($error); ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($success): ?>
+                    <div class="alert-message alert-success">
+                        <?php echo htmlspecialchars($success); ?>
+                        <br><small>You will be redirected to login page in <span id="countdown">5</span> seconds...</small>
+                    </div>
+                <?php endif; ?>
+
+                <form method="POST" action="" id="signupForm">
                     <div class="form-group">
-                        <label class="form-label required" for="fullName">Full Name</label>
+                        <label class="form-label" for="username">
+                            Full Name <span class="required">*</span>
+                        </label>
                         <div class="input-with-icon">
                             <i class="fas fa-user"></i>
-                            <input type="text" id="fullName" class="form-input" placeholder="Enter your full name"
-                                required>
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                class="form-input"
+                                placeholder="Enter your full name"
+                                required
+                                value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>"
+                            >
                         </div>
-                        <div id="fullNameError" class="error-message">Please enter your full name</div>
+                        <span class="form-hint">As you'd like to be addressed</span>
                     </div>
 
-                    <!-- Email -->
                     <div class="form-group">
-                        <label class="form-label required" for="email">Email Address</label>
+                        <label class="form-label" for="email">
+                            Email Address <span class="required">*</span>
+                        </label>
                         <div class="input-with-icon">
                             <i class="fas fa-envelope"></i>
-                            <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="form-input"
+                                placeholder="you@example.com"
+                                required
+                                value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>"
+                            >
                         </div>
-                        <div id="emailError" class="error-message">Please enter a valid email address</div>
+                        <span class="form-hint">We'll never share your email</span>
                     </div>
 
-                    <!-- Password -->
                     <div class="form-group">
-                        <label class="form-label required" for="password">Password</label>
+                        <label class="form-label" for="password">
+                            Password <span class="required">*</span>
+                        </label>
                         <div class="input-with-icon">
                             <i class="fas fa-lock"></i>
-                            <input type="password" id="password" class="form-input"
-                                placeholder="Create a password (min. 8 characters)" required>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-input"
+                                placeholder="Create a strong password"
+                                required
+                            >
                             <button type="button" class="password-toggle" id="togglePassword">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
-                        <div id="passwordError" class="error-message">Password must be at least 8 characters</div>
+                        <div class="password-strength">
+                            <span>Strength:</span>
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                            <span id="strengthText">None</span>
+                        </div>
+                        <span class="form-hint">At least 6 characters with letters and numbers</span>
                     </div>
 
-                    <!-- Date of Birth and Gender -->
-                    <div class="form-row">
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label class="form-label required" for="dob">Date of Birth</label>
-                                <div class="input-with-icon">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <input type="date" id="dob" class="form-input" required>
-                                </div>
-                                <div id="dobError" class="error-message">Please select your date of birth</div>
-                            </div>
-                        </div>
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label class="form-label required" for="gender">Gender</label>
-                                <div class="input-with-icon">
-                                    <i class="fas fa-venus-mars"></i>
-                                    <select id="gender" class="form-select" required>
-                                        <option value="" disabled selected>Select gender</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Other</option>
-                                        <option value="prefer-not-to-say">Prefer not to say</option>
-                                    </select>
-                                </div>
-                                <div id="genderError" class="error-message">Please select your gender</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Phone Number -->
                     <div class="form-group">
-                        <label class="form-label required" for="phone">Phone Number</label>
+                        <label class="form-label" for="confirmPassword">
+                            Confirm Password <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                class="form-input"
+                                placeholder="Re-enter your password"
+                                required
+                            >
+                        </div>
+                        <span id="passwordMatch" class="field-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="birthdate">Birth Date</label>
+                        <input
+                            type="date"
+                            id="birthdate"
+                            name="birthdate"
+                            class="form-input no-icon"
+                            value="<?php echo isset($_POST['birthdate']) ? htmlspecialchars($_POST['birthdate']) : ''; ?>"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="phone">Phone Number</label>
                         <div class="input-with-icon">
                             <i class="fas fa-phone"></i>
-                            <input type="tel" id="phone" class="form-input" placeholder="Enter your phone number"
-                                required>
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                class="form-input"
+                                placeholder="Enter your phone number"
+                                value="<?php echo isset($_POST['phone']) ? htmlspecialchars($_POST['phone']) : ''; ?>"
+                            >
                         </div>
-                        <div id="phoneError" class="error-message">Please enter a valid phone number</div>
                     </div>
 
-                    <!-- Terms and Conditions -->
+                    <div class="form-group">
+                        <label class="form-label" for="gender">Gender</label>
+                        <select id="gender" name="gender" class="form-input no-icon">
+                            <option value="">-- Select Gender --</option>
+                            <option value="Male" <?php echo (isset($_POST['gender']) && $_POST['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+                            <option value="Female" <?php echo (isset($_POST['gender']) && $_POST['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
+                            <option value="Other" <?php echo (isset($_POST['gender']) && $_POST['gender'] == 'Other') ? 'selected' : ''; ?>>Other</option>
+                        </select>
+                    </div>
+
                     <div class="terms-group">
-                        <div class="terms-checkbox">
-                            <input type="checkbox" id="termsAgreement" required>
-                            <label for="termsAgreement" class="terms-text">
-                                I agree with the <a href="Prototype_Terms.html" id="termsLink" target="_blank">Terms of
-                                    Service</a> and acknowledge the
-                                <a href="Prototype_Privacy.html" id="privacyLink" target="_blank">Privacy Policy</a>. I
-                                understand that AI Buddy is a mental wellness companion and not a substitute for
-                                professional medical advice.
-                            </label>
-                        </div>
-                        <div id="termsError" class="error-message" style="margin-top: 10px;">You must agree to the terms
-                            to continue</div>
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">
+                            I agree to the <a href="AIBuddy_Terms of Service.php" target="_blank">Terms of Service</a> 
+                            and <a href="AIBuddy_PrivacyPolicy.php" target="_blank">Privacy Policy</a>
+                            <span class="required">*</span>
+                        </label>
                     </div>
 
-                    <!-- Success Message -->
-                    <div id="successMessage" class="success-message">
-                        Account created successfully! Redirecting to Sign In...
-                    </div>
-
-                    <!-- Sign Up Button -->
-                    <button type="submit" class="signup-form-btn" id="signupButton">
+                    <button type="submit" class="signup-form-btn" id="submitBtn">
                         <i class="fas fa-user-plus"></i> Create Account
                     </button>
-                </form>
 
-                <div class="signin-link">
-                    Already have an account?
-                    <a href="AIBuddy_SignIn.html" id="signinLink">Sign In</a>
-                </div>
+
+                    <div class="signin-link">
+                        Already have an account?
+                        <a href="AIBuddy_SignIn.php">Sign in now</a>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
@@ -705,18 +839,18 @@
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="Prototype_Homepage.html">Home</a></li>
-                        <li><a href="Prototype_Chatbot.html">Chatbot</a></li>
-                        <li><a href="Prototype_EmotionTracker.html">Emotion Tracker</a></li>
-                        <li><a href="Prototype_Trial.html">Trial</a></li>
-                        <li><a href="Prototype_Contact.html">Contact</a></li>
+                        <li><a href="AIBuddy_Homepage.php">Home</a></li>
+                        <li><a href="AIBuddy_Chatbot.php">Chatbot</a></li>
+                        <li><a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a></li>
+                        <li><a href="AIBuddy_Trial.php">Trial</a></li>
+                        <li><a href="AIBuddy_Contact.php">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Legal</h3>
                     <ul>
-                        <li><a href="AIBuddy_Terms of Service.html">Terms of Service</a></li>
-                        <li><a href="AIBuddy_Privacy Policy.html">Privacy Policy</a></li>
+                        <li><a href="AIBuddy_Terms of Service.php">Terms of Service</a></li>
+                        <li><a href="AIBuddy_Privacy Policy.php">Privacy Policy</a></li>
                         <li><a href="#">Cookie Policy</a></li>
                         <li><a href="#">Disclaimer</a></li>
                     </ul>
@@ -738,19 +872,13 @@
     </footer>
 
     <script>
-        // DOM Elements
-        const signupForm = document.getElementById('signupForm');
+        // Toggle hiển thị mật khẩu
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('password');
-        const termsAgreement = document.getElementById('termsAgreement');
-        const signupButton = document.getElementById('signupButton');
-        const successMessage = document.getElementById('successMessage');
-        const termsLink = document.getElementById('termsLink');
-        const privacyLink = document.getElementById('privacyLink');
-
-        // Toggle password visibility
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        
         if (togglePassword) {
-            togglePassword.addEventListener('click', function () {
+            togglePassword.addEventListener('click', function() {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
                 this.querySelector('i').classList.toggle('fa-eye');
@@ -758,217 +886,231 @@
             });
         }
 
-        // Terms and Privacy links - mở trong tab mới
-        if (termsLink) {
-            termsLink.addEventListener('click', function (e) {
-                e.preventDefault();
-                window.open(this.href, '_blank');
-            });
-        }
-
-        if (privacyLink) {
-            privacyLink.addEventListener('click', function (e) {
-                e.preventDefault();
-                window.open(this.href, '_blank');
-            });
-        }
-
-        // Real-time validation functions
-        function validateFullName() {
-            const fullName = document.getElementById('fullName').value.trim();
-            const errorElement = document.getElementById('fullNameError');
-            const inputElement = document.getElementById('fullName');
-
-            if (fullName.length < 2) {
-                showError(errorElement, inputElement, 'Full name must be at least 2 characters');
-                return false;
+        // Password Strength Indicator
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthText = document.getElementById('strengthText');
+        
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 6) strength += 25;
+            if (password.length >= 8) strength += 10;
+            if (password.length >= 12) strength += 10;
+            
+            // Character variety checks
+            if (/[a-z]/.test(password)) strength += 15;
+            if (/[A-Z]/.test(password)) strength += 15;
+            if (/[0-9]/.test(password)) strength += 15;
+            if (/[^a-zA-Z0-9]/.test(password)) strength += 10;
+            
+            // Update UI
+            strengthFill.style.width = Math.min(strength, 100) + '%';
+            
+            // Set color and text based on strength
+            if (strength < 30) {
+                strengthFill.style.backgroundColor = '#F44336';
+                strengthText.textContent = 'Weak';
+                strengthText.style.color = '#F44336';
+            } else if (strength < 60) {
+                strengthFill.style.backgroundColor = '#FF9800';
+                strengthText.textContent = 'Fair';
+                strengthText.style.color = '#FF9800';
+            } else if (strength < 80) {
+                strengthFill.style.backgroundColor = '#2196F3';
+                strengthText.textContent = 'Good';
+                strengthText.style.color = '#2196F3';
             } else {
-                clearError(errorElement, inputElement);
-                return true;
+                strengthFill.style.backgroundColor = '#4CAF50';
+                strengthText.textContent = 'Strong';
+                strengthText.style.color = '#4CAF50';
             }
         }
+        
+        passwordInput.addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+            validatePasswordMatch();
+        });
 
-        function validateEmail() {
-            const email = document.getElementById('email').value.trim();
-            const errorElement = document.getElementById('emailError');
-            const inputElement = document.getElementById('email');
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            if (!emailRegex.test(email)) {
-                showError(errorElement, inputElement, 'Please enter a valid email address');
+        // Password Match Validation
+        function validatePasswordMatch() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const matchElement = document.getElementById('passwordMatch');
+            
+            if (confirmPassword === '') {
+                matchElement.textContent = '';
+                confirmPasswordInput.classList.remove('invalid', 'valid');
                 return false;
-            } else {
-                clearError(errorElement, inputElement);
+            }
+            
+            if (password === confirmPassword) {
+                matchElement.textContent = '✓ Passwords match';
+                matchElement.style.color = '#4CAF50';
+                confirmPasswordInput.classList.remove('invalid');
+                confirmPasswordInput.classList.add('valid');
                 return true;
+            } else {
+                matchElement.textContent = '✗ Passwords do not match';
+                matchElement.style.color = '#F44336';
+                confirmPasswordInput.classList.remove('valid');
+                confirmPasswordInput.classList.add('invalid');
+                return false;
             }
         }
+        
+        confirmPasswordInput.addEventListener('input', validatePasswordMatch);
 
-        function validatePassword() {
-            const password = document.getElementById('password').value;
-            const errorElement = document.getElementById('passwordError');
-            const inputElement = document.getElementById('password');
-
-            if (password.length < 8) {
-                showError(errorElement, inputElement, 'Password must be at least 8 characters');
-                return false;
-            } else {
-                clearError(errorElement, inputElement);
-                return true;
-            }
-        }
-
-        function validateDOB() {
-            const dob = document.getElementById('dob').value;
-            const errorElement = document.getElementById('dobError');
-            const inputElement = document.getElementById('dob');
-
-            if (!dob) {
-                showError(errorElement, inputElement, 'Please select your date of birth');
-                return false;
-            } else {
-                // Check if user is at least 13 years old
-                const dobDate = new Date(dob);
-                const today = new Date();
-                const age = today.getFullYear() - dobDate.getFullYear();
-                const monthDiff = today.getMonth() - dobDate.getMonth();
-
-                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
-                    age--;
-                }
-
-                if (age < 13) {
-                    showError(errorElement, inputElement, 'You must be at least 13 years old');
-                    return false;
-                } else if (age > 120) {
-                    showError(errorElement, inputElement, 'Please enter a valid date of birth');
-                    return false;
+        // Form Validation
+        const signupForm = document.getElementById('signupForm');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        function validateForm() {
+            let isValid = true;
+            
+            // Required fields check
+            const requiredFields = signupForm.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('invalid');
+                    isValid = false;
                 } else {
-                    clearError(errorElement, inputElement);
-                    return true;
+                    field.classList.remove('invalid');
                 }
+            });
+            
+            // Email format check
+            const emailField = document.getElementById('email');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailField.value && !emailRegex.test(emailField.value)) {
+                emailField.classList.add('invalid');
+                isValid = false;
             }
-        }
-
-        function validateGender() {
-            const gender = document.getElementById('gender').value;
-            const errorElement = document.getElementById('genderError');
-            const inputElement = document.getElementById('gender');
-
-            if (!gender) {
-                showError(errorElement, inputElement, 'Please select your gender');
-                return false;
+            
+            // Password match check
+            if (!validatePasswordMatch()) {
+                isValid = false;
+            }
+            
+            // Password length check
+            if (passwordInput.value.length < 6) {
+                passwordInput.classList.add('invalid');
+                isValid = false;
+            }
+            
+            // Terms agreement check
+            const termsCheckbox = document.getElementById('terms');
+            if (!termsCheckbox.checked) {
+                termsCheckbox.classList.add('invalid');
+                isValid = false;
             } else {
-                clearError(errorElement, inputElement);
-                return true;
+                termsCheckbox.classList.remove('invalid');
             }
+            
+            // Update button state
+            submitBtn.disabled = !isValid;
+            
+            return isValid;
         }
-
-        function validatePhone() {
-            const phone = document.getElementById('phone').value.trim();
-            const errorElement = document.getElementById('phoneError');
-            const inputElement = document.getElementById('phone');
-
-            // Remove all non-digit characters except +
-            const cleanedPhone = phone.replace(/[^\d+]/g, '');
-
-            if (cleanedPhone.length < 10) {
-                showError(errorElement, inputElement, 'Please enter a valid phone number (at least 10 digits)');
-                return false;
-            } else {
-                clearError(errorElement, inputElement);
-                return true;
-            }
-        }
-
-        function validateTerms() {
-            const errorElement = document.getElementById('termsError');
-
-            if (!termsAgreement.checked) {
-                errorElement.style.display = 'block';
-                return false;
-            } else {
-                errorElement.style.display = 'none';
-                return true;
-            }
-        }
-
-        // Helper functions for error handling
-        function showError(errorElement, inputElement, message) {
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-            inputElement.classList.add('error');
-        }
-
-        function clearError(errorElement, inputElement) {
-            errorElement.style.display = 'none';
-            inputElement.classList.remove('error');
-        }
-
-        // Real-time validation listeners
-        document.getElementById('fullName').addEventListener('blur', validateFullName);
-        document.getElementById('email').addEventListener('blur', validateEmail);
-        document.getElementById('password').addEventListener('blur', validatePassword);
-        document.getElementById('dob').addEventListener('change', validateDOB);
-        document.getElementById('gender').addEventListener('change', validateGender);
-        document.getElementById('phone').addEventListener('blur', validatePhone);
-        termsAgreement.addEventListener('change', validateTerms);
+        
+        // Validate on input
+        signupForm.querySelectorAll('input, select').forEach(field => {
+            field.addEventListener('input', validateForm);
+            field.addEventListener('change', validateForm);
+        });
+        
+        // Initial validation
+        validateForm();
 
         // Form submission
-        if (signupForm) {
-            signupForm.addEventListener('submit', function (e) {
+        signupForm.addEventListener('submit', function(e) {
+            if (!validateForm()) {
                 e.preventDefault();
+                showAlert('Please fill in all required fields correctly', 'error');
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            submitBtn.disabled = true;
+            
+            // In a real app, you might want to do additional validation here
+            // before allowing the form to submit
+        });
 
-                // Validate all fields
-                const isFullNameValid = validateFullName();
-                const isEmailValid = validateEmail();
-                const isPasswordValid = validatePassword();
-                const isDOBValid = validateDOB();
-                const isGenderValid = validateGender();
-                const isPhoneValid = validatePhone();
-                const isTermsValid = validateTerms();
+        // Countdown for redirect after success
+        <?php if ($success): ?>
+        let countdown = 5;
+        const countdownElement = document.getElementById('countdown');
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdownElement) {
+                countdownElement.textContent = countdown;
+            }
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                window.location.href = 'AIBuddy_SignIn.php';
+            }
+        }, 1000);
+        <?php endif; ?>
 
-                if (isFullNameValid && isEmailValid && isPasswordValid &&
-                    isDOBValid && isGenderValid && isPhoneValid && isTermsValid) {
-
-                    // Show loading state
-                    signupButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
-                    signupButton.disabled = true;
-
-                    // Simulate API call (in real app, send data to server)
-                    setTimeout(() => {
-                        // Show success message
-                        successMessage.style.display = 'block';
-                        signupButton.style.display = 'none';
-
-                        // Collect form data for demo
-                        const formData = {
-                            fullName: document.getElementById('fullName').value,
-                            email: document.getElementById('email').value,
-                            dob: document.getElementById('dob').value,
-                            gender: document.getElementById('gender').value,
-                            phone: document.getElementById('phone').value
-                        };
-
-                        console.log('Form submitted:', formData);
-
-                        // Redirect to sign in page after 2 seconds
-                        setTimeout(() => {
-                            window.location.href = 'AIBuddy_SignIn.html';
-                        }, 2000);
-
-                    }, 1500);
-                } else {
-                    // Scroll to first error
-                    const firstError = document.querySelector('.error');
-                    if (firstError) {
-                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Show alert function
+        function showAlert(message, type) {
+            const alertEl = document.createElement('div');
+            alertEl.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 1000;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                animation: slideInAlert 0.3s ease-out;
+            `;
+            
+            if (type === 'success') {
+                alertEl.style.backgroundColor = '#4CAF50';
+            } else if (type === 'error') {
+                alertEl.style.backgroundColor = '#F44336';
+            } else {
+                alertEl.style.backgroundColor = 'var(--primary)';
+            }
+            
+            alertEl.textContent = message;
+            document.body.appendChild(alertEl);
+            
+            // Add animation CSS
+            if (!document.querySelector('#alertAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'alertAnimation';
+                style.textContent = `
+                    @keyframes slideInAlert {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
                     }
-                }
-            });
-        }
+                    @keyframes slideOutAlert {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                alertEl.style.animation = 'slideOutAlert 0.3s ease-out';
+                setTimeout(() => {
+                    if (alertEl.parentNode) {
+                        alertEl.parentNode.removeChild(alertEl);
+                    }
+                }, 300);
+        }, 3000);
+    }
 
-        // Responsive navigation for mobile
-        function adjustNavigation() {
+    // Responsive navigation
+    function adjustNavigation() {
             const nav = document.querySelector('nav');
             if (window.innerWidth <= 768) {
                 if (nav) {
@@ -978,10 +1120,9 @@
                 }
             }
         }
-
+        
         window.addEventListener('load', adjustNavigation);
         window.addEventListener('resize', adjustNavigation);
     </script>
 </body>
-
 </html>
