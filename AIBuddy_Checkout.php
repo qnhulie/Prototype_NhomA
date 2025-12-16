@@ -442,6 +442,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .modal-actions .btn,
         .modal-content .btn {
             min-width: 140px;
+            text-decoration: none;
             padding: 10px 18px;
             border-radius: 8px;
             font-size: 0.95rem;
@@ -676,47 +677,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="post">
             <div class="payment-container">
 
+                <!-- ================= CUSTOMER INFO ================= -->
                 <div class="customer-form">
                     <h2>Customer Information</h2>
 
                     <div class="form-group">
                         <label>Full Name *</label>
-                        <input type="text" name="FullName" class="form-control" required>
+                        <input type="text" name="FullName" class="form-control" placeholder="Enter your full name"
+                            required>
                     </div>
 
                     <div class="form-group">
                         <label>Email Address *</label>
-                        <input type="email" name="UserEmail" class="form-control" required>
+                        <input type="email" name="UserEmail" class="form-control" placeholder="example@email.com"
+                            required>
                     </div>
 
                     <div class="form-group">
                         <label>Phone Number *</label>
-                        <input type="text" name="PhoneNumber" class="form-control" required>
+                        <input type="text" name="PhoneNumber" class="form-control" placeholder="e.g. 0901234567"
+                            required>
                     </div>
 
                     <div class="form-group">
                         <label>Country *</label>
-                        <input type="text" name="Country" class="form-control" required>
+                        <input type="text" name="Country" class="form-control" placeholder="e.g. Vietnam" required>
                     </div>
 
                     <div class="form-group">
                         <label>City / Province *</label>
-                        <input type="text" name="City" class="form-control" required>
+                        <input type="text" name="City" class="form-control" placeholder="e.g. Ho Chi Minh City"
+                            required>
                     </div>
 
                     <div class="form-group">
                         <label>Postal Code *</label>
-                        <input type="text" name="PostalCode" class="form-control" required>
+                        <input type="text" name="PostalCode" class="form-control" placeholder="e.g. 700000" required>
                     </div>
                 </div>
 
+                <!-- ================= PAYMENT METHOD ================= -->
                 <div class="payment-method">
                     <h2>Payment Method Details</h2>
 
+                    <!-- Payment Method -->
                     <div class="form-group">
                         <label>Payment Method *</label>
-                        <select name="PaymentMethod" class="form-control" required>
-                            <option value="">Select</option>
+                        <select name="PaymentMethod" id="paymentMethod" class="form-control" required>
+                            <option value="">Select payment method</option>
                             <option value="Credit Card">Credit Card</option>
                             <option value="Debit Card">Debit Card</option>
                             <option value="Bank Transfer">Bank Transfer</option>
@@ -724,24 +732,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </select>
                     </div>
 
+                    <!-- Bank (only for Bank Transfer) -->
+                    <div class="form-group" id="bankGroup" style="display:none;">
+                        <label>Select Bank *</label>
+                        <select name="BankName" class="form-control">
+                            <option value="">Choose your bank</option>
+                            <option value="Vietcombank">Vietcombank</option>
+                            <option value="Techcombank">Techcombank</option>
+                            <option value="BIDV">BIDV</option>
+                            <option value="VietinBank">VietinBank</option>
+                            <option value="ACB">ACB</option>
+                            <option value="MB Bank">MB Bank</option>
+                        </select>
+                    </div>
+
+                    <!-- Card / Wallet Number -->
                     <div class="form-group">
                         <label>Card / Account Number *</label>
-                        <input type="text" name="CardNumber" class="form-control" required>
+                        <input type="text" name="CardNumber" class="form-control"
+                            placeholder="Enter card or account number" required>
                     </div>
 
                     <div class="form-group">
                         <label>Cardholder / Account Name *</label>
-                        <input type="text" name="CardHolder" class="form-control" required>
+                        <input type="text" name="CardHolder" class="form-control"
+                            placeholder="Name as shown on card/account" required>
                     </div>
 
+                    <!-- Expiration Date -->
                     <div class="form-group">
-                        <label>Expiration Date</label>
-                        <input type="text" name="Expiry" class="form-control">
+                        <label>Expiration Date (MM/DD/YYYY) *</label>
+                        <input type="text" name="Expiry" id="expiryInput" class="form-control" placeholder="MM/DD/YYYY"
+                            maxlength="10" required>
                     </div>
 
-                    <div class="form-group">
-                        <label>CVV</label>
-                        <input type="text" name="CVV" class="form-control">
+                    <!-- CVV -->
+                    <div class="form-group" id="cvvGroup">
+                        <label>CVV *</label>
+                        <input type="text" name="CVV" class="form-control" placeholder="3 or 4 digits" maxlength="4"
+                            pattern="\d{3,4}">
                     </div>
 
                     <button type="submit" class="btn">Submit Payment</button>
@@ -750,8 +779,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </form>
     </section>
-
-
 
     <!-- Order Information -->
     <section class="order-information">
@@ -870,6 +897,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         homeBtn?.addEventListener("click", () => {
             window.location.assign("AIBuddy_Homepage.php");
         });
+
+        /* ================= PAYMENT METHOD LOGIC ================= */
+        const paymentMethodSelect = document.getElementById("paymentMethod");
+        const bankGroup = document.getElementById("bankGroup");
+        const cvvGroup = document.getElementById("cvvGroup");
+
+        paymentMethodSelect.addEventListener("change", function () {
+            const method = this.value;
+
+            // Bank Transfer
+            if (method === "Bank Transfer") {
+                bankGroup.style.display = "block";
+                cvvGroup.style.display = "none";
+            } else {
+                bankGroup.style.display = "none";
+                cvvGroup.style.display = "block";
+            }
+        });
+
+        /* ================= EXPIRATION DATE AUTO FORMAT ================= */
+        const expiryInput = document.getElementById("expiryInput");
+
+        expiryInput.addEventListener("input", function (e) {
+            let value = e.target.value.replace(/\D/g, ""); // chỉ giữ số
+
+            if (value.length > 8) value = value.slice(0, 8);
+
+            let formatted = value;
+
+            if (value.length >= 3) {
+                formatted = value.slice(0, 2) + "/" + value.slice(2);
+            }
+            if (value.length >= 5) {
+                formatted =
+                    value.slice(0, 2) +
+                    "/" +
+                    value.slice(2, 4) +
+                    "/" +
+                    value.slice(4);
+            }
+
+            e.target.value = formatted;
+        });
     </script>
 
     <?php if ($paymentSuccess && $orderSummary): ?>
@@ -881,9 +951,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p><strong>Plan:</strong> <?= htmlspecialchars($orderSummary['PlanName']) ?></p>
                 <p><strong>Total:</strong> <?= number_format($orderSummary['TotalAmount']) ?> VND</p>
                 <p><strong>Payment:</strong> <?= htmlspecialchars($orderSummary['PaymentMethod']) ?></p>
-                <p><strong>Email:</strong> <?= htmlspecialchars($orderSummary['UserEmail']) ?></p>
+                <p><strong>Email:</strong> <?= htmlspecialchars($_POST['UserEmail']) ?></p>
 
-                <a href="AIBuddy_Homepage.php" class="btn">Back to Homepage</a>
+                <div class="modal-actions">
+                    <a href="AIBuddy_Homepage.php" class="btn">Back to Homepage</a>
+                </div>
             </div>
         </div>
     <?php endif; ?>
@@ -891,4 +963,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </body>
 
 </html>
-
