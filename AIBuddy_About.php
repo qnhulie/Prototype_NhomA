@@ -395,7 +395,7 @@
       <h3>Want to collaborate or learn more?</h3>
       <p>Email us at <a href="mailto:support@aibuddy.com"
           style="color:var(--primary);font-weight:600;">support@aibuddy.com</a></p>
-      <a href="Prototype_Contact.html"><button class="btn">Contact Us</button></a>
+      <a href="AIBuddy_Contact.php"><button class="btn">Contact Us</button></a>
     </section>
   </div>
 
@@ -456,3 +456,4 @@
 
 
 </html>
+
