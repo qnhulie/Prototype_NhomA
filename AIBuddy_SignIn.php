@@ -658,7 +658,7 @@ $user = $stmt->fetch();
                             <input type="checkbox" id="remember">
                             <span>Remember me</span>
                         </label>
-                        <a href="change_password.php" class="forgot-password">Forgot Password?</a>                    
+                        <a href="AIBuddy_ChangePassword.php" class="forgot-password">Forgot Password?</a>                    
                     </div>
 
                     <button type="submit" class="signin-form-btn">
