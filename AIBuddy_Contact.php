@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'db.php';
+require_once 'config.php';
 
 $successMsg = null;
 $errorMsg = null;
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errorMsg = "Please fill in all required fields.";
     } else {
 
-        $stmt = $pdo->prepare("
+        $stmt = $conn->prepare("
             INSERT INTO form
             (UserID, AdminID, FormTopic, FormContent, FormStatus, FormCreationTime)
             VALUES (?, NULL, ?, ?, 'Pending', NOW())
