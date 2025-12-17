@@ -235,10 +235,12 @@
       background-color: var(--primary-dark);
     }
 
+    /* Footer */
     footer {
       background-color: var(--primary-dark);
       color: var(--white);
       padding: 60px 0 20px;
+      margin-top: 60px;
     }
 
     .footer-content {
@@ -280,6 +282,22 @@
       font-size: 0.9rem;
     }
 
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .social-links a {
+      color: var(--light);
+      font-size: 1.2rem;
+      transition: color 0.3s;
+    }
+
+    .social-links a:hover {
+      color: var(--accent);
+    }
+
     @media (max-width: 768px) {
       .hero h1 {
         font-size: 2rem;
@@ -300,7 +318,7 @@
         <a href="AIBuddy_Homepage.php">Home</a>
         <a href="AIBuddy_Chatbot.php">Chatbot</a>
         <a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a>
-        <a href="AIBuddy_Focus.php">Focus</a>
+        <a href="AIBuddy_Trial.php">Trial</a>
         <a href="AIBuddy_Profile.php">Profile</a>
         <a href="AIBuddy_About.php">About</a>
         <a href="AIBuddy_Contact.php">Contact</a>
@@ -399,7 +417,6 @@
     </section>
   </div>
 
-
   <footer>
     <div class="container">
       <div class="footer-content">
@@ -413,7 +430,6 @@
             <a href="#"><i class="fab fa-linkedin-in"></i></a>
           </div>
         </div>
-
         <div class="footer-column">
           <h3>Quick Links</h3>
           <ul>
@@ -424,17 +440,15 @@
             <li><a href="AIBuddy_Contact.php">Contact</a></li>
           </ul>
         </div>
-
         <div class="footer-column">
           <h3>Legal</h3>
           <ul>
             <li><a href="AIBuddy_Terms of Service.php">Terms of Service</a></li>
-            <li><a href="AIBuddy_Privacy Policy.php">Privacy Policy</a></li>
+            <li><a href="AIBuddy_PrivacyPolicy.php">Privacy Policy</a></li>
             <li><a href="#">Cookie Policy</a></li>
             <li><a href="#">Disclaimer</a></li>
           </ul>
         </div>
-
         <div class="footer-column">
           <h3>Contact</h3>
           <ul>
@@ -445,7 +459,6 @@
           </ul>
         </div>
       </div>
-
       <div class="copyright">
         <p>&copy; 2025 AI Buddy. All rights reserved. | Mental Health Companion</p>
       </div>
@@ -454,6 +467,4 @@
 
 </body>
 
-
 </html>
-
