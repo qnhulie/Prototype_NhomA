@@ -1189,9 +1189,9 @@ require_once 'session.php';
             <p class="price"><span>$0</span>/month</p>
             <ul class="features-list">
               <li><i class="fas fa-check"></i> 2 short sessions (5 mins)</li>
-              <li><i class="fas fa-check"></i> Basic voice guide</li>
-              <li class="disabled"><i class="fas fa-times"></i> Background music</li>
-              <li class="disabled"><i class="fas fa-times"></i> Custom AI personas</li>
+              <li><i class="fas fa-check"></i> 2 times Breathe Animation</li>
+              <li class="disabled"><i class="fas fa-times"></i> Analyze emotional trends</li>
+              <li class="disabled"><i class="fas fa-times"></i> Deeper emotional insights</li>
             </ul>
             <button class="btn-secondary" disabled>Your Current Plan</button>
           </div>
@@ -1201,10 +1201,9 @@ require_once 'session.php';
             <h4>🌿 Essential Plan</h4>
             <p class="price"><span>$5.49</span>/month</p>
             <ul class="features-list">
-              <li><i class="fas fa-check"></i> 10 session music</li>
-              <li><i class="fas fa-check"></i> Background music</li>
-              <li><i class="fas fa-check"></i> Select AI voice</li>
-              <li class="disabled"><i class="fas fa-times"></i> Automatic reminders</li>
+              <li><i class="fas fa-check"></i> 10 session and background music</li>
+              <li><i class="fas fa-check"></i> Emotional chat + Mood chat</li>
+              <li><i class="fas fa-check"></i> Select multiple persona + topic (counselor, parents…)</li>
             </ul>
             <button class="btn-primary" onclick="location.href='AIBuddy_Checkout.php'">Upgrade Now</button>
           </div>
@@ -1214,8 +1213,11 @@ require_once 'session.php';
             <p class="price"><span>$8.49</span>/month</p>
             <ul class="features-list">
               <li><i class="fas fa-check"></i> 30 diverse sessions</li>
-              <li><i class="fas fa-check"></i> Custom AI voice personas</li>
+              <li><i class="fas fa-check"></i> Select multiple persona + topic</li>
               <li><i class="fas fa-check"></i> Automatic focus reminders</li>
+              <li><i class="fas fa-check"></i> Analyze emotional trends</li>
+              <li><i class="fas fa-check"></i> Deeper emotional insights</li>
+
             </ul>
             <button class="btn-primary" onclick="location.href='AIBuddy_Checkout.php'">Get Premium</button>
           </div>
