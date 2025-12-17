@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'db.php';
+require_once 'config.php';
 
 $error = null;
 $success = null;
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Mật khẩu phải có ít nhất 6 ký tự";
     } else {
         // CHECK EMAIL TỒN TẠI
-        $stmt = $pdo->prepare("SELECT UserID FROM users WHERE UserEmail = ?");
+        $stmt = $conn->prepare("SELECT UserID FROM users WHERE UserEmail = ?");
         $stmt->execute([$email]);
 
         if ($stmt->fetch()) {
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $hashed = password_hash($password, PASSWORD_DEFAULT);
 
             // INSERT
-            $stmt = $pdo->prepare("
+            $stmt = $conn->prepare("
                 INSERT INTO users
                 (UserName, UserEmail, UserPassword, BirthDate, PhoneNumber, Gender)
                 VALUES (?, ?, ?, ?, ?, ?)
