@@ -342,7 +342,7 @@
       <div class="three">
         <div class="value">
           <h4>Empathy First</h4>
-          <p>Every feature is designed with compassion — to comfort, not overwhelm. We listen before we advise.</p>
+          <p>Every feature is designed with compassion - to comfort, not overwhelm. We listen before we advise.</p>
         </div>
         <div class="value">
           <h4>Privacy & Trust</h4>
@@ -453,5 +453,6 @@
   </footer>
 
 </body>
+
 
 </html>
