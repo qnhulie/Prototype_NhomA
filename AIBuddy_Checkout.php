@@ -639,15 +639,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 AI Buddy
             </div>
             <nav>
-                <a href="Prototype_Homepage.html">Home</a>
-                <a href="Prototype_Chatbot.html">Chatbot</a>
-                <a href="Prototype_EmotionTracker.html">Emotion Tracker</a>
-                <a href="Prototype_Trial.html">Trial</a>
-                <a href="Prototype_Profile.html">Profile</a>
-                <a href="Prototype_About.html">About</a>
-                <a href="Prototype_Contact.html">Contact</a>
+                <a href="AIBuddy_Homepage.php">Home</a>
+                <a href="AIBuddy_Chatbot.php">Chatbot</a>
+                <a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a>
+                <a href="AIBuddy_Trial.php">Trial</a>
+                <a href="AIBuddy_Profile.php">Profile</a>
+                <a href="AIBuddy_About.php">About</a>
+                <a href="AIBuddy_Contact.php">Contact</a>
             </nav>
-            <a href="AIBuddy_SignIn.html">
+            <a href="AIBuddy_SignIn.php">
                 <button class="signin-btn">Sign In</button>
             </a>
         </div>
@@ -658,7 +658,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="container">
             <h1>Checkout</h1>
             <ul class="breadcrumb">
-                <li><a href="Prototype_Trial.html">Trial</a></li>
+                <li><a href="AIBuddy_Trial.php">Trial</a></li>
                 <li class="current">Checkout</li>
             </ul>
         </div>
@@ -670,6 +670,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             Time left to complete payment:
             <strong id="timer-value">02:00</strong>
         </h2>
+    </section>
+
+    <!-- Order Information -->
+    <section class="order-information">
+        <h2>Your order information</h2>
+        <p><strong>Plan:</strong> <?= htmlspecialchars($plan['PlanName']) ?></p>
+        <p><strong>Price:</strong> <?= number_format($plan['PlanPrice']) ?> VND</p>
+        <p><strong>Billing:</strong> <?= htmlspecialchars($plan['BillingCycle']) ?></p>
     </section>
 
     <!-- Payment Section -->
@@ -780,15 +788,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </section>
 
-    <!-- Order Information -->
-    <section class="order-information">
-        <h2>Your order information</h2>
-        <p><strong>Plan:</strong> <?= htmlspecialchars($plan['PlanName']) ?></p>
-        <p><strong>Price:</strong> <?= number_format($plan['PlanPrice']) ?> VND</p>
-        <p><strong>Billing:</strong> <?= htmlspecialchars($plan['BillingCycle']) ?></p>
-
-    </section>
-
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -806,11 +805,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="Prototype_Homepage.html">Home</a></li>
-                        <li><a href="Prototype_Chatbot.html">Chatbot</a></li>
-                        <li><a href="Prototype_EmotionTracker.html">Emotion Tracker</a></li>
-                        <li><a href="Prototype_Trial.html">Trial</a></li>
-                        <li><a href="Prototype_Contact.html">Contact</a></li>
+                        <li><a href="AIBuddy_Homepage.php">Home</a></li>
+                        <li><a href="AIBuddy_Chatbot.php">Chatbot</a></li>
+                        <li><a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a></li>
+                        <li><a href="AIBuddy_Trial.php">Trial</a></li>
+                        <li><a href="AIBuddy_Contact.php">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
