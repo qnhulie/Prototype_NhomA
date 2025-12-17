@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+include 'config.php';
 
 $error = null;
 
@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare(
+    $stmt = $conn->prepare(
     "SELECT UserID, UserName, UserPassword
      FROM users
      WHERE UserEmail = ?"
