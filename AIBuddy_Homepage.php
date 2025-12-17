@@ -1,3 +1,8 @@
+<?php
+require_once 'session.php';
+?>
+<!DOCTYPE html>
+<html lang="en">
 <!DOCTYPE html>
 <html lang="en">
 
@@ -939,12 +944,24 @@
         <a href="AIBuddy_Chatbot.php">Chatbot</a>
         <a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a>
         <a href="AIBuddy_Trial.php">Trial</a>
+        <?php if (!empty($_SESSION['user_name'])): ?>
         <a href="AIBuddy_Profile.php">Profile</a>
+        <?php endif; ?>
         <a href="AIBuddy_About.php">About</a>
         <a href="AIBuddy_Contact.php">Contact</a>
       </nav>
-      <button class="signin-btn" onclick="window.location.href='AiBuddy_SignIn.php'">
-        Sign In</button>
+      <?php if (!empty($_SESSION['user_name'])): ?>
+  <a href="AIBuddy_Profile.php" class="user-account">
+    <i class="fa-regular fa-user"></i>
+    <span><?= htmlspecialchars($_SESSION['user_name']) ?></span>
+  </a>
+<?php else: ?>
+  <button class="signin-btn" onclick="window.location.href='AIBuddy_SignIn.php'">
+    Sign In
+  </button>
+<?php endif; ?>
+
+
     </div>
   </header>
 
@@ -1077,8 +1094,6 @@
           <ul class="features-list">
             <li><i class="fas fa-check"></i> 2 short sessions (5 mins)</li>
             <li><i class="fas fa-check"></i> Basic voice guide</li>
-            <li class="disabled"><i class="fas fa-times"></i> Background music</li>
-            <li class="disabled"><i class="fas fa-times"></i> Custom AI personas</li>
           </ul>
           <button class="btn-secondary" disabled>Your Current Plan</button>
         </div>
@@ -1088,8 +1103,7 @@
           <h4>🌿 Essential Plan</h4>
           <p class="price"><span>$5.49</span>/month</p>
           <ul class="features-list">
-            <li><i class="fas fa-check"></i> 10 sessions</li>
-            <li><i class="fas fa-check"></i> Background music</li>
+            <li><i class="fas fa-check"></i> 10 sessions + background music</li>
             <li><i class="fas fa-check"></i> Select AI voice</li>
             <li class="disabled"><i class="fas fa-times"></i> Automatic reminders</li>
           </ul>
@@ -1187,7 +1201,7 @@
             <h4>🌿 Essential Plan</h4>
             <p class="price"><span>$5.49</span>/month</p>
             <ul class="features-list">
-              <li><i class="fas fa-check"></i> 10 sessions</li>
+              <li><i class="fas fa-check"></i> 10 session music</li>
               <li><i class="fas fa-check"></i> Background music</li>
               <li><i class="fas fa-check"></i> Select AI voice</li>
               <li class="disabled"><i class="fas fa-times"></i> Automatic reminders</li>
@@ -1199,10 +1213,9 @@
             <h4>🌸 Premium Plan</h4>
             <p class="price"><span>$8.49</span>/month</p>
             <ul class="features-list">
-              <li><i class="fas fa-check"></i> 30+ diverse sessions</li>
+              <li><i class="fas fa-check"></i> 30 diverse sessions</li>
               <li><i class="fas fa-check"></i> Custom AI voice personas</li>
               <li><i class="fas fa-check"></i> Automatic focus reminders</li>
-              <li><i class="fas fa-check"></i> Deeper analytics</li>
             </ul>
             <button class="btn-primary" onclick="location.href='AIBuddy_Checkout.php'">Get Premium</button>
           </div>
