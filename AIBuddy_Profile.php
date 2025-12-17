@@ -53,6 +53,20 @@ $stmt->execute();
 $currentPlan = $stmt->get_result()->fetch_assoc();
 
 /* ================================
+   BADGE LOGIC (DEMO VERSION)
+================================ */
+$currentBadge = null;
+
+if ($currentPlan && in_array($currentPlan['PlanName'], ['Essential', 'Premium'])) {
+    $currentBadge = [
+        'BadgeID' => 1,
+        'BadgeName' => 'Calm Master',
+        'BadgeSymbol' => '🏅',
+        'BadgeColor' => 'badge1'
+    ];
+}
+
+/* ================================
    ACTION: REQUEST REFUND
 ================================ */
 if (isset($_POST['action']) && $_POST['action'] === 'request_refund') {
@@ -1008,6 +1022,17 @@ if (isset($_POST['action']) && $_POST['action'] === 'cancel_subscription') {
                 <!-- Cột 3: Badges & Achievements -->
                 <div class="dashboard-box">
                     <h2>Badges & Achievements</h2>
+
+                    <?php if ($currentBadge): ?>
+                        <div class="<?= $currentBadge['BadgeColor'] ?>">
+                            <p><?= $currentBadge['BadgeSymbol'] ?>     <?= $currentBadge['BadgeName'] ?></p>
+                            <small>Your current badge</small>
+                        </div>
+                    <?php else: ?>
+                        <p>No badge earned yet.</p>
+                    <?php endif; ?>
+                    <br>
+
                     <div class="badge-grid">
                         <div class="badge1">
                             <p>&#127941; Calm Master</p>
@@ -1022,8 +1047,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'cancel_subscription') {
                     <button class="btn-primary" id="openBadgeModal">
                         View Details
                     </button>
-
                 </div>
+
+            </div>
 
             </div>
         </section>
@@ -1111,36 +1137,35 @@ if (isset($_POST['action']) && $_POST['action'] === 'cancel_subscription') {
 
             <div class="modal-content">
 
+                <!-- LEVEL 1 -->
                 <div class="badge-requirement">
                     <h3>🏅 Calm Master</h3>
-                    <ul style="list-style: none; padding-left: 15px;">
+                    <ul style="list-style:none; padding-left:15px;">
                         <li>✔ Essential plan or higher</li>
-                        <li>✔ Complete at least 5 sessions</li>
-                        <li>✔ Use Breathe Animation 3 times</li>
+                        <li>✔ Active subscription</li>
                     </ul>
                 </div>
 
+                <!-- LEVEL 2 -->
                 <div class="badge-requirement">
                     <h3>🧘 Focus Hero</h3>
-                    <ul style="list-style: none; padding-left: 15px;">
+                    <ul style="list-style:none; padding-left:15px;">
                         <li>✔ Premium plan required</li>
                         <li>✔ Complete 15 focus sessions</li>
-                        <li>✔ Enable automatic focus reminders</li>
-                        <li>✔ 5 sessions longer than 25 minutes</li>
                     </ul>
                 </div>
 
+                <!-- LEVEL 3 -->
                 <div class="badge-requirement">
                     <h3>🔥 Consistency Streak</h3>
-                    <ul style="list-style: none; padding-left: 15px;">
+                    <ul style="list-style:none; padding-left:15px;">
                         <li>✔ Premium plan required</li>
                         <li>✔ Active 7 consecutive days</li>
-                        <li>✔ Minimum 1 session per day</li>
-                        <li>✔ Emotional trends analysis enabled</li>
                     </ul>
                 </div>
 
             </div>
+
         </div>
     </div>
 
@@ -1216,79 +1241,61 @@ if (isset($_POST['action']) && $_POST['action'] === 'cancel_subscription') {
         </div>
     </div>
 
+
+
+
+
     <script>
-        /* ===== SAFE MODAL FUNCTIONS ===== */
-
+        /* ===== SUBSCRIPTION MODALS ===== */
         function openCancelModal() {
-            const modal = document.getElementById("cancelModal");
-            if (modal) modal.style.display = "flex";
+            document.getElementById("cancelModal").style.display = "flex";
         }
-
         function closeCancelModal() {
-            const modal = document.getElementById("cancelModal");
-            if (modal) modal.style.display = "none";
+            document.getElementById("cancelModal").style.display = "none";
         }
 
         function openRefundModal() {
-            const modal = document.getElementById("refundModal");
-            if (modal) modal.style.display = "flex";
+            document.getElementById("refundModal").style.display = "flex";
         }
-
         function closeRefundModal() {
-            const modal = document.getElementById("refundModal");
-            if (modal) modal.style.display = "none";
+            document.getElementById("refundModal").style.display = "none";
         }
 
-        /* Badge modal */
         const badgeBtn = document.getElementById("openBadgeModal");
         const badgeModal = document.getElementById("badgeModal");
         const closeModal = document.getElementById("closeModal");
 
-        if (badgeBtn && badgeModal) {
-            badgeBtn.addEventListener("click", () => {
-                badgeModal.style.display = "flex";
-            });
-        }
+        badgeBtn.addEventListener("click", () => {
+            badgeModal.style.display = "flex";
+        });
 
-        if (closeModal && badgeModal) {
-            closeModal.addEventListener("click", () => {
+        closeModal.addEventListener("click", () => {
+            badgeModal.style.display = "none";
+        });
+
+        badgeModal.addEventListener("click", (e) => {
+            if (e.target === badgeModal) {
                 badgeModal.style.display = "none";
-            });
-        }
+            }
+        });
 
-        if (badgeModal) {
-            badgeModal.addEventListener("click", (e) => {
-                if (e.target === badgeModal) {
-                    badgeModal.style.display = "none";
-                }
-            });
-        }
-
-        /* Edit modal */
         function openEditModal(field, label, value) {
-            const modal = document.getElementById("editModal");
-            if (!modal) return;
-
-            modal.style.display = "flex";
+            document.getElementById("editModal").style.display = "flex";
             document.getElementById("editField").value = field;
             document.getElementById("editLabel").innerText = label;
             document.getElementById("editValue").value = value;
         }
 
         function closeEditModal() {
-            const modal = document.getElementById("editModal");
-            if (modal) modal.style.display = "none";
+            document.getElementById("editModal").style.display = "none";
         }
 
-        /* Logout */
-        const logoutBtn = document.getElementById("logout-btn");
-        if (logoutBtn) {
-            logoutBtn.addEventListener("click", () => {
-                window.location.href = "AIBuddy_SignIn.php";
-            });
-        }
+        document.getElementById("logout-btn").addEventListener("click", () => {
+            window.location.href = "AIBuddy_SignIn.php";
+        });
+
+
     </script>
-
 
 </body>
 
