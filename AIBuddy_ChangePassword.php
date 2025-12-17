@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Mật khẩu mới không được trùng với mật khẩu cũ";
     } else {
         // KIỂM TRA EMAIL VÀ MẬT KHẨU CŨ
-        $stmt = $pdo->prepare("SELECT UserID, UserPassword FROM users WHERE UserEmail = ?");
+        $stmt = $conn->prepare("SELECT UserID, UserPassword FROM users WHERE UserEmail = ?");
         $stmt->execute([$email]);
         $user = $stmt->fetch();
 
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 // CẬP NHẬT MẬT KHẨU MỚI
                 $hashed = password_hash($new_password, PASSWORD_DEFAULT);
-                $stmt = $pdo->prepare("UPDATE users SET UserPassword = ? WHERE UserID = ?");
+                $stmt = $conn->prepare("UPDATE users SET UserPassword = ? WHERE UserID = ?");
                 if ($stmt->execute([$hashed, $user['UserID']])) {
                     $success = "Đổi mật khẩu thành công! Vui lòng đăng nhập lại.";
                 } else {
@@ -580,9 +580,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="AIBuddy_About.php">About</a>
                 <a href="AIBuddy_Contact.php">Contact</a>
             </nav>
-            <a href="AIBuddy_SignIn.php">
-                <button class="signin-btn">Sign In</button>
-            </a>
+            <?php if (isset($_SESSION['user_name'])): ?>
+                <a href="AIBuddy_Profile.php" class="user-account">
+                    <i class="fa-regular fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['user_name']) ?></span>
+                </a>
+            <?php else: ?>
+                <a href="AIBuddy_SignIn.php">
+                    <button class="signin-btn">Sign In</button>
+                </a>
+            <?php endif; ?>
+
         </div>
     </header>
 
