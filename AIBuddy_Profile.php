@@ -1,3 +1,10 @@
+<!--
+PAGE: Profile
+DEPENDENCY:
+table: orders, order_items
+-->
+
+
 <?php
 require_once 'config.php';
 ?>
@@ -499,15 +506,15 @@ require_once 'config.php';
                 AI Buddy
             </div>
             <nav>
-                <a href="Prototype_Homepage.html">Home</a>
-                <a href="Prototype_Chatbot.html">Chatbot</a>
-                <a href="Prototype_EmotionTracker.html">Emotion Tracker</a>
-                <a href="Prototype_Trial.html">Trial</a>
-                <a href="Prototype_Profile.html">Profile</a>
-                <a href="Prototype_About.html">About</a>
-                <a href="Prototype_Contact.html">Contact</a>
+                <a href="AIBuddy_Homepage.php">Home</a>
+                <a href="AIBuddy_Chatbot.php">Chatbot</a>
+                <a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a>
+                <a href="AIBuddy_Trial.php">Trial</a>
+                <a href="AIBuddy_Profile.php">Profile</a>
+                <a href="AIBuddy_About.php">About</a>
+                <a href="AIBuddy_Contact.php">Contact</a>
             </nav>
-            <a href="AIBuddy_SignIn.html">
+            <a href="AIBuddy_SignIn.php">
                 <button class="signin-btn">Sign In</button>
             </a>
         </div>
@@ -518,7 +525,7 @@ require_once 'config.php';
         <div class="container">
             <h1>Your Profile</h1>
             <ul class="breadcrumb">
-                <li><a href="Prototype_Homepage.html">Home</a></li>
+                <li><a href="AIBuddy_Homepage.php">Home</a></li>
                 <li class="current">Profile</li>
             </ul>
         </div>
@@ -599,11 +606,11 @@ require_once 'config.php';
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="Prototype_Homepage.html">Home</a></li>
-                        <li><a href="Prototype_Chatbot.html">Chatbot</a></li>
-                        <li><a href="Prototype_EmotionTracker.html">Emotion Tracker</a></li>
-                        <li><a href="Prototype_Trial.html">Trial</a></li>
-                        <li><a href="Prototype_Contact.html">Contact</a></li>
+                        <li><a href="AIBuddy_Homepage.php">Home</a></li>
+                        <li><a href="AIBuddy_Chatbot.php">Chatbot</a></li>
+                        <li><a href="AIBuddy_EmotionTracker.php">Emotion Tracker</a></li>
+                        <li><a href="AIBuddy_Trial.php">Trial</a></li>
+                        <li><a href="AIBuddy_Contact.php">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -700,6 +707,4 @@ require_once 'config.php';
 
 </body>
 
-
 </html>
-
